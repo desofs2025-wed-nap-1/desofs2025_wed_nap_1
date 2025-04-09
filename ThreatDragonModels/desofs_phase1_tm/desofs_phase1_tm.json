@@ -270,7 +270,7 @@
             },
             "attrs": {
               "text": {
-                "text": "Customer\nClient"
+                "text": "Customer\nApplication"
               },
               "body": {
                 "stroke": "#333333",
@@ -366,7 +366,7 @@
             "id": "502b2a90-9292-403f-a5af-4ad3ae150f46",
             "data": {
               "type": "tm.Actor",
-              "name": "Customer\nClient",
+              "name": "Customer\nApplication",
               "description": "",
               "outOfScope": false,
               "reasonOutOfScope": "",
