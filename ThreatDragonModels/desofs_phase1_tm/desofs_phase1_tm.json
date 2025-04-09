@@ -38,6 +38,7 @@
             },
             "visible": true,
             "shape": "process",
+            "zIndex": 1,
             "ports": {
               "groups": {
                 "top": {
@@ -121,7 +122,6 @@
               ]
             },
             "id": "fdc3928c-ab1c-4df7-be27-087048269291",
-            "zIndex": 1,
             "data": {
               "type": "tm.Process",
               "name": "Backend\nAPI",
@@ -160,6 +160,7 @@
             },
             "visible": true,
             "shape": "store",
+            "zIndex": 2,
             "ports": {
               "groups": {
                 "top": {
@@ -243,7 +244,6 @@
               ]
             },
             "id": "a653a5ca-30f1-4a85-a2ab-480bba1ef989",
-            "zIndex": 2,
             "data": {
               "type": "tm.Store",
               "name": "Database",
@@ -270,7 +270,7 @@
             },
             "attrs": {
               "text": {
-                "text": "Customer"
+                "text": "Customer\nClient"
               },
               "body": {
                 "stroke": "#333333",
@@ -280,6 +280,7 @@
             },
             "visible": true,
             "shape": "actor",
+            "zIndex": 4,
             "ports": {
               "groups": {
                 "top": {
@@ -363,10 +364,9 @@
               ]
             },
             "id": "502b2a90-9292-403f-a5af-4ad3ae150f46",
-            "zIndex": 4,
             "data": {
               "type": "tm.Actor",
-              "name": "Customer",
+              "name": "Customer\nClient",
               "description": "",
               "outOfScope": false,
               "reasonOutOfScope": "",
@@ -396,6 +396,7 @@
             },
             "visible": true,
             "shape": "actor",
+            "zIndex": 5,
             "ports": {
               "groups": {
                 "top": {
@@ -488,8 +489,7 @@
               "hasOpenThreats": false,
               "providesAuthentication": false,
               "threats": []
-            },
-            "zIndex": 5
+            }
           },
           {
             "position": {
@@ -512,6 +512,7 @@
             },
             "visible": true,
             "shape": "actor",
+            "zIndex": 6,
             "ports": {
               "groups": {
                 "top": {
@@ -595,7 +596,6 @@
               ]
             },
             "id": "0b600728-524a-4aec-bef7-5d020192be8e",
-            "zIndex": 6,
             "data": {
               "type": "tm.Actor",
               "name": "Admin",
