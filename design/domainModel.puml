@@ -2,79 +2,89 @@
 skinparam classAttributeIconSize 0
 
 rectangle "User Aggregate" {
-class User {
-  -id: UUID
-  -nome: String
-  -email: String
-  -password: String
-  -telefone: String
-  +login()
-  +criarConta()
-  +cancelarConta()
-  +alterarInformacoes()
-}
+  class User {
+    -id: UUID
+    -username: String
+    -email: String
+    -password: String
+    -phoneNumber: String
+    +login()
+    +createAccount()
+    +cancelAccount()
+    +updateInformation()
+  }
 
-class Role {
-  -id: UUID
-  -nome: String <<CLIENTE | PARK_MANAGER | ADMIN>>
-}
-class PaymentMethod {
-   -id: UUID
-   -tipo: String
-   -detalhes: String
-   +alterar()
- }
+  class Role {
+    -id: UUID
+    -name: String <<CLIENTE | PARK_MANAGER | ADMIN>>
+  }
+
+  class PaymentDetails {
+    -id: UUID
+    -type: PaymentMethod
+    -details: String
+    +changePaymentDetails()
+  }
+
+  enum PaymentMethod {
+    - MBWay
+    - Card
+  }
+
 }
 
 rectangle "Vehicle Aggregate" {
-class Carro {
-  -matricula: String
-  -marca: String
-  -modelo: String
-  -aprovado: Boolean
-  +alterarInformacoes()
-}
-
-
-class PedidoDeRegisto {
-  -id: UUID
-  -dataPedido: Date
-  -estado: String <<aprovado|rejeitado|pendente>>
-}
+  class Vehicle {
+    -licensePlate: String
+    -brand: String
+    -model: String
+    -approved: Boolean
+    +updateInformation()
+  }
 }
 
 
 rectangle "Park Aggregate" {
-class Parque {
-  -id: UUID
-  -nome: String
-  -localizacao: String
-  -capacidade: int
-  -portaoAberto: Boolean
-  +abrirPortao()
-  +fecharPortao()
+  class Park {
+    -id: UUID
+    -name: String
+    -location: String
+    -capacity: int
+    -gateOpen: Boolean
+    +openGate()
+    +closeGate()
+  }
+
+class ParkingSpot {
+    -id: UUID
+    -number: int
+    -available: Boolean
+  }
 }
 
-class Lugar {
-  -id: UUID
-  -numero: int
-  -disponivel: Boolean
-}
+rectangle "ParkingRequest Aggregate" {
+  class ParkingRequest {
+    -id: UUID
+    -requestDate: Date
+    -requestPeriod: int
+    -state: String <<approved|rejected|pending>>
+  }
 }
 
 ' Relações
-User "1" -- "0..*" Role : tem >
-User "1" -- "0..*" Carro : possui >
-User "1" -- "0..1" PaymentMethod
-User "1" -- "0..*" PedidoDeRegisto : submete >
+User "1" -- "1" Role : has >
+User "1" -- "0..*" Vehicle : has >
+User "1" -- "0..1" PaymentDetails : has >
+PaymentDetails "1" -- "1" PaymentMethod : uses >
+User "1" -- "0..*" ParkingRequest : submits >
+Vehicle "1" -- "0..1" Park : parks in >
 
-PedidoDeRegisto "1" -- "1" Carro : refere >
+ParkingRequest "1" -- "1" Vehicle : relates to >
+ParkingRequest "1" -- "1" Park : relates to >
 
-Parque "1" -- "0..*" Lugar : contém >
+Park "1" -- "0..*" ParkingSpot : has >
 
-Role "CLIENTE" ..> PedidoDeRegisto : submete >
-Role "PARK_MANAGER" ..> Parque : gere >
-Role "PARK_MANAGER" ..> PedidoDeRegisto : aprova/rejeita >
-Role "ADMIN" ..> Role : cria >
-
+User "1" ..> "0..*" Park : manages >
+User "1" ..> "0..*" ParkingRequest : approves/rejects >
+User "1" ..> "1..*" User : creates >
 @enduml
