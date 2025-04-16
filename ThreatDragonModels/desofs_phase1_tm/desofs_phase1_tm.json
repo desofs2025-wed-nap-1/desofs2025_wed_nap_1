@@ -20,7 +20,7 @@
           {
             "position": {
               "x": 520,
-              "y": 202
+              "y": 170
             },
             "size": {
               "width": 90,
@@ -833,9 +833,41 @@
             "vertices": []
           },
           {
+            "shape": "trust-boundary-curve",
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Boundary",
+              "name": "External / Internal\nNetwork Boundary",
+              "description": "",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false
+            },
+            "labels": [
+              "External / Internal\nNetwork Boundary"
+            ],
+            "id": "62472972-2924-473b-867b-7f0949a52453",
+            "source": {
+              "x": 440,
+              "y": 90
+            },
+            "target": {
+              "x": 430,
+              "y": 500
+            },
+            "vertices": [
+              {
+                "x": 480,
+                "y": 340
+              }
+            ]
+          },
+          {
             "position": {
-              "x": 505,
-              "y": 422
+              "x": 620,
+              "y": 412
             },
             "size": {
               "width": 120,
