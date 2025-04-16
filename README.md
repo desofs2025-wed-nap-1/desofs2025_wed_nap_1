@@ -1,12 +1,13 @@
 # DESOFS_m1c
 DESOFS PROJECT TEAM: 1181031, 1190830, 1211739, 1240465, 1240466
 
-FUNCTIONAL REQUIREMENTS
-* FR01 – The system must allow customer registration through the application.
+## FUNCTIONAL REQUIREMENTS
+
+* FR01 – The system must allow user registration through the application.
 
 * FR02 – The system must support login with two-factor authentication for registered users.
 
-* FR03 – The user can manage their personal information (name, email, contact, etc.).
+* FR03 – The user can manage their personal information (name, email, contact, vehicle information and payment details).
 
 * FR04 – The user can cancel their account at any time.
 
@@ -38,6 +39,17 @@ FUNCTIONAL REQUIREMENTS
 
 * FR19 – The system must ensure communication between modules through RESTful APIs.
 ----
+
+## Security Requerements
+
+- Authentication:
+    - Multi-Factor Authentication: email or OTP codes using an authenticator
+    - Least privilege: users will not be authorized to perform any actions they are not supposed
+- HTTPS between client applications and backend API
+- Secure connection between API and Database
+- Hashed and Salted passwords (provided by authentication service)
+- Role-Based Access Control is implemented via an allow-list method: certain roles are allowed to perform certain actions, and forbidden to do all others.
+
 # Threat Model
 
 ## Executive Summary
@@ -48,7 +60,6 @@ FUNCTIONAL REQUIREMENTS
 |----|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 01 | The API will be hosted on a Linux server. It will be developed in C# using the .NET Framework. This server will be subjected to regular security patches.    |
 | 02 | The RDMS will be MySQL, hosted on a Linux server. This server will be subjected to regular security patches.                                                 |
-| 03 | All connections will be encrypted using TLS.                                                                                                                 |
 
 ## Entry Points
 
