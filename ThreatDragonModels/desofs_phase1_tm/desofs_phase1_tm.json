@@ -138,8 +138,8 @@
           },
           {
             "position": {
-              "x": 850,
-              "y": 222
+              "x": 930,
+              "y": 230
             },
             "size": {
               "width": 120,
@@ -912,6 +912,32 @@
               "port": "12590922-1a1f-49a9-8eb4-71b4c93ec0a3"
             },
             "vertices": []
+          },
+          {
+            "shape": "trust-boundary-curve",
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Boundary",
+              "name": "Backend / DB\nBoundary",
+              "description": "",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false
+            },
+            "labels": [
+              "Backend / DB\nBoundary"
+            ],
+            "id": "63dabdea-968e-45a6-82e0-d4d94fa4e6ef",
+            "source": {
+              "x": 820,
+              "y": 20
+            },
+            "target": {
+              "x": 880,
+              "y": 360
+            }
           },
           {
             "position": {
