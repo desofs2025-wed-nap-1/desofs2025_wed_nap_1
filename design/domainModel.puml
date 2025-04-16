@@ -1,65 +1,80 @@
-@startuml "domain_model"
-
-title Domain Model
+@startuml
+skinparam classAttributeIconSize 0
 
 rectangle "User Aggregate" {
-    class User {
-        - userId: int
-        - username: string
-        - email: string
-        - password: string
-        - role: Role
-        - status: Status
-    }
-
-    class Role {
-        - roleId: int
-        - roleName: string
-    }
-
-    enum UserType {
-        - BASIC
-        - PREMIUM
-    }
-
-    enum Status {
-        - ACTIVE
-        - INACTIVE
-    }
-
+class User {
+  -id: UUID
+  -nome: String
+  -email: String
+  -password: String
+  -telefone: String
+  +login()
+  +criarConta()
+  +cancelarConta()
+  +alterarInformacoes()
 }
 
-rectangle "Parking Aggregate" {
-    class Parking {
-        - id: int
-    }
-
+class Role {
+  -id: UUID
+  -nome: String <<CLIENTE | PARK_MANAGER | ADMIN>>
 }
-
+class PaymentMethod {
+   -id: UUID
+   -tipo: String
+   -detalhes: String
+   +alterar()
+ }
+}
 
 rectangle "Vehicle Aggregate" {
-    class Vehicle {
-        - id: int
-    }
-
+class Carro {
+  -matricula: String
+  -marca: String
+  -modelo: String
+  -aprovado: Boolean
+  +alterarInformacoes()
 }
 
-' User "1" -up- "0...*" Tweet : Posts
 
-' User "1" -up- "0...*" User : Follows
-' User "1" -down- "0...*" User : IsFollowed
+class PedidoDeRegisto {
+  -id: UUID
+  -dataPedido: Date
+  -estado: String <<aprovado|rejeitado|pendente>>
+}
+}
 
-' User "0...*" -left- "1" Status : Is
-' User "0...*" -left- "1" UserType : Has
-' User "1" -left- "1" Role : Has
-' User "1" -right- "1" MediaAttachment: Has
 
-' MediaAttachment "1" -right- "1" MediaType: Is
+rectangle "Park Aggregate" {
+class Parque {
+  -id: UUID
+  -nome: String
+  -localizacao: String
+  -capacidade: int
+  -portaoAberto: Boolean
+  +abrirPortao()
+  +fecharPortao()
+}
 
-' Tweet "0..*" -left- "0...*" Hashtag : Contains
-' Tweet "1" -right- "0...*" Reply: Contains
-' User "0..*" -up- "0...*" Hashtag : Follows
+class Lugar {
+  -id: UUID
+  -numero: int
+  -disponivel: Boolean
+}
+}
 
-' Hashtag "1" -left- "1" HashtagStatistic: Has
+' Relações
+User "1" -- "0..*" Role : tem >
+User "1" -- "0..*" Carro : possui >
+User "1" -- "0..1" PaymentMethod
+User "1" -- "0..*" PedidoDeRegisto : submete >
+
+PedidoDeRegisto "1" -- "1" Carro : refere >
+
+Parque "1" -- "0..*" Lugar : contém >
+
+Role "CLIENTE" ..> PedidoDeRegisto : submete >
+Role "PARK_MANAGER" ..> Parque : gere >
+Role "PARK_MANAGER" ..> PedidoDeRegisto : aprova/rejeita >
+Role "ADMIN" ..> Role : cria >
 
 @enduml
