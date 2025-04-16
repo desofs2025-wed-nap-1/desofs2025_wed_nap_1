@@ -877,7 +877,7 @@
                   "name": "block"
                 },
                 "sourceMarker": {
-                  "name": ""
+                  "name": "block"
                 },
                 "strokeDasharray": null
               }
@@ -893,7 +893,7 @@
               "outOfScope": false,
               "reasonOutOfScope": "",
               "hasOpenThreats": false,
-              "isBidirectional": false,
+              "isBidirectional": true,
               "isEncrypted": false,
               "isPublicNetwork": false,
               "protocol": "",
@@ -1057,6 +1057,7 @@
             },
             "visible": true,
             "shape": "process",
+            "zIndex": 12,
             "ports": {
               "groups": {
                 "top": {
@@ -1140,7 +1141,6 @@
               ]
             },
             "id": "4d831538-4591-41fd-ba59-9638e01debc8",
-            "zIndex": 12,
             "data": {
               "type": "tm.Process",
               "name": "Authentication",
