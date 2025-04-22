@@ -175,7 +175,7 @@
                 },
                 {
                   "id": "87cd5975-1b2c-4d6e-bfe1-abc500368350",
-                  "title": "New STRIDE threat",
+                  "title": "Information Disclosure",
                   "status": "Mitigated",
                   "severity": "Medium",
                   "type": "Information disclosure",
@@ -185,15 +185,41 @@
                   "new": false,
                   "number": 4,
                   "score": "8"
+                },
+                {
+                  "id": "5bb716e5-c592-463f-920a-edb534c3bebf",
+                  "title": "DDoS",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Denial of service",
+                  "description": "An attacker might attempt to issue a flood of requests to the backend, rendering it unavailable to respond to legitimate requests",
+                  "mitigation": "Implement rate limiting and request throttling measures to ensure that attackers can't flood the backend with requests.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 5,
+                  "score": "12"
+                },
+                {
+                  "id": "e2445d06-4dc6-410c-8bc9-021034b06cf5",
+                  "title": "Elevation of Privilege",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Elevation of privilege",
+                  "description": "A user might try to bypass access controls via insecure endpoints to elevate his privilege to an admin or park manager, thus becoming able to tamper with sensitive data. ",
+                  "mitigation": "Enforce strict RBAC policies to ensure that users can't change their privileges. Re-validate the provided authentication token and match it with the operation being requested.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 6,
+                  "score": "8"
                 }
               ],
               "threatFrequency": {
                 "spoofing": 2,
                 "tampering": 1,
                 "repudiation": 1,
-                "informationDisclosure": 2,
-                "denialOfService": 0,
-                "elevationOfPrivilege": 0
+                "informationDisclosure": 3,
+                "denialOfService": 2,
+                "elevationOfPrivilege": 1
               }
             }
           },
@@ -1247,6 +1273,6 @@
     ],
     "diagramTop": 1,
     "reviewer": "",
-    "threatTop": 4
+    "threatTop": 6
   }
 }
