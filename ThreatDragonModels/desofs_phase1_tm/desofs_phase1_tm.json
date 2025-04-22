@@ -146,15 +146,80 @@
                   "new": false,
                   "number": 1,
                   "score": "9"
+                },
+                {
+                  "id": "5ffed15c-3eb6-41cd-9213-f020b2ae7c28",
+                  "title": "Information Tampering",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Tampering",
+                  "description": "Attackers might try to tamper the information stored by the application, performing malicious requests in order to do so.",
+                  "mitigation": "Use TLS to encrypt every connection. Validate all user-provided input according to well-defined rules. Implement queries with prepared statements to prevent tampering via database operations. ",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 2,
+                  "score": "6"
+                },
+                {
+                  "id": "62fd4796-cf9a-4a60-b3f3-784a41f65d8a",
+                  "title": "Repudiation",
+                  "status": "Mitigated",
+                  "severity": "Low",
+                  "type": "Repudiation",
+                  "description": "Users might try to deny having performed certain actions on the platform.",
+                  "mitigation": "Implement robust logging solutions to ensure traceability and accountability of all performed actions.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 3,
+                  "score": "4"
+                },
+                {
+                  "id": "87cd5975-1b2c-4d6e-bfe1-abc500368350",
+                  "title": "Information Disclosure",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Information disclosure",
+                  "description": "Attackers might try to release information which should not be accessible to the general public.",
+                  "mitigation": "Validate all incoming requests. Encrypt data in transactions. Ensure that RBAC is strictly enforced so that access to data is allowed according to the least-privilege principle. Sanitize API responses to ensure no detailed error logs are sent to the client-side.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 4,
+                  "score": "8"
+                },
+                {
+                  "id": "5bb716e5-c592-463f-920a-edb534c3bebf",
+                  "title": "DDoS",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Denial of service",
+                  "description": "An attacker might attempt to issue a flood of requests to the backend, rendering it unavailable to respond to legitimate requests",
+                  "mitigation": "Implement rate limiting and request throttling measures to ensure that attackers can't flood the backend with requests.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 5,
+                  "score": "12"
+                },
+                {
+                  "id": "e2445d06-4dc6-410c-8bc9-021034b06cf5",
+                  "title": "Elevation of Privilege",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Elevation of privilege",
+                  "description": "A user might try to bypass access controls via insecure endpoints to elevate his privilege to an admin or park manager, thus becoming able to tamper with sensitive data. ",
+                  "mitigation": "Enforce strict RBAC policies to ensure that users can't change their privileges. Re-validate the provided authentication token and match it with the operation being requested.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 6,
+                  "score": "8"
                 }
               ],
               "threatFrequency": {
                 "spoofing": 2,
-                "tampering": 0,
-                "repudiation": 0,
-                "informationDisclosure": 0,
-                "denialOfService": 0,
-                "elevationOfPrivilege": 0
+                "tampering": 1,
+                "repudiation": 1,
+                "informationDisclosure": 3,
+                "denialOfService": 2,
+                "elevationOfPrivilege": 1
               }
             }
           },
@@ -394,38 +459,7 @@
               "reasonOutOfScope": "",
               "hasOpenThreats": false,
               "providesAuthentication": false,
-              "threats": [
-                {
-                  "id": "a2fca2cd-7486-43c0-881b-89a6a50c5644",
-                  "title": "Impersonation of Legitimate Customer",
-                  "status": "Mitigated",
-                  "severity": "Medium",
-                  "type": "Spoofing",
-                  "description": "An attacker may try to impersonate a legitimate customer by exploiting the absence of proper authentication mechanisms on the Customer Application side",
-                  "mitigation": "Enforce strong authentication (e.g., OAuth2 or OpenID Connect)",
-                  "modelType": "STRIDE",
-                  "new": false,
-                  "number": 2,
-                  "score": "8"
-                },
-                {
-                  "id": "2f275d1a-bc41-4d4c-a542-85dff9c1f4b8",
-                  "title": "Action Without Traceability",
-                  "status": "Mitigated",
-                  "severity": "Medium",
-                  "type": "Repudiation",
-                  "description": "A customer might perform an action via the app (e.g., open the gate, book a parking slot) and later deny having done so. Without proper logging and authentication, it would be hard to prove otherwise.",
-                  "mitigation": "Implement strong user authentication and session management and maintain secure, tamper-proof logs of actions with timestamps and user IDs.",
-                  "modelType": "STRIDE",
-                  "new": false,
-                  "number": 3,
-                  "score": "7"
-                }
-              ],
-              "threatFrequency": {
-                "spoofing": 1,
-                "repudiation": 1
-              }
+              "threats": []
             }
           },
           {
@@ -784,6 +818,51 @@
             "labels": [
               "Communicates\nWith"
             ],
+            "id": "c23f8758-fe8c-4c4e-bb5b-040ee2bf8a27",
+            "source": {
+              "cell": "502b2a90-9292-403f-a5af-4ad3ae150f46",
+              "port": "feca807c-d2fa-447d-83a3-99b9837ed625"
+            },
+            "target": {
+              "cell": "fdc3928c-ab1c-4df7-be27-087048269291",
+              "port": "897c8516-0c36-491d-aca3-10ef21116b58"
+            },
+            "vertices": []
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "Communicates\nWith",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": []
+            },
+            "labels": [
+              "Communicates\nWith"
+            ],
             "id": "a22c6a7b-e234-4568-bf16-054bb758c8d9",
             "source": {
               "cell": "0b600728-524a-4aec-bef7-5d020192be8e",
@@ -945,116 +1024,6 @@
             "target": {
               "x": 880,
               "y": 360
-            }
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "red",
-                "strokeWidth": 2.5,
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
-                  "name": ""
-                },
-                "strokeDasharray": null
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "Communicates\nWith",
-              "description": "",
-              "outOfScope": false,
-              "reasonOutOfScope": "",
-              "hasOpenThreats": true,
-              "isBidirectional": false,
-              "isEncrypted": false,
-              "isPublicNetwork": false,
-              "protocol": "",
-              "threats": [
-                {
-                  "id": "db0e4957-9bc9-4d6e-98ad-6ca34c95af2d",
-                  "title": "Modified API Requests",
-                  "status": "Mitigated",
-                  "severity": "High",
-                  "type": "Tampering",
-                  "description": "An attacker intercepts and alters requests sent from the customer application to the backend API, potentially changing parameters (e.g., altering parking reservation details).",
-                  "mitigation": "Enforce HTTPS (TLS) on all communications.",
-                  "modelType": "STRIDE",
-                  "new": false,
-                  "number": 4,
-                  "score": "9"
-                },
-                {
-                  "id": "8247294b-97b9-4ba4-8cae-f90343567434",
-                  "title": "Sensitive Data Leak in Transit",
-                  "status": "Mitigated",
-                  "severity": "High",
-                  "type": "Information disclosure",
-                  "description": "Sensitive user data (e.g., location, personal info) might be exposed if intercepted during transmission between the app and backend.",
-                  "mitigation": "Encrypt all communications using TLS and, avoid exposing sensitive data in URLs (using POST body instead).",
-                  "modelType": "STRIDE",
-                  "new": false,
-                  "number": 5,
-                  "score": "9"
-                },
-                {
-                  "id": "d984686c-7b5b-4fba-ac6b-fef196050fde",
-                  "title": "API Request Flooding",
-                  "status": "Open",
-                  "severity": "Medium",
-                  "type": "Denial of service",
-                  "description": "An attacker or malicious user could flood the backend API with requests from the customer application, making the system unavailable to other users.",
-                  "mitigation": "Implement rate limiting and throttling on the API endpoints and monitor and block abusive IPs or behavior patterns",
-                  "modelType": "STRIDE",
-                  "new": false,
-                  "number": 6,
-                  "score": "7"
-                }
-              ],
-              "threatFrequency": {
-                "tampering": 1,
-                "informationDisclosure": 1,
-                "denialOfService": 1
-              }
-            },
-            "labels": [
-              "Communicates\nWith"
-            ],
-            "id": "c23f8758-fe8c-4c4e-bb5b-040ee2bf8a27",
-            "source": {
-              "cell": "502b2a90-9292-403f-a5af-4ad3ae150f46",
-              "port": "feca807c-d2fa-447d-83a3-99b9837ed625"
-            },
-            "target": {
-              "cell": "fdc3928c-ab1c-4df7-be27-087048269291",
-              "port": "897c8516-0c36-491d-aca3-10ef21116b58"
-            },
-            "vertices": [
-              {
-                "x": 350,
-                "y": 180
-              },
-              {
-                "x": 410,
-                "y": 180
-              }
-            ],
-            "tools": {
-              "items": [
-                "boundary",
-                "button-remove",
-                "vertices",
-                "source-arrowhead",
-                "target-arrowhead"
-              ],
-              "name": null
             }
           },
           {
