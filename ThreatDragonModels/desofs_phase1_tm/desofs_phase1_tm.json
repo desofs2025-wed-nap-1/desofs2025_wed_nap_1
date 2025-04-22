@@ -1055,12 +1055,25 @@
                   "new": false,
                   "number": 11,
                   "score": "8"
+                },
+                {
+                  "id": "82595343-90e8-4b07-a1e9-a0c83dbbedb1",
+                  "title": "DDoS of Authentication Service",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Attackers spam login/MFA endpoints to exhaust backend or authentication service resources.",
+                  "mitigation": "Implement rate limiting between these services to ensure that resources are not exhausted. Use account lockout after repeated failures of login attempts.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 12,
+                  "score": "9"
                 }
               ],
               "threatFrequency": {
                 "tampering": 1,
                 "informationDisclosure": 1,
-                "denialOfService": 0
+                "denialOfService": 1
               }
             },
             "labels": [
@@ -1350,6 +1363,6 @@
     ],
     "diagramTop": 1,
     "reviewer": "",
-    "threatTop": 11
+    "threatTop": 12
   }
 }
