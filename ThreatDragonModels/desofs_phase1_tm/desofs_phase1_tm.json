@@ -781,12 +781,38 @@
                   "new": false,
                   "number": 7,
                   "score": "4"
+                },
+                {
+                  "id": "4db36d8a-767f-4505-b720-c22f782dc2b1",
+                  "title": "DDoS",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Denial of service",
+                  "description": "An attacker might try to perform several actions which require writing to / reading from the filesystem in a short period of time, thus rendering the system unavailable due to the processing of these requests.",
+                  "mitigation": "Limit the number of concurrent filesystem operations the backend can perform. Limit the maximum file size for user uploads or generated reports.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 8,
+                  "score": "12"
+                },
+                {
+                  "id": "8d680899-529b-4031-a344-e78ce6d38020",
+                  "title": "Obtaining Information",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Information disclosure",
+                  "description": "An attacker might try to obtain information that's being written to or read from the filesystem without being allowed to do so.",
+                  "mitigation": "Ensure that potentially sensitive data being stored on the filesystem (or read from it) through this data flow is encrypted, so that it cannot be disclosed.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 9,
+                  "score": "6"
                 }
               ],
               "threatFrequency": {
                 "tampering": 1,
-                "informationDisclosure": 0,
-                "denialOfService": 0
+                "informationDisclosure": 1,
+                "denialOfService": 2
               }
             },
             "labels": [
@@ -801,7 +827,17 @@
               "cell": "232b6b91-4073-4732-a00e-0ff2d7ee98d3",
               "port": "e8a20441-b162-4abd-88b7-ae7b5365f264"
             },
-            "vertices": []
+            "vertices": [],
+            "tools": {
+              "items": [
+                "boundary",
+                "button-remove",
+                "vertices",
+                "source-arrowhead",
+                "target-arrowhead"
+              ],
+              "name": null
+            }
           },
           {
             "shape": "flow",
@@ -1292,6 +1328,6 @@
     ],
     "diagramTop": 1,
     "reviewer": "",
-    "threatTop": 7
+    "threatTop": 9
   }
 }
