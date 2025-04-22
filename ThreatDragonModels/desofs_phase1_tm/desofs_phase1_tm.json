@@ -827,17 +827,7 @@
               "cell": "232b6b91-4073-4732-a00e-0ff2d7ee98d3",
               "port": "e8a20441-b162-4abd-88b7-ae7b5365f264"
             },
-            "vertices": [],
-            "tools": {
-              "items": [
-                "boundary",
-                "button-remove",
-                "vertices",
-                "source-arrowhead",
-                "target-arrowhead"
-              ],
-              "name": null
-            }
+            "vertices": []
           },
           {
             "shape": "flow",
@@ -1039,7 +1029,39 @@
               "isEncrypted": false,
               "isPublicNetwork": false,
               "protocol": "",
-              "threats": []
+              "threats": [
+                {
+                  "id": "d64a53a7-0d2d-45e9-8bac-dafd8e6ea451",
+                  "title": "Tampering with authentication data",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Tampering",
+                  "description": "An attacker might try to tamper with data being sent from the backend to the authentication service in order to elevate his privileges.",
+                  "mitigation": "Encrypt all connections with TLS. Always verify claims being issued with a token.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 10,
+                  "score": "6"
+                },
+                {
+                  "id": "70404464-0b1f-4207-986b-fe9580899eb0",
+                  "title": "Disclose User Authentication Details",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Information disclosure",
+                  "description": "An attacker might try to disclose sensitive data being transmitted in this communication channel.",
+                  "mitigation": "Ensure connections are encrypted using TLS. Ensure only the necessary data is transmitted in each transaction.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 11,
+                  "score": "8"
+                }
+              ],
+              "threatFrequency": {
+                "tampering": 1,
+                "informationDisclosure": 1,
+                "denialOfService": 0
+              }
             },
             "labels": [
               "Handles Authentication\nRequests"
@@ -1328,6 +1350,6 @@
     ],
     "diagramTop": 1,
     "reviewer": "",
-    "threatTop": 9
+    "threatTop": 11
   }
 }
