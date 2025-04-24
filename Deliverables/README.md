@@ -51,6 +51,71 @@ For our application, we define three different user roles:
 2. **Park Managers** - users which manage all aspects relating to parks, such as their capacity and gate status. They are also responsible for approving Parking Requests created by regular users;
 3. **Admins** - these are administrators of the parking organization, responsible for adding, chaning, and removing Park Managers from the application. 
 
+## Client Use Cases
+
+The use cases outline the functionalities available to a Client user in the platform. This role is designed for regular users who interact with the parking system to manage their personal accounts, vehicles, and parking preferences.
+
+- **Create Account**: The client can register a new user account on the platform.
+- **Login**: The client can authenticate and access their personal dashboard.
+- **Request Car Registration**: The client can submit a request to register a new vehicle under their account.
+- **Update Personal Information**: The client can modify their personal details, such as name, address, or contact.
+- **Cancel Account**: The client can permanently delete their account from the system.
+- **Update Car Information**: The client can modify existing details about a registered vehicle.
+- **Add Payment Method**: The client can add a new payment method for future transactions.
+- **Update Payment Method**: The client can change or replace an existing payment method.
+- **Check Available Parks**: The client can view a list of parks currently available for use.
+- **Check Available Parking Spots**: The client can check spot availability within selected parks.
+
+### Abuse Cases Identified
+- Creating an account with invalid data.
+- Repeated login attempts with incorrect credentials .
+- Submitting a car registration request with fake or already-registered vehicle information.
+- Injecting cross-site scripting (XSS) code in info update fields.
+- Attempting to update vehicle information for a car not owned by the user.
+- Adding invalid payment methods to exploit the system.
+- Scraping the list of available parks through automated or excessive requests.
+- Simulating multiple users or sessions to overload the parking spot availability system.
+
+---
+
+## Park Manager Use Cases
+
+The use cases for the Park Manager illustrate the responsibilities and features accessible to users responsible for managing parks and validating user requests.
+
+- **Login**: The Park Manager can authenticate and access management features.
+- **Create Parks**: The Park Manager can define and register new parking locations in the system.
+- **Edit Parks**: The Park Manager can update details of existing parks such as capacity, hours, or pricing.
+- **View Car Registration Requests**: The Park Manager can view pending car registration requests from clients.
+- **View Payments**: The Park Manager can access payment records associated with their parks.
+- **Approve Requests**: The Park Manager can approve car registration requests submitted by clients.
+- **Reject Requests**: The Park Manager can deny car registration requests.
+- **Edit Park Information**: The Park Manager can change general park settings and metadata.
+- **Open/Close Gate of Each Park**: The Park Manager can remotely control the access gate to each parking location.
+
+### Abuse Cases Identified
+- Attempting to log in using administrator credentials.
+- Creating parks with incorrect or fake location data.
+- Deleting or modifying parks that are currently active.
+- Mass approval or rejection of requests without reviewing their validity.
+- Accessing customer payment information without proper authorization.
+- Opening or closing gates at unauthorized times or without audit tracking.
+
+---
+
+## Admin Use Cases
+
+The Admin use cases present the core administrative tasks performed by users with full platform authority. These actions typically involve user account creation and access management.
+
+- **Create Account**: The Admin can create new accounts within the system.
+- **Login**: The Admin can authenticate and access the control panel.
+- **Create Park Managers**: The Admin can create new Park Manager accounts and assign permissions.
+
+### Abuse Cases Identified
+- Creating admin-level accounts without sufficient verification.
+- Replacing or modifying credentials of other administrators.
+- Accessing admin-only interfaces using lower-privilege accounts.
+
+
 ### Deployment Model
 
 Below, we present the Implementation Diagram which details how our application will be deployed:
