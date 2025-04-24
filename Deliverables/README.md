@@ -4,7 +4,7 @@ DESOFS PROJECT TEAM: 1181031, 1190830, 1211739, 1240465, 1240466
 
 ## Introduction
 
-Our application aims to provide a easier parking experinence for our users. Through it, they can create an account, register their vehicles and gain access to parks whenever they need. Users issue parking requests, which are approved by our park managers, thus granting them permission to park their vehicle.
+Our application aims to provide an easier parking experience for our users. Through it, they can create an account, register their vehicles and gain access to parks whenever they need. Users issue parking requests, which are approved by our park managers, thus granting them permission to park their vehicle.
 
 ## Design
 
@@ -122,7 +122,7 @@ Below, we present the Implementation Diagram which details how our application w
 
 ![deployment](../design/deploymentDiagram.svg)
 
-## Security Requerements
+## Security Requirements
 
 - Authentication:
     - Multi-Factor Authentication: email or OTP codes using an authenticator
@@ -131,6 +131,160 @@ Below, we present the Implementation Diagram which details how our application w
 - Secure connection between API and Database
 - Hashed and Salted passwords (provided by authentication service)
 - Role-Based Access Control is implemented via an allow-list method: certain roles are allowed to perform certain actions, and forbidden to do all others.
+
+## Security Test Planning
+
+ The following aspects of the system will be tested:
+
+* **Authentication and Authorization**:
+  * Multi-factor authentication (MFA).
+  * Role-based access control (RBAC).
+
+
+* **Input Validation**:
+  * SQL injection prevention.
+
+
+
+* **Data Security**:
+  * Data encryption (in-transit and at-rest).
+  * Secure password storage (hashed and salted).
+
+
+* **Security of External Integrations**:
+  * Secure communication with external payment services (MBWay, Visa).
+
+
+* **Access Control**:
+  * Role-based access testing (Anonymous, Authenticated user, Park Manager, Admin, System Admin).
+
+
+* **Security Vulnerabilities**:
+  * SQL Injection, XSS, CSRF, and other OWASP Top Ten vulnerabilities.
+
+
+* **Logging and Monitoring**:
+  * Ensure logs are generated for security events (logins, access to sensitive data).
+  * Verify the application’s ability to monitor and respond to suspicious activity.
+
+  
+
+### Test Strategy
+
+Security testing will be performed using the following strategies:
+
+* **Static Analysis**:
+  * Code reviews to identify security flaws.
+  * Automated static code analysis using security-focused tools (SonarQube, Checkmarx).
+
+
+* **Dynamic Analysis**:
+  * Manual penetration testing to identify vulnerabilities like SQL injection.
+  * Automated security testing tools such as OWASP ZAP.
+
+
+* **Access Control Testing**:
+  * Role-based access control (RBAC) validation.
+  * Verify that users with different roles (anonymous users, authenticated users, park managers, admins) can only access permitted features and data.
+
+
+* **Authentication and Session Testing**:
+  * Testing the multi-factor authentication process, ensuring proper working of email/OTP-based MFA.
+  * Testing session management (timeouts, invalidating sessions after logout).
+
+
+* **Data Protection Testing**:
+  * Verifying the encryption of sensitive data both in transit (using HTTPS/TLS) and at rest.
+  * Testing for proper password hashing mechanisms.
+
+
+* **Integration Testing**:
+  * Testing external payment gateways to ensure they are securely integrated.
+
+
+* **Vulnerability Scanning**:
+  * Use automated tools to scan the application for known vulnerabilities.
+  * Run tests for common vulnerabilities (OWASP Top Ten).
+
+
+
+
+### Test Environment
+
+* **API Environment**:
+  * The API will be hosted on a secure Linux server with the necessary firewall and security configurations.
+  * Database: MySQL with necessary patches and security settings.
+
+
+* **Test Tools**:
+  * OWASP ZAP for dynamic testing.
+  * SonarQube for static code analysis.
+  * Postman for testing API endpoints.
+
+
+* **Authentication Tools**:
+  * Auth0 or a custom-built two-factor authentication service.
+
+
+* **Security Monitoring**:
+  * Implement logging and monitoring tools to ensure audit logs are generated and analyzed.
+
+
+
+### Test Cases
+
+#### Test Case 1: Multi-Factor Authentication
+
+* **Objective**: Ensure the application correctly enforces multi-factor authentication.
+
+* **Test Steps**:
+1. Register as a user and attempt to log in with the correct username and password.
+2. Confirm the application prompts for an OTP or email-based code.
+3. Enter the correct OTP/email code and verify successful login.
+4. Attempt to log in with an incorrect OTP/email code and verify the login fails.
+
+* **Expected Results**:
+  * Users are required to authenticate using both the password and OTP/email code.
+  * The application denies access if the OTP/email code is incorrect.
+
+
+#### Test Case 2: Role-Based Access Control (RBAC)
+
+* **Objective**: Verify that only users with appropriate roles can access certain functionalities.
+
+
+* **Test Steps**:
+1. Log in as a regular user and try to access the "Manage Park" page.
+2. Log in as a park manager and try to access the "Manage Park Managers" page.
+3. Log in as an admin and attempt to access "Manage Park" and "Manage Park Managers".
+4. Log in as a system admin and attempt to access all restricted pages.
+
+* **Expected Results**:
+  * A regular user should not access the "Manage Park" or "Manage Park Managers" page.
+  * A park manager should have limited access to managing parks.
+  * Only an admin or system admin should be able to manage park managers.
+
+
+#### Test Case 3: SQL Injection
+
+* **Objective**: Test for SQL Injection vulnerabilities in user input fields.
+
+* **Test Steps**:
+1. In the login form, enter the input ' OR 1=1 -- into the username or password field.
+
+* **Expected Results**:
+  * The application should reject the input, preventing unauthorized SQL commands from being executed.
+
+  
+### Risk-Based Test Coverage
+
+The tests should prioritize high-risk areas such as:
+
+* Authentication and access control
+* External payment system integration
+* Sensitive data storage and transmission
+* User input validation
+
 
 # Threat Model
 
