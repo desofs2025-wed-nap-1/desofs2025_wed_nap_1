@@ -734,51 +734,6 @@
                   "name": "block"
                 },
                 "sourceMarker": {
-                  "name": "block"
-                },
-                "strokeDasharray": null
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "DBMS",
-              "description": "",
-              "outOfScope": false,
-              "reasonOutOfScope": "",
-              "hasOpenThreats": false,
-              "isBidirectional": true,
-              "isEncrypted": false,
-              "isPublicNetwork": false,
-              "protocol": "",
-              "threats": []
-            },
-            "labels": [
-              "DBMS"
-            ],
-            "id": "88788d58-8c11-4cf2-9f39-c6c806a891bd",
-            "source": {
-              "cell": "fdc3928c-ab1c-4df7-be27-087048269291",
-              "port": "63654fc0-1b96-4908-9d0b-56a38b4fe548"
-            },
-            "target": {
-              "cell": "a653a5ca-30f1-4a85-a2ab-480bba1ef989",
-              "port": "2ab9868e-396a-4d3d-b5c1-f805845dc739"
-            },
-            "vertices": []
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "#333333",
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
                   "name": ""
                 },
                 "strokeDasharray": null
@@ -1087,42 +1042,6 @@
             "vertices": []
           },
           {
-            "shape": "trust-boundary-curve",
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Boundary",
-              "name": "External / Internal\nNetwork Boundary",
-              "description": "",
-              "isTrustBoundary": true,
-              "hasOpenThreats": false
-            },
-            "labels": [
-              "External / Internal\nNetwork Boundary"
-            ],
-            "id": "62472972-2924-473b-867b-7f0949a52453",
-            "source": {
-              "x": 440,
-              "y": 130
-            },
-            "target": {
-              "x": 430,
-              "y": 540
-            },
-            "vertices": [
-              {
-                "x": 510,
-                "y": 240
-              },
-              {
-                "x": 480,
-                "y": 380
-              }
-            ]
-          },
-          {
             "shape": "flow",
             "attrs": {
               "line": {
@@ -1210,28 +1129,52 @@
               "cell": "4d831538-4591-41fd-ba59-9638e01debc8",
               "port": "12590922-1a1f-49a9-8eb4-71b4c93ec0a3"
             },
-            "vertices": [
-              {
-                "x": 280,
-                "y": 140
-              },
-              {
-                "x": 310,
-                "y": 150
-              },
-              {
-                "x": 350,
-                "y": 170
-              },
-              {
-                "x": 440,
-                "y": 170
-              },
-              {
-                "x": 460,
-                "y": 190
+            "vertices": []
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": "block"
+                },
+                "strokeDasharray": null
               }
-            ]
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "DBMS",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": true,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": []
+            },
+            "labels": [
+              "DBMS"
+            ],
+            "id": "88788d58-8c11-4cf2-9f39-c6c806a891bd",
+            "source": {
+              "cell": "fdc3928c-ab1c-4df7-be27-087048269291",
+              "port": "63654fc0-1b96-4908-9d0b-56a38b4fe548"
+            },
+            "target": {
+              "cell": "a653a5ca-30f1-4a85-a2ab-480bba1ef989",
+              "port": "2ab9868e-396a-4d3d-b5c1-f805845dc739"
+            },
+            "vertices": []
           },
           {
             "position": {
