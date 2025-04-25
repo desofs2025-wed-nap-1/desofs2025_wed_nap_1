@@ -1375,7 +1375,66 @@
               "isSigned": false,
               "storesCredentials": false,
               "storesInventory": false,
-              "threats": []
+              "threats": [
+                {
+                  "id": "4cc77685-0d29-47ec-927f-b094661a33f1",
+                  "title": "Tampering with stored data",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Tampering",
+                  "description": "A malicious actor modifies stored data, such as logs, user-uploaded content, or application configurations.",
+                  "mitigation": "Use containerization technologies to isolate filesystem interactions from the host. Run the application with a dedicated OS user to prevent modifications to system files.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 12,
+                  "score": "8"
+                },
+                {
+                  "id": "fa112a8b-7d6b-4606-8e23-646550f23788",
+                  "title": "Repudiation of file operations",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Repudiation",
+                  "description": "A user might deny having performed an action with system files.",
+                  "mitigation": "Implement logging on file operations, detailing what application user performed what action for a certain file or set of files. Ensure logs are immutable. ",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 13,
+                  "score": "8"
+                },
+                {
+                  "id": "0e8e72cb-96fc-401f-bc7d-746281a17cac",
+                  "title": "Information Disclosure",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Information disclosure",
+                  "description": "An attacker might disclose sensitive information sourced from files stored in the filesystem, such as license plate information.",
+                  "mitigation": "Ensure that files which contain sensitive data are encrypted at-rest. Ensure the least-privilege principle when accessing files.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 14,
+                  "score": "9"
+                },
+                {
+                  "id": "8336d1cb-1dbb-4782-be55-808087616cdf",
+                  "title": "DoS to filesystem",
+                  "status": "Mitigated",
+                  "severity": "Low",
+                  "type": "Denial of service",
+                  "description": "A malicious actor might try to flood the filesystem with user uploads or log flooding (i.e. performing several operations which generate logs in the system in quick succession), causing a system failure.",
+                  "mitigation": "Ensure that no user upload can exceed a maximum file size. Implement log rotation according to file size limits.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 15,
+                  "score": "6"
+                }
+              ],
+              "threatFrequency": {
+                "tampering": 1,
+                "repudiation": 1,
+                "informationDisclosure": 2,
+                "denialOfService": 2
+              }
             }
           },
           {
@@ -1502,6 +1561,6 @@
     ],
     "diagramTop": 1,
     "reviewer": "",
-    "threatTop": 11
+    "threatTop": 15
   }
 }
