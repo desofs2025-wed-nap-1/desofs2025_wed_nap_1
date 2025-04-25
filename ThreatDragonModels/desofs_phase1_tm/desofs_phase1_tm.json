@@ -753,7 +753,38 @@
               "reasonOutOfScope": "",
               "hasOpenThreats": false,
               "providesAuthentication": false,
-              "threats": []
+              "threats": [
+                {
+                  "id": "64530c22-a615-43a0-b8ed-998e718aa7bb",
+                  "title": "Admin Identity",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Spoofing",
+                  "description": "Someone could impersonate an admin to gain access to park management functionalities",
+                  "mitigation": "Enforce Multi-Factor Authentication (MFA) and implement Role-Based Access Control (RBAC)",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 17,
+                  "score": "12"
+                },
+                {
+                  "id": "e1767cb4-8066-4afa-96b6-29b54710dce8",
+                  "title": "Admin repudiates changes",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Repudiation",
+                  "description": "An Admin deletes or modifies data and later denies it",
+                  "mitigation": "Maintain a secure, immutable audit log with user ID, timestamp, and affected data",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 18,
+                  "score": "6"
+                }
+              ],
+              "threatFrequency": {
+                "spoofing": 4,
+                "repudiation": 2
+              }
             }
           },
           {
@@ -875,7 +906,52 @@
               "isEncrypted": false,
               "isPublicNetwork": false,
               "protocol": "",
-              "threats": []
+              "threats": [
+                {
+                  "id": "30b781e4-e7c8-47bc-9071-3ae5c21c08f5",
+                  "title": "Modification of REST request content",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Tampering",
+                  "description": "An attacker intercepts and alters requests sent from the admin application to the backend API, potentially allowing unauthorized access ti administrative functionality or alteration of sensitive data.",
+                  "mitigation": "Implement HTTPS (TLS) in all communications and signing of requests to ensure message integrity",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 20,
+                  "score": "9"
+                },
+                {
+                  "id": "d1e33fdd-f0be-4f45-9836-9649179ab62e",
+                  "title": "Data leak",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "An attacker could gain unauthorized access to sensitive data (e.g., user data, system configurations) by exploiting vulnerabilities in the communication channel between the Admin Application and the Backend API",
+                  "mitigation": "Enforce HTTPS for all communication. Implement strict access controls and input validation on the backend to prevent unauthorized data access. Minimize the data transmitted in each request and response",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 21,
+                  "score": "15"
+                },
+                {
+                  "id": "b078ff60-2c49-43dc-b78e-b00a9967c13b",
+                  "title": "REST endpoint flooding",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Denial of service",
+                  "description": "An attacker could flood the Backend API with requets from the Admin Application, exhausting system resources and making the system unavailable to the users.",
+                  "mitigation": "Implement rate limiting and request throttling on the backend API. Consider using a web application firewall to detect and block malicious traffic. Employ DDoS protection mechanims",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 22,
+                  "score": "12"
+                }
+              ],
+              "threatFrequency": {
+                "tampering": 4,
+                "informationDisclosure": 3,
+                "denialOfService": 2
+              }
             },
             "labels": [
               "Communicates\nWith"
@@ -890,6 +966,18 @@
               "port": "897c8516-0c36-491d-aca3-10ef21116b58"
             },
             "vertices": [
+              {
+                "x": 320,
+                "y": 340
+              },
+              {
+                "x": 340,
+                "y": 320
+              },
+              {
+                "x": 370,
+                "y": 320
+              },
               {
                 "x": 380,
                 "y": 310
@@ -988,6 +1076,14 @@
               {
                 "x": 280,
                 "y": 292
+              },
+              {
+                "x": 350,
+                "y": 270
+              },
+              {
+                "x": 390,
+                "y": 270
               }
             ]
           },
@@ -1142,8 +1238,7 @@
             "shape": "flow",
             "attrs": {
               "line": {
-                "stroke": "red",
-                "strokeWidth": 2.5,
+                "stroke": "#333333",
                 "targetMarker": {
                   "name": "block"
                 },
@@ -1163,7 +1258,7 @@
               "description": "",
               "outOfScope": false,
               "reasonOutOfScope": "",
-              "hasOpenThreats": true,
+              "hasOpenThreats": false,
               "isBidirectional": false,
               "isEncrypted": false,
               "isPublicNetwork": false,
@@ -1198,7 +1293,7 @@
                 {
                   "id": "d984686c-7b5b-4fba-ac6b-fef196050fde",
                   "title": "API Request Flooding",
-                  "status": "Open",
+                  "status": "Mitigated",
                   "severity": "Medium",
                   "type": "Denial of service",
                   "description": "An attacker or malicious user could flood the backend API with requests from the customer application, making the system unavailable to other users.",
@@ -1212,7 +1307,7 @@
               "threatFrequency": {
                 "tampering": 1,
                 "informationDisclosure": 1,
-                "denialOfService": 1
+                "denialOfService": 2
               }
             },
             "labels": [
@@ -1234,6 +1329,10 @@
               },
               {
                 "x": 310,
+                "y": 150
+              },
+              {
+                "x": 330,
                 "y": 150
               },
               {
@@ -1588,12 +1687,26 @@
               "description": "",
               "outOfScope": false,
               "reasonOutOfScope": "",
-              "hasOpenThreats": false,
+              "hasOpenThreats": true,
               "handlesCardPayment": false,
               "handlesGoodsOrServices": false,
               "isWebApplication": false,
               "privilegeLevel": "",
-              "threats": []
+              "threats": [
+                {
+                  "id": "259a71dc-a51d-4012-a8e3-342fcea17ee0",
+                  "title": "New STRIDE threat",
+                  "status": "Open",
+                  "severity": "TBD",
+                  "type": "Spoofing",
+                  "description": "Provide a description for this threat",
+                  "mitigation": "Provide remediation for this threat or a reason if status is N/A",
+                  "modelType": "STRIDE",
+                  "new": true,
+                  "number": 16,
+                  "score": ""
+                }
+              ]
             }
           }
         ]
@@ -1601,6 +1714,6 @@
     ],
     "diagramTop": 1,
     "reviewer": "",
-    "threatTop": 15
+    "threatTop": 22
   }
 }
