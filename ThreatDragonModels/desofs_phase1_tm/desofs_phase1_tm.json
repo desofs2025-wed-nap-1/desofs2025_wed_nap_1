@@ -1211,6 +1211,51 @@
             ]
           },
           {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": "block"
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "DBMS",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": true,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": []
+            },
+            "labels": [
+              "DBMS"
+            ],
+            "id": "f1505c06-ddbd-4604-9c88-326a424e35cb",
+            "source": {
+              "cell": "fdc3928c-ab1c-4df7-be27-087048269291",
+              "port": "63654fc0-1b96-4908-9d0b-56a38b4fe548"
+            },
+            "target": {
+              "cell": "a653a5ca-30f1-4a85-a2ab-480bba1ef989",
+              "port": "2ab9868e-396a-4d3d-b5c1-f805845dc739"
+            },
+            "vertices": []
+          },
+          {
             "position": {
               "x": 620,
               "y": 412
