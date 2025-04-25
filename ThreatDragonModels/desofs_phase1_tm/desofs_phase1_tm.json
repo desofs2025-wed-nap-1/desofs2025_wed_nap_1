@@ -146,15 +146,80 @@
                   "new": false,
                   "number": 1,
                   "score": "9"
+                },
+                {
+                  "id": "5ffed15c-3eb6-41cd-9213-f020b2ae7c28",
+                  "title": "Information Tampering",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Tampering",
+                  "description": "Attackers might try to tamper the information stored by the application, performing malicious requests in order to do so.",
+                  "mitigation": "Use TLS to encrypt every connection. Validate all user-provided input according to well-defined rules. Implement queries with prepared statements to prevent tampering via database operations. ",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 2,
+                  "score": "6"
+                },
+                {
+                  "id": "62fd4796-cf9a-4a60-b3f3-784a41f65d8a",
+                  "title": "Repudiation",
+                  "status": "Mitigated",
+                  "severity": "Low",
+                  "type": "Repudiation",
+                  "description": "Users might try to deny having performed certain actions on the platform.",
+                  "mitigation": "Implement robust logging solutions to ensure traceability and accountability of all performed actions.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 3,
+                  "score": "4"
+                },
+                {
+                  "id": "87cd5975-1b2c-4d6e-bfe1-abc500368350",
+                  "title": "Information Disclosure",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Information disclosure",
+                  "description": "Attackers might try to release information which should not be accessible to the general public.",
+                  "mitigation": "Validate all incoming requests. Encrypt data in transactions. Ensure that RBAC is strictly enforced so that access to data is allowed according to the least-privilege principle. Sanitize API responses to ensure no detailed error logs are sent to the client-side.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 4,
+                  "score": "8"
+                },
+                {
+                  "id": "5bb716e5-c592-463f-920a-edb534c3bebf",
+                  "title": "DDoS",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Denial of service",
+                  "description": "An attacker might attempt to issue a flood of requests to the backend, rendering it unavailable to respond to legitimate requests",
+                  "mitigation": "Implement rate limiting and request throttling measures to ensure that attackers can't flood the backend with requests.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 5,
+                  "score": "12"
+                },
+                {
+                  "id": "e2445d06-4dc6-410c-8bc9-021034b06cf5",
+                  "title": "Elevation of Privilege",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Elevation of privilege",
+                  "description": "A user might try to bypass access controls via insecure endpoints to elevate his privilege to an admin or park manager, thus becoming able to tamper with sensitive data. ",
+                  "mitigation": "Enforce strict RBAC policies to ensure that users can't change their privileges. Re-validate the provided authentication token and match it with the operation being requested.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 6,
+                  "score": "8"
                 }
               ],
               "threatFrequency": {
                 "spoofing": 2,
-                "tampering": 0,
-                "repudiation": 0,
-                "informationDisclosure": 0,
-                "denialOfService": 0,
-                "elevationOfPrivilege": 0
+                "tampering": 1,
+                "repudiation": 1,
+                "informationDisclosure": 3,
+                "denialOfService": 2,
+                "elevationOfPrivilege": 1
               }
             }
           },
@@ -711,7 +776,7 @@
             "connector": "smooth",
             "data": {
               "type": "tm.Flow",
-              "name": "DBMS",
+              "name": "Writes to / Reads From",
               "description": "",
               "outOfScope": false,
               "reasonOutOfScope": "",
@@ -720,55 +785,55 @@
               "isEncrypted": false,
               "isPublicNetwork": false,
               "protocol": "",
-              "threats": []
-            },
-            "labels": [
-              "DBMS"
-            ],
-            "id": "88788d58-8c11-4cf2-9f39-c6c806a891bd",
-            "source": {
-              "cell": "fdc3928c-ab1c-4df7-be27-087048269291",
-              "port": "63654fc0-1b96-4908-9d0b-56a38b4fe548"
-            },
-            "target": {
-              "cell": "a653a5ca-30f1-4a85-a2ab-480bba1ef989",
-              "port": "2ab9868e-396a-4d3d-b5c1-f805845dc739"
-            },
-            "vertices": []
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "#333333",
-                "targetMarker": {
-                  "name": "block"
+              "threats": [
+                {
+                  "id": "194b4b9b-c008-4819-9745-7479c070f685",
+                  "title": "Tampering with system files",
+                  "status": "Mitigated",
+                  "severity": "Low",
+                  "type": "Tampering",
+                  "description": "An attacker might try to tamper with data that's written to (or read from) the filesystem.",
+                  "mitigation": "Run the backend process as non-root so that it can't alter critical files.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 7,
+                  "score": "4"
                 },
-                "sourceMarker": {
-                  "name": ""
+                {
+                  "id": "4db36d8a-767f-4505-b720-c22f782dc2b1",
+                  "title": "DDoS",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Denial of service",
+                  "description": "An attacker might try to perform several actions which require writing to / reading from the filesystem in a short period of time, thus rendering the system unavailable due to the processing of these requests.",
+                  "mitigation": "Limit the number of concurrent filesystem operations the backend can perform. Limit the maximum file size for user uploads or generated reports.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 8,
+                  "score": "12"
                 },
-                "strokeDasharray": null
+                {
+                  "id": "8d680899-529b-4031-a344-e78ce6d38020",
+                  "title": "Obtaining Information",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Information disclosure",
+                  "description": "An attacker might try to obtain information that's being written to or read from the filesystem without being allowed to do so.",
+                  "mitigation": "Ensure that potentially sensitive data being stored on the filesystem (or read from it) through this data flow is encrypted, so that it cannot be disclosed.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 9,
+                  "score": "6"
+                }
+              ],
+              "threatFrequency": {
+                "tampering": 1,
+                "informationDisclosure": 1,
+                "denialOfService": 2
               }
             },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "Writes to/\nReads from",
-              "description": "",
-              "outOfScope": false,
-              "reasonOutOfScope": "",
-              "hasOpenThreats": false,
-              "isBidirectional": false,
-              "isEncrypted": false,
-              "isPublicNetwork": false,
-              "protocol": "",
-              "threats": []
-            },
             "labels": [
-              "Writes to/\nReads from"
+              "Writes to / Reads From"
             ],
             "id": "dac27a28-5cbf-441b-9d91-45c8402630d3",
             "source": {
@@ -991,7 +1056,47 @@
               "isEncrypted": false,
               "isPublicNetwork": false,
               "protocol": "",
-              "threats": []
+              "threats": [
+                {
+                  "id": "d64a53a7-0d2d-45e9-8bac-dafd8e6ea451",
+                  "title": "Tampering with authentication data",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Tampering",
+                  "description": "An attacker might try to tamper with data being sent from the backend to the authentication service in order to elevate his privileges.",
+                  "mitigation": "Encrypt all connections with TLS. Always verify claims being issued with a token.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 10,
+                  "score": "6"
+                },
+                {
+                  "id": "70404464-0b1f-4207-986b-fe9580899eb0",
+                  "title": "Disclose User Authentication Details",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Information disclosure",
+                  "description": "An attacker might try to disclose sensitive data being transmitted in this communication channel.",
+                  "mitigation": "Ensure connections are encrypted using TLS. Ensure only the necessary data is transmitted in each transaction.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 11,
+                  "score": "8"
+                },
+                {
+                  "id": "82595343-90e8-4b07-a1e9-a0c83dbbedb1",
+                  "title": "DDoS of Authentication Service",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Attackers spam login/MFA endpoints to exhaust backend or authentication service resources.",
+                  "mitigation": "Implement rate limiting between these services to ensure that resources are not exhausted. Use account lockout after repeated failures of login attempts.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 12,
+                  "score": "9"
+                }
+              ]
             },
             "labels": [
               "Handles Authentication\nRequests"
@@ -1144,6 +1249,51 @@
                 "y": 190
               }
             ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": "block"
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "DBMS",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": false,
+              "isBidirectional": true,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": []
+            },
+            "labels": [
+              "DBMS"
+            ],
+            "id": "f1505c06-ddbd-4604-9c88-326a424e35cb",
+            "source": {
+              "cell": "fdc3928c-ab1c-4df7-be27-087048269291",
+              "port": "63654fc0-1b96-4908-9d0b-56a38b4fe548"
+            },
+            "target": {
+              "cell": "a653a5ca-30f1-4a85-a2ab-480bba1ef989",
+              "port": "2ab9868e-396a-4d3d-b5c1-f805845dc739"
+            },
+            "vertices": []
           },
           {
             "position": {
