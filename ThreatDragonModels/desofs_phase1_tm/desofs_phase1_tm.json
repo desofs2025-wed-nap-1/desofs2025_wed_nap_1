@@ -913,7 +913,7 @@
                   "status": "Mitigated",
                   "severity": "High",
                   "type": "Tampering",
-                  "description": "An attacker intercepts and alters requests sent from the admin application to the backend API, potentially allowing unauthorized access ti administrative functionality or alteration of sensitive data.",
+                  "description": "An attacker intercepts and alters requests sent from the admin application to the backend API, potentially allowing unauthorized access to administrative functionality or alteration of sensitive data.",
                   "mitigation": "Implement HTTPS (TLS) in all communications and signing of requests to ensure message integrity",
                   "modelType": "STRIDE",
                   "new": false,
@@ -948,7 +948,7 @@
                 }
               ],
               "threatFrequency": {
-                "tampering": 4,
+                "tampering": 5,
                 "informationDisclosure": 3,
                 "denialOfService": 2
               }
@@ -982,7 +982,17 @@
                 "x": 380,
                 "y": 310
               }
-            ]
+            ],
+            "tools": {
+              "items": [
+                "boundary",
+                "button-remove",
+                "vertices",
+                "source-arrowhead",
+                "target-arrowhead"
+              ],
+              "name": null
+            }
           },
           {
             "shape": "flow",
