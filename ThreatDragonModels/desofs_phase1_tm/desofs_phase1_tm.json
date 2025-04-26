@@ -237,11 +237,13 @@
                 "text": "Database"
               },
               "topLine": {
-                "strokeWidth": 1.5,
+                "stroke": "red",
+                "strokeWidth": 2.5,
                 "strokeDasharray": null
               },
               "bottomLine": {
-                "strokeWidth": 1.5,
+                "stroke": "red",
+                "strokeWidth": 2.5,
                 "strokeDasharray": null
               }
             },
@@ -337,13 +339,59 @@
               "description": "",
               "outOfScope": false,
               "reasonOutOfScope": "",
-              "hasOpenThreats": false,
+              "hasOpenThreats": true,
               "isALog": false,
               "isEncrypted": false,
               "isSigned": false,
               "storesCredentials": false,
               "storesInventory": false,
-              "threats": []
+              "threats": [
+                {
+                  "id": "213ad4e1-524e-4683-b17b-b70e3a4bd5d2",
+                  "title": "DB Tampering",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Tampering",
+                  "description": "Attackers modify database contents",
+                  "mitigation": "Strong access controls, least privilege",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 25,
+                  "score": "12"
+                },
+                {
+                  "id": "e30aaf95-9163-41fa-9ef4-6d5793490d70",
+                  "title": "DB Information Disclosure",
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "type": "Information disclosure",
+                  "description": "Leaking sensitive DB data",
+                  "mitigation": "Encrypt DB at rest and transit, access controls",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 26,
+                  "score": "16"
+                },
+                {
+                  "id": "5abf4e08-02d4-428d-96ed-7bff1a25b744",
+                  "title": "New STRIDE threat",
+                  "status": "Open",
+                  "severity": "TBD",
+                  "type": "Repudiation",
+                  "description": "Provide a description for this threat",
+                  "mitigation": "Provide remediation for this threat or a reason if status is N/A",
+                  "modelType": "STRIDE",
+                  "new": true,
+                  "number": 29,
+                  "score": ""
+                }
+              ],
+              "threatFrequency": {
+                "tampering": 1,
+                "repudiation": 0,
+                "informationDisclosure": 1,
+                "denialOfService": 0
+              }
             }
           },
           {
@@ -982,17 +1030,7 @@
                 "x": 380,
                 "y": 310
               }
-            ],
-            "tools": {
-              "items": [
-                "boundary",
-                "button-remove",
-                "vertices",
-                "source-arrowhead",
-                "target-arrowhead"
-              ],
-              "name": null
-            }
+            ]
           },
           {
             "shape": "flow",
@@ -1402,7 +1440,12 @@
               "cell": "a653a5ca-30f1-4a85-a2ab-480bba1ef989",
               "port": "2ab9868e-396a-4d3d-b5c1-f805845dc739"
             },
-            "vertices": []
+            "vertices": [
+              {
+                "x": 790,
+                "y": 240
+              }
+            ]
           },
           {
             "position": {
@@ -1600,8 +1643,8 @@
                 "text": "Authentication"
               },
               "body": {
-                "stroke": "#333333",
-                "strokeWidth": 1.5,
+                "stroke": "red",
+                "strokeWidth": 2.5,
                 "strokeDasharray": null
               }
             },
@@ -1705,18 +1748,52 @@
               "threats": [
                 {
                   "id": "259a71dc-a51d-4012-a8e3-342fcea17ee0",
-                  "title": "New STRIDE threat",
-                  "status": "Open",
-                  "severity": "TBD",
+                  "title": "Authentication Spoofing",
+                  "status": "Mitigated",
+                  "severity": "Medium",
                   "type": "Spoofing",
-                  "description": "Provide a description for this threat",
-                  "mitigation": "Provide remediation for this threat or a reason if status is N/A",
+                  "description": "Fake user logins",
+                  "mitigation": "Rely on SSO/OAuth securely",
                   "modelType": "STRIDE",
-                  "new": true,
+                  "new": false,
                   "number": 16,
-                  "score": ""
+                  "score": "4"
+                },
+                {
+                  "id": "79639f48-e24c-46c4-a9c0-a767ca1e55ce",
+                  "title": "Authentication Tampering",
+                  "status": "Mitigated",
+                  "severity": "Low",
+                  "type": "Tampering",
+                  "description": "Forged tokens",
+                  "mitigation": "Token signing, validation",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 27,
+                  "score": "4"
+                },
+                {
+                  "id": "1e5c6e5a-8a92-4ec3-ba2e-513cad276fe8",
+                  "title": "Authentication DoS",
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "Overloading auth service",
+                  "mitigation": "Add rate limiting, CAPTCHA",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 28,
+                  "score": "12"
                 }
-              ]
+              ],
+              "threatFrequency": {
+                "spoofing": 1,
+                "tampering": 1,
+                "repudiation": 0,
+                "informationDisclosure": 0,
+                "denialOfService": 1,
+                "elevationOfPrivilege": 0
+              }
             }
           }
         ]
@@ -1724,6 +1801,6 @@
     ],
     "diagramTop": 1,
     "reviewer": "",
-    "threatTop": 28
+    "threatTop": 29
   }
 }
