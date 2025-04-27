@@ -237,13 +237,11 @@
                 "text": "Database"
               },
               "topLine": {
-                "stroke": "red",
-                "strokeWidth": 2.5,
+                "strokeWidth": 1.5,
                 "strokeDasharray": null
               },
               "bottomLine": {
-                "stroke": "red",
-                "strokeWidth": 2.5,
+                "strokeWidth": 1.5,
                 "strokeDasharray": null
               }
             },
@@ -339,7 +337,7 @@
               "description": "",
               "outOfScope": false,
               "reasonOutOfScope": "",
-              "hasOpenThreats": true,
+              "hasOpenThreats": false,
               "isALog": false,
               "isEncrypted": false,
               "isSigned": false,
@@ -371,19 +369,6 @@
                   "new": false,
                   "number": 26,
                   "score": "16"
-                },
-                {
-                  "id": "5abf4e08-02d4-428d-96ed-7bff1a25b744",
-                  "title": "New STRIDE threat",
-                  "status": "Open",
-                  "severity": "TBD",
-                  "type": "Repudiation",
-                  "description": "Provide a description for this threat",
-                  "mitigation": "Provide remediation for this threat or a reason if status is N/A",
-                  "modelType": "STRIDE",
-                  "new": true,
-                  "number": 29,
-                  "score": ""
                 }
               ],
               "threatFrequency": {
@@ -1426,7 +1411,39 @@
               "isEncrypted": false,
               "isPublicNetwork": false,
               "protocol": "",
-              "threats": []
+              "threats": [
+                {
+                  "id": "8e658eaf-8350-45b2-8ed4-7e4dcdb91edc",
+                  "title": "API ↔ DB Connection Data Leak",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Information disclosure",
+                  "description": "Data leaks during connection",
+                  "mitigation": "Secure connection",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 32,
+                  "score": "12"
+                },
+                {
+                  "id": "1c623530-dd13-4937-a14b-3e4cc74c09a4",
+                  "title": "API ↔ DB Connection Tampering",
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Tampering",
+                  "description": "Malicious query modification",
+                  "mitigation": "Strong connection security",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 33,
+                  "score": "4"
+                }
+              ],
+              "threatFrequency": {
+                "tampering": 1,
+                "informationDisclosure": 1,
+                "denialOfService": 0
+              }
             },
             "labels": [
               "DBMS"
@@ -1442,10 +1459,20 @@
             },
             "vertices": [
               {
-                "x": 790,
+                "x": 810,
                 "y": 240
               }
-            ]
+            ],
+            "tools": {
+              "items": [
+                "boundary",
+                "button-remove",
+                "vertices",
+                "source-arrowhead",
+                "target-arrowhead"
+              ],
+              "name": null
+            }
           },
           {
             "position": {
@@ -1801,6 +1828,6 @@
     ],
     "diagramTop": 1,
     "reviewer": "",
-    "threatTop": 31
+    "threatTop": 33
   }
 }
