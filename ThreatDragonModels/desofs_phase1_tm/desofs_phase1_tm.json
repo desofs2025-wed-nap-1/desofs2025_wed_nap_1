@@ -1676,8 +1676,8 @@
                 "text": "Authentication"
               },
               "body": {
-                "stroke": "red",
-                "strokeWidth": 2.5,
+                "stroke": "#333333",
+                "strokeWidth": 1.5,
                 "strokeDasharray": null
               }
             },
@@ -1773,7 +1773,7 @@
               "description": "",
               "outOfScope": false,
               "reasonOutOfScope": "",
-              "hasOpenThreats": true,
+              "hasOpenThreats": false,
               "handlesCardPayment": false,
               "handlesGoodsOrServices": false,
               "isWebApplication": false,
@@ -1808,7 +1808,7 @@
                 {
                   "id": "1e5c6e5a-8a92-4ec3-ba2e-513cad276fe8",
                   "title": "Authentication DoS",
-                  "status": "Open",
+                  "status": "Mitigated",
                   "severity": "Medium",
                   "type": "Denial of service",
                   "description": "Overloading auth service",
@@ -1824,7 +1824,7 @@
                 "tampering": 1,
                 "repudiation": 0,
                 "informationDisclosure": 0,
-                "denialOfService": 1,
+                "denialOfService": 2,
                 "elevationOfPrivilege": 0
               }
             }
