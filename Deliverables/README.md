@@ -309,8 +309,6 @@ The following section presents the threat model that was created for the applica
 | 1.5 | Manage Park                 | Page to add, update or delete a park in the system                                                                            | 3             |
 | 1.6 | Manage Park Managers        | Page to add, delete, or change information of park managers.                                            |  4            |
 
-## Exit Points
-
 ## Assets
 
 | ID  | Name                            | Description                                                                                                              | Trust Levels |
@@ -348,7 +346,7 @@ The following section presents the threat model that was created for the applica
 
 ## STRIDE Analysis for each component
 
-Having defined all elements in the DFD, we conducted a STRIDE analysis for each of them, wherein we detail each threat that affects our system, as well as mitigation measures for it. Having used Threat Dragon for this, we present the full threat model report in the [threatModel.pdf](./threatModel/threatModel.pdf) file.
+Having defined all elements in the DFD, we conducted a STRIDE analysis for each of them, wherein we detail each threat that affects our system, as well as mitigation measures for it. Having used Threat Dragon for this, we present the full threat model report in the [`threatModel.pdf`](./threatModel/threatModel.pdf) file.
 
 ## Risk Classification
 
@@ -358,7 +356,7 @@ Since we performed a STRIDE analysis for each component of the DFD, we require a
 
 # ASVS Checklist
 
-The full ASVS assessment is presented in the [v4-ASVS-checklist-en.xlsx](./v4-ASVS-checklist-en.xlsx) file, with assessments on the applicability of the requirements, as well as comments and documentation references for each of those considered valid.
+The full ASVS assessment is presented in the [`v4-ASVS-checklist-en.xlsx`](./v4-ASVS-checklist-en.xlsx) file, with assessments on the applicability of the requirements, as well as comments and documentation references for each of those considered valid.
 
 Below, we also present the current ASVS assessment summary for this phase of the project:
 
