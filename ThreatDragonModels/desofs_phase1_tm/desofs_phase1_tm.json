@@ -141,7 +141,7 @@
             "data": {
               "type": "tm.Process",
               "name": "Backend\nAPI",
-              "description": "",
+              "description": "Backend API which processes requests by users.",
               "outOfScope": false,
               "reasonOutOfScope": "",
               "hasOpenThreats": false,
@@ -350,7 +350,7 @@
             "data": {
               "type": "tm.Store",
               "name": "Database",
-              "description": "",
+              "description": "Relational Database used by the application",
               "outOfScope": false,
               "reasonOutOfScope": "",
               "hasOpenThreats": false,
@@ -503,7 +503,7 @@
             "data": {
               "type": "tm.Actor",
               "name": "Customer\nApplication",
-              "description": "",
+              "description": "Application used by regular users to interact with the API",
               "outOfScope": false,
               "reasonOutOfScope": "",
               "hasOpenThreats": false,
@@ -650,7 +650,7 @@
             "data": {
               "type": "tm.Actor",
               "name": "Park Manager\nApplication",
-              "description": "",
+              "description": "Application used by Park Managers to interact with the API",
               "outOfScope": false,
               "reasonOutOfScope": "",
               "hasOpenThreats": false,
@@ -797,7 +797,7 @@
             "data": {
               "type": "tm.Actor",
               "name": "Admin\nApplication",
-              "description": "",
+              "description": "Application used by Administrators to interact with the API",
               "outOfScope": false,
               "reasonOutOfScope": "",
               "hasOpenThreats": false,
@@ -857,7 +857,7 @@
             "data": {
               "type": "tm.Flow",
               "name": "Writes to / Reads From",
-              "description": "",
+              "description": "Communication flow between the Backend API and the filesystem",
               "outOfScope": false,
               "reasonOutOfScope": "",
               "hasOpenThreats": false,
@@ -947,7 +947,7 @@
             "data": {
               "type": "tm.Flow",
               "name": "Communicates\nWith",
-              "description": "",
+              "description": "Communication between Administrators and the Backend API",
               "outOfScope": false,
               "reasonOutOfScope": "",
               "hasOpenThreats": false,
@@ -1054,7 +1054,7 @@
             "data": {
               "type": "tm.Flow",
               "name": "Communicates\nWith",
-              "description": "",
+              "description": "Communication flow between the Park Manager application and the Backend API",
               "outOfScope": false,
               "reasonOutOfScope": "",
               "hasOpenThreats": false,
@@ -1193,7 +1193,7 @@
             "data": {
               "type": "tm.Flow",
               "name": "Handles Authentication\nRequests",
-              "description": "",
+              "description": "Communication flow between the Backend API and the authentication service",
               "outOfScope": false,
               "reasonOutOfScope": "",
               "hasOpenThreats": false,
@@ -1304,7 +1304,7 @@
             "data": {
               "type": "tm.Flow",
               "name": "Communicates\nWith",
-              "description": "",
+              "description": "Communication flow between the Customer application and the Backend API",
               "outOfScope": false,
               "reasonOutOfScope": "",
               "hasOpenThreats": false,
@@ -1419,7 +1419,7 @@
             "data": {
               "type": "tm.Flow",
               "name": "DBMS",
-              "description": "",
+              "description": "Communication flow between the API and the database",
               "outOfScope": false,
               "reasonOutOfScope": "",
               "hasOpenThreats": false,
@@ -1591,7 +1591,7 @@
             "data": {
               "type": "tm.Store",
               "name": "Filesystem",
-              "description": "",
+              "description": "Filesystem used by the Backend API to store/read data necessary to the fulfillment of some use cases.",
               "outOfScope": false,
               "reasonOutOfScope": "",
               "hasOpenThreats": false,
@@ -1770,7 +1770,7 @@
             "data": {
               "type": "tm.Process",
               "name": "Authentication",
-              "description": "",
+              "description": "Authentication service which handles the authentication process for the application",
               "outOfScope": false,
               "reasonOutOfScope": "",
               "hasOpenThreats": false,
