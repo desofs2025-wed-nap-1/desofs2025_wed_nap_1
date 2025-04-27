@@ -2,12 +2,28 @@
   "version": "2.4.1",
   "summary": {
     "title": "desofs_phase1_tm",
-    "owner": "",
-    "description": "",
+    "owner": "desofs2025_wed_nap_1",
+    "description": "Our application aims to provide an easier parking experience for our users. Through it, they can create an account, register their vehicles and gain access to parks whenever they need. Users issue parking requests, which are approved by our park managers, thus granting them permission to park their vehicle.",
     "id": 0
   },
   "detail": {
-    "contributors": [],
+    "contributors": [
+      {
+        "name": "1181031@isep.ipp.pt"
+      },
+      {
+        "name": "1190830@isep.ipp.pt"
+      },
+      {
+        "name": "1211739@isep.ipp.pt"
+      },
+      {
+        "name": "1240465@isep.ipp.pt"
+      },
+      {
+        "name": "1240466@isep.ipp.pt"
+      }
+    ],
     "diagrams": [
       {
         "id": 0,
@@ -1817,7 +1833,7 @@
       }
     ],
     "diagramTop": 1,
-    "reviewer": "",
+    "reviewer": "nap@isep.ipp.pt",
     "threatTop": 33
   }
 }
