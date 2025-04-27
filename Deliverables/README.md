@@ -1,4 +1,4 @@
-# DESOFS2025_WED_NAP_1
+# DESOFS2025_WED_NAP_1 - Phase 1
 
 DESOFS PROJECT TEAM: 1181031, 1190830, 1211739, 1240465, 1240466
 
@@ -34,7 +34,7 @@ The following list enumerates the functional requirements of our application:
 
 ### Domain Model
 
-![domainModel.svg](../design/domainModel.svg)
+![domainModel.svg](./design/domainModel.svg)
 
 In our domain model, we define four aggregates:
 
@@ -120,7 +120,7 @@ The Admin use cases present the core administrative tasks performed by users wit
 
 Below, we present the Implementation Diagram which details how our application will be deployed:
 
-![deployment](../design/deploymentDiagram.svg)
+![deployment](./design/deploymentDiagram.svg)
 
 ## Security Requirements
 
@@ -288,7 +288,7 @@ The tests should prioritize high-risk areas such as:
 
 # Threat Model
 
-## Executive Summary
+The following section presents the threat model that was created for the application which has been described previously. It follows the [Threat Modeling Process guidelines](https://owasp.org/www-community/Threat_Modeling_Process) defined by the OWASP community.
 
 ## External Dependencies
 
@@ -344,14 +344,16 @@ The tests should prioritize high-risk areas such as:
 
 ## Data-Flow Diagram (DFD)
 
-**TODO:** Incluir o DFD aqui quando estiver finalizado/definitivo
+![dfd.png](./threatModel/dfd.png)
+
+## STRIDE Analysis for each component
+
+Having defined all elements in the DFD, we conducted a STRIDE analysis for each of them, wherein we detail each threat that affects our system, as well as mitigation measures for it. Having used Threat Dragon for this, we present the full threat model report in the [threatModel.pdf](./threatModel/threatModel.pdf) file.
 
 ## Risk Classification
 
 Since we performed a STRIDE analysis for each component of the DFD, we require a systematic way of evaluating the risk score of each identified threat. For that, we used the following risk matrix:
 
-![riskMatrix.svg](../design/risk_matrix.svg)
-
-## Security Testing
+![riskMatrix.svg](./threatModel/risk_matrix.svg)
 
 # ASVS Checklist
