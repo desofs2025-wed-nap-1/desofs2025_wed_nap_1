@@ -357,3 +357,11 @@ Since we performed a STRIDE analysis for each component of the DFD, we require a
 ![riskMatrix.svg](./threatModel/risk_matrix.svg)
 
 # ASVS Checklist
+
+The full ASVS assessment is presented in the [v4-ASVS-checklist-en.xlsx](./v4-ASVS-checklist-en.xlsx) file, with assessments on the applicability of the requirements, as well as comments and documentation references for each of those considered valid.
+
+Below, we also present the current ASVS assessment summary for this phase of the project:
+
+![asvsSummary.png](./asvsExports/asvsSummary.png)
+
+![asvsGraph.png](./asvsExports/asvsGraph.png)
