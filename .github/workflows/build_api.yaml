@@ -6,6 +6,9 @@ on:
   push:
     branches:
       - dev-dynamic-analysis-artifact-scanning
+    paths:
+      - ParkingSystem/**
+      - .github/workflows/build_api.yaml
 
 jobs:
   build-api:
@@ -22,5 +25,15 @@ jobs:
         with:
           context: ./ParkingSystem
           push: false
+          load: true
           tags: desofs/parking-system:0.0.1
 
+      - name: Scan built Docker image with Trivy
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: 'desofs/parking-system:0.0.1'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
