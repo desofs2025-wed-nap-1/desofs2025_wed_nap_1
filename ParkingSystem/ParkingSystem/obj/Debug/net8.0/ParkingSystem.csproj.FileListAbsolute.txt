@@ -13,3 +13,9 @@ C:\Users\MSI\Documents\desofs\desofs2025_wed_nap_1-1\ParkingSystem\ParkingSystem
 C:\Users\MSI\Documents\desofs\desofs2025_wed_nap_1-1\ParkingSystem\ParkingSystem\obj\Debug\net8.0\ParkingSystem.pdb
 C:\Users\MSI\Documents\desofs\desofs2025_wed_nap_1-1\ParkingSystem\ParkingSystem\obj\Debug\net8.0\ParkingSystem.genruntimeconfig.cache
 C:\Users\MSI\Documents\desofs\desofs2025_wed_nap_1-1\ParkingSystem\ParkingSystem\obj\Debug\net8.0\ref\ParkingSystem.dll
+C:\Users\MSI\Documents\desofs\desofs2025_wed_nap_1-1\ParkingSystem\ParkingSystem\bin\Debug\net8.0\Microsoft.OpenApi.dll
+C:\Users\MSI\Documents\desofs\desofs2025_wed_nap_1-1\ParkingSystem\ParkingSystem\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\MSI\Documents\desofs\desofs2025_wed_nap_1-1\ParkingSystem\ParkingSystem\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\MSI\Documents\desofs\desofs2025_wed_nap_1-1\ParkingSystem\ParkingSystem\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\MSI\Documents\desofs\desofs2025_wed_nap_1-1\ParkingSystem\ParkingSystem\obj\Debug\net8.0\ParkingSystem.csproj.AssemblyReference.cache
+C:\Users\MSI\Documents\desofs\desofs2025_wed_nap_1-1\ParkingSystem\ParkingSystem\obj\Debug\net8.0\ParkingSystem.csproj.CopyComplete
