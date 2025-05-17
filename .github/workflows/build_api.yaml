@@ -30,8 +30,10 @@ jobs:
 
       - name: Scan built Docker image with Trivy
         uses: aquasecurity/trivy-action@0.28.0
+        # FIXME: Scanning a random image just to see if a report is generated. Once this is tested change back to ours
         with:
-          image-ref: 'desofs/parking-system:0.0.1'
+          # image-ref: 'desofs/parking-system:0.0.1'
+          image-ref: 'nginx:alpine'
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
