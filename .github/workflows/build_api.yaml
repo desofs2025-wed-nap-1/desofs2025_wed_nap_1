@@ -3,6 +3,9 @@ name: Build and Push API
 on:
   # TODO: temporary while testing, will be changed to run on pull_request to main
   workflow_dispatch:
+  push:
+    branches:
+      - dev-dynamic-analysis-artifact-scanning
 
 jobs:
   build-api:
@@ -21,4 +24,3 @@ jobs:
           push: false
           tags: desofs/parking-system:0.0.1
 
-          
