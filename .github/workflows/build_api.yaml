@@ -36,7 +36,7 @@ jobs:
           image-ref: 'nginx:alpine'
           format: 'sarif'
           output: 'trivy-results.sarif'
-          exit-code: '1'
+          exit-code: '0'
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'MEDIUM,HIGH,CRITICAL'
@@ -45,3 +45,14 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: 'trivy-results.sarif'
+      
+      - name: Fail build on High/Criticial Vulnerabilities
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          format: table
+          image-ref: 'nginx:alpine'
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: 1
+          # On a subsequent call to the action we know trivy is already installed so can skip this
+          skip-setup-trivy: true
