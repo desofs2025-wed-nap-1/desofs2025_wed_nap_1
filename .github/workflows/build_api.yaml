@@ -13,6 +13,9 @@ on:
 jobs:
   build-api:
     runs-on: ubuntu-22.04  
+    permissions:
+      actions: write
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
