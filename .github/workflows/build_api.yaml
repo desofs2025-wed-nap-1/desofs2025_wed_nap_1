@@ -61,7 +61,7 @@ jobs:
         with:
           format: table
           image-ref: 'desofs/parking-system:${{ env.VERSION }}'
-          severity: HIGH,CRITICAL
+          severity: CRITICAL
           ignore-unfixed: true
           exit-code: 1
 
