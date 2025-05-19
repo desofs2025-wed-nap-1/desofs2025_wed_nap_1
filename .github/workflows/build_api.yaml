@@ -14,7 +14,13 @@ jobs:
   build-api:
     runs-on: ubuntu-22.04  
     permissions:
-      actions: write
+      security-events: write
+      pull-requests: read
+      contents: write
+      id-token: write
+      statuses: write
+      actions: read
+      pages: write
     
     steps:
       - name: Checkout code
