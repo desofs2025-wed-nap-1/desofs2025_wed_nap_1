@@ -10,6 +10,9 @@ on:
       - ParkingSystem/**
       - .github/workflows/build_api.yaml
 
+env:
+  VERSION: 0.0.1
+
 jobs:
   build-api:
     runs-on: ubuntu-22.04  
@@ -39,10 +42,8 @@ jobs:
 
       - name: Scan built Docker image with Trivy
         uses: aquasecurity/trivy-action@0.28.0
-        # FIXME: Scanning a random image just to see if a report is generated. Once this is tested change back to ours
         with:
-          # image-ref: 'desofs/parking-system:0.0.1'
-          image-ref: 'nginx:alpine'
+          image-ref: 'desofs/parking-system:${{ env.VERSION }}'
           format: 'sarif'
           output: 'trivy-results.sarif'
           exit-code: '0'
@@ -59,7 +60,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.28.0
         with:
           format: table
-          image-ref: 'nginx:alpine'
+          image-ref: 'desofs/parking-system:${{ env.VERSION }}'
           severity: HIGH,CRITICAL
           ignore-unfixed: true
           exit-code: 1
