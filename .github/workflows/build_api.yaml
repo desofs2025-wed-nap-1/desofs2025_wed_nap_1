@@ -59,9 +59,10 @@ jobs:
       - name: Fail build on High/Criticial Vulnerabilities
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          format: table
+          format: json
           image-ref: 'desofs/parking-system:${{ env.VERSION }}'
           severity: CRITICAL
           ignore-unfixed: true
           exit-code: 1
+          cache: 'false'
 
