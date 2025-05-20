@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using YourProject.DTOs;
-using YourProject.Services;
+using  ParkingSystem.Application.DTOs;
+using  ParkingSystem.Application.Services;
 
 namespace ParkingSystem.API.Controllers
 {

@@ -1,6 +1,8 @@
 using System.Text;
 using System.Text.Json;
-using YourProject.DTOs;
+using ParkingSystem.Application.DTOs;
+using Microsoft.Extensions.Configuration;
+
 
 namespace ParkingSystem.Application.Services
 {
