@@ -12,6 +12,9 @@ on:
 
 env:
   VERSION: 0.0.1
+  # FIXME: token is in clear text since I don't have admin access to our github repo
+  DOCKER_USER: lew6s
+  DOCKER_PASS: dckr_pat_sQeO65WFLgDPo0LYNtxILaLdGiI
 
 jobs:
   build-api:
@@ -32,18 +35,24 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKER_USER }}
+          password: ${{ env.DOCKER_PASS }}
+
       - name: Build docker image
         uses: docker/build-push-action@v6
         with:
           context: ./ParkingSystem
-          push: false
+          push: true
           load: true
-          tags: desofs/parking-system:0.0.1
+          tags: lew6s/parking-system:0.0.1
 
       - name: Scan built Docker image with Trivy
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          image-ref: 'desofs/parking-system:${{ env.VERSION }}'
+          image-ref: 'lew6s/parking-system:${{ env.VERSION }}'
           format: 'sarif'
           output: 'trivy-results.sarif'
           exit-code: '0'
@@ -60,7 +69,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.28.0
         with:
           format: json
-          image-ref: 'desofs/parking-system:${{ env.VERSION }}'
+          image-ref: 'lew6s/parking-system:${{ env.VERSION }}'
           severity: CRITICAL
           ignore-unfixed: true
           exit-code: 1
