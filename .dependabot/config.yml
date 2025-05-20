@@ -1,7 +1,0 @@
-﻿version: 2
-updates:
-  - package-ecosystem: "nuget"
-    directory: "/ParkingSystem/ParkingSystem"
-    schedule:
-      interval: "daily"
-    open-pull-requests-limit: 5
