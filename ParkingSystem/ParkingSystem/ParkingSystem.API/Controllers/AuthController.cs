@@ -5,7 +5,7 @@ using  ParkingSystem.Application.Services;
 namespace ParkingSystem.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     public class AuthController : ControllerBase
     {
         private readonly SupabaseAuthService _authService;
