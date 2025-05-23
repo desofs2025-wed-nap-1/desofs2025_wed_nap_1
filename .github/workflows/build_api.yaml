@@ -77,7 +77,7 @@ jobs:
     needs: [build-api]
     services:
       api:
-        image: 'lew6s/parking-system:${{ env.VERSION }}'
+        image: 'lew6s/parking-system:0.0.1'
         ports:
           - 8080:8080
     
