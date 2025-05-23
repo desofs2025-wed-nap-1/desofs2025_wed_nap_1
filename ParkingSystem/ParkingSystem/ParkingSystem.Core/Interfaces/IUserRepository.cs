@@ -1,9 +1,14 @@
 using ParkingSystem.Core.Aggregates;
-
-namespace ParkingSystem.Core.Interfaces;
-
-public interface IUserRepository
+using System.Threading.Tasks;
+namespace ParkingSystem.Core.Interfaces
 {
-    Task<User?> GetByIdAsync(Guid id);
-    Task<IEnumerable<User>> GetAllAsync();
+    public interface IUserRepository
+    {
+        Task<User?> AddUser(User user);
+        Task<User?> UpdateUser(User user);
+        Task<User?> DeleteUser(long id);
+        Task<User?> GetUserById(long id);
+        Task<User?> GetUserByEmailAndPassword(string email, string password);    
+        Task<bool> IsUsernameTaken(string username);
+    }
 }

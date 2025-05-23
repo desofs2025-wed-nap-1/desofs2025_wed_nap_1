@@ -1,36 +1,59 @@
-/*
+using Microsoft.AspNetCore.Mvc;
+using  ParkingSystem.Application.DTOs;
+using  ParkingSystem.Application.Services;
+using  ParkingSystem.Application.Interfaces;
+
 namespace ParkingSystem.API.Controllers
-{/*
+{
     [ApiController]
     [Route("api/[controller]")]
     public class ParkController : ControllerBase
     {
-        [HttpGet("available")]
-        public IActionResult GetAvailableParks()
+        private readonly IParkService _parkService;
+
+        public ParkController(IParkService parkService)
         {
-            // Simulate fetching data
-            return Ok(new[] { new ParkDTO { Name = "Central Park", AvailableSpots = 42 } });
+            _parkService = parkService;
         }
 
         [HttpPost("create")]
-        public IActionResult CreatePark(ParkDTO parkDto)
+        public IActionResult AddPark(ParkDTO parkDto)
         {
-            // Simulate park creation
-            return Ok("Park created.");
+            var result = _parkService.AddPark(parkDto);
+            if (result != null)
+            {
+                return Ok("Park created successfully.");
+            }
+            return BadRequest("Failed to create park.");
         }
 
         [HttpPut("update")]
         public IActionResult UpdatePark(ParkDTO parkDto)
         {
-            // Simulate update
-            return Ok("Park updated.");
+            var result = _parkService.UpdatePark(parkDto);
+            if (result != null)
+            {
+                return Ok("Park updated successfully.");
+            }
+            return BadRequest("Failed to update park.");
         }
 
         [HttpDelete("delete/{id}")]
-        public IActionResult DeletePark(Guid id)
+        public IActionResult DeletePark(long id)
         {
-            // Simulate deletion
-            return Ok("Park deleted.");
+            var result = _parkService.DeletePark(id);
+            if (result != null)
+            {
+                return Ok("Park deleted successfully.");
+            }
+            return NotFound("Park not found.");
+        }
+
+        [HttpGet("available")]
+        public IActionResult GetAvailableParks()
+        {
+            var parks = _parkService.GetAvailableParks();
+            return Ok(parks);
         }
     }
-}*/
+}

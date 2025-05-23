@@ -1,4 +1,9 @@
-/*namespace ParkingSystem.API.Controllers
+using Microsoft.AspNetCore.Mvc;
+using  ParkingSystem.Application.DTOs;
+using  ParkingSystem.Application.Services;
+using  ParkingSystem.Application.Interfaces;
+
+namespace ParkingSystem.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -14,29 +19,41 @@
         [HttpPost("add")]
         public IActionResult AddVehicle(VehicleDTO vehicleDto)
         {
-            _vehicleService.AddVehicle(vehicleDto);
-            return Ok("Vehicle added successfully.");
+            var result =_vehicleService.AddVehicleToUser(vehicleDto);
+            if (result != null)
+            {
+                return Ok("Vehicle created successfully.");
+            }
+            return BadRequest("Failed to create Vehicle.");
         }
 
         [HttpPut("update")]
         public IActionResult UpdateVehicle(VehicleDTO vehicleDto)
         {
-            _vehicleService.UpdateVehicle(vehicleDto);
-            return Ok("Vehicle updated successfully.");
+            var result = _vehicleService.UpdateVehicle(vehicleDto);
+            if (result != null)
+            {
+                return Ok("Vehicle updated successfully.");
+            }
+            return NotFound("Failed to update vehicle.");
         }
 
         [HttpDelete("delete/{id}")]
-        public IActionResult DeleteVehicle(Guid id)
+        public IActionResult DeleteVehicle(long id)
         {
-            _vehicleService.DeleteVehicle(id);
-            return Ok("Vehicle deleted.");
+            var result = _vehicleService.DeleteVehicle(id);
+            if (result != null)
+            {
+                return Ok("Vehicle deleted successfully.");
+            }
+            return NotFound("Vehicle not found.");
         }
 
         [HttpGet("user/{userId}")]
-        public IActionResult GetVehiclesByUser(Guid userId)
+        public IActionResult GetVehiclesByUser(long userId)
         {
             var vehicles = _vehicleService.GetVehiclesByUser(userId);
             return Ok(vehicles);
         }
     }
-}*/
+}
