@@ -76,6 +76,15 @@ jobs:
     runs-on: ubuntu-22.04
     # container: ubuntu 
     needs: [build-api]
+    permissions:
+      security-events: write
+      pull-requests: read
+      contents: write
+      id-token: write
+      statuses: write
+      actions: read
+      pages: write
+      issues: write
     services:
       api:
         image: 'lew6s/parking-system:0.0.1'
