@@ -71,9 +71,10 @@ jobs:
           ignore-unfixed: true
           exit-code: 1
           cache: 'false'
-  
+
   run-zap-test:
-    runs-on: ubuntu-22.04 
+    runs-on: ubuntu-22.04
+    # container: ubuntu 
     needs: [build-api]
     services:
       api:
@@ -85,5 +86,5 @@ jobs:
       - name: Run ZAP test targeting API
         uses: zaproxy/action-api-scan@v0.9.0
         with:
-          target: 'https://api:8080/'
+          target: 'https://localhost:8080/'
 
