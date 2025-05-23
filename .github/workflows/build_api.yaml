@@ -1,0 +1,98 @@
+name: Build and Push API
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - ParkingSystem/**
+      - .github/workflows/build_api.yaml
+
+env:
+  VERSION: 0.0.1
+
+jobs:
+  build-api:
+    runs-on: ubuntu-22.04  
+    permissions:
+      security-events: write
+      pull-requests: read
+      contents: write
+      id-token: write
+      statuses: write
+      actions: read
+      pages: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_LOGIN_USER }}
+          password: ${{ secrets.DOCKER_LOGIN_TOKEN }}
+      
+      - name: Build docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./ParkingSystem
+          push: true
+          load: true
+          tags: lew6s/parking-system:${{ env.VERSION }}
+
+      - name: Scan built Docker image with Trivy
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: 'lew6s/parking-system:${{ env.VERSION }}'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          exit-code: '0'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'MEDIUM,HIGH,CRITICAL'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+      
+      - name: Fail build on High/Criticial Vulnerabilities
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          format: json
+          image-ref: 'lew6s/parking-system:${{ env.VERSION }}'
+          severity: CRITICAL
+          ignore-unfixed: true
+          exit-code: 1
+          cache: 'false'
+
+  run-zap-test:
+    runs-on: ubuntu-22.04
+    # container: ubuntu 
+    needs: [build-api]
+    permissions:
+      security-events: write
+      pull-requests: read
+      contents: write
+      id-token: write
+      statuses: write
+      actions: read
+      pages: write
+      issues: write
+    services:
+      api:
+        image: 'lew6s/parking-system:0.0.1'
+        ports:
+          - 8080:8080
+    
+    steps:
+      - name: Run ZAP test targeting API
+        uses: zaproxy/action-api-scan@v0.9.0
+        with:
+          target: 'http://localhost:8080/'
+

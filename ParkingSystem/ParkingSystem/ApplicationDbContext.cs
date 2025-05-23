@@ -17,9 +17,9 @@ namespace ParkingSystem.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<User>().HasKey(u => u.Id);
-            modelBuilder.Entity<Vehicle>().HasKey(v => v.Id);
-            modelBuilder.Entity<Park>().HasKey(p => p.Id);
+            // modelBuilder.Entity<User>().HasKey(u => u.Id);
+            // modelBuilder.Entity<Vehicle>().HasKey(v => v.Id);
+            // modelBuilder.Entity<Park>().HasKey(p => p.Id);
 
         }
     }
