@@ -3,19 +3,19 @@ namespace ParkingSystem.Core.Aggregates
 {
     public class User 
     {
-        public string username { get; set; }
-        public string email { get; set; }
-        public string password { get; set; }
-        public string phoneNumber { get; set; }
-        public Role role { get; set; }
+        public string Username { get; set; } = string.Empty;
+        public string Email { get; set; }= string.Empty;
+        public string Password { get; set; }= string.Empty;
+        public string PhoneNumber { get; set; }= string.Empty;
+        public Role Role { get; set; }
 
         public User(string username, string email, string password, string phoneNumber, Role role)
         {
-            username = username;
-            email = email;
-            password = password;
-            phoneNumber = phoneNumber;
-            role = role;
+            Username = username;
+            Email = email;
+            Password = password;
+            PhoneNumber = phoneNumber;
+            Role = role;
         }
         public User(){}
     }
