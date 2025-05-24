@@ -145,11 +145,39 @@ Below, we can see an example of the findings reported by Trivy:
 
 ![trivyScanSecurity.png](./img/trivyScanSecurity.png)
 
-
-
 ### Dynamic Analysis
 
-(falar do ZAP API scan, mostrar o workflow, mostrar o relatório gerado por este processo)
+After conducting the artifact scan, we run a dynamic analysis of the application. For this, we used the `OWASP ZAP` tool. Notably, we used the `zaproxy/action-api-scan@v0.9.0` GitHub action, which specifically conducts a scan for Web APIs - unlike other OWASP ZAP scans. These tests are fully automated through the [`build_api.yaml`](../../../.github/workflows/build_api.yaml) workflow.
+
+Since we currently don't have a production deployment of the application, the aforementioned Docker image is executed as a service container for this job, making it so that it's accessible by the job itself on the `localhost` of the runner:
+
+```YAML
+services:
+  api:
+    image: 'lew6s/parking-system:0.0.1'
+    ports:
+      - 8080:8080
+```
+
+Then, we have a step which runs the ZAP API scan, targeting the application's container:
+
+```YAML
+steps:
+  - name: Run ZAP test targeting API
+    uses: zaproxy/action-api-scan@v0.9.0
+    with:
+      target: 'http://localhost:8080/'
+```
+
+This action generated a report, which is set as an artifact on the build itself:
+
+![zapScanArtifact.png](./img/zapScanArtifact.png)
+
+However, for convenience and further analysis of the findings, it also opens a **GitHub issue** which reports the findings, so that the team can look into and fix them:
+
+![zapScanIssue.png](./img/zapScanIssue.png)
+
+If this issue is not resolved, it's updated with new findings (if that's the case) whenever the job executes.
 
 ### Configuration Validation
 
