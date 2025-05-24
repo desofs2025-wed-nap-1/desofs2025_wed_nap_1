@@ -202,8 +202,6 @@ If this issue is not resolved, it's updated with new findings (if that's the cas
 
 ### Configuration Validation
 
-(falar de tools que temos para detetar secrets a serem pushados para o repo - temos evidências disto, é só explicar e colar)
-
 As seen in the **Artifact Scanning** section, Trivy is executed with the `misconfiguration` scan profile enabled, which makes it so that the configuration elements of the application are also automatically scanned. This is handled by the **same workflow job and step**, so that explanation won't be repeated here.
 
 On the security tab, **Trivy** also includes security issues related to configuration. Below is an example of this:
