@@ -29,6 +29,7 @@ jobs:
         run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Begin SonarCloud analysis
+        working-directory: ParkingSystem/ParkingSystem
         run: >
           dotnet-sonarscanner begin
           /k:"JoanaGMoreira_desofs2025_wed_nap_1"
@@ -37,10 +38,13 @@ jobs:
           /d:sonar.host.url="https://sonarcloud.io"
 
       - name: Restore dependencies
+        working-directory: ParkingSystem/ParkingSystem
         run: dotnet restore ParkingSystem.sln
 
       - name: Build solution
+        working-directory: ParkingSystem/ParkingSystem
         run: dotnet build ParkingSystem.sln --no-restore --no-incremental
 
       - name: End SonarCloud analysis
+        working-directory: ParkingSystem/ParkingSystem
         run: dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
