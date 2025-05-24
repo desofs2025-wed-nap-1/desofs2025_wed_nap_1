@@ -14,7 +14,6 @@ This `README` file contains all information about developments that were done du
 
 ### Static Code Analysis
 
-### Static Code Analysis
 
 To ensure our code quality, maintainability, and security, we integrated **SonarCloud** into our development pipeline. SonarCloud automatically analyzes our C# codebase on each push to the `main` branch using a GitHub Actions workflow.
 
