@@ -3,6 +3,9 @@ using ParkingSystem.Application.Interfaces;
 using  ParkingSystem.Application.DTOs;
 using ParkingSystem.Application.Mappers;
 using System.Text.RegularExpressions;
+//using ParkingSystem.Core.Entities;
+using ParkingSystem.Core.Interfaces;
+using ParkingSystem.Core.Aggregates;
 namespace ParkingSystem.Application.Services
 {
     public class VehicleService : IVehicleService
