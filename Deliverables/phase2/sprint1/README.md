@@ -14,7 +14,79 @@ This `README` file contains all information about developments that were done du
 
 ### Static Code Analysis
 
-(falar sobre o SonarCloud e respetivo workflow, anexar prints de um report/output/artefacto gerado por esta ferramenta para termos evidências de que a estamos a usar).
+### Static Code Analysis
+
+To ensure our code quality, maintainability, and security, we integrated **SonarCloud** into our development pipeline. SonarCloud automatically analyzes our C# codebase on each push to the `main` branch using a GitHub Actions workflow.
+
+The workflow performs the following steps:
+
+- **Checkout code and setup environment**
+
+```yaml
+- name: Checkout code
+  uses: actions/checkout@v4
+
+- name: Setup .NET
+  uses: actions/setup-dotnet@v4
+  with:
+    dotnet-version: '8.0.x'  
+```
+
+- **Install SonarScanner tool and configure PATH**
+
+```yaml
+- name: Install dotnet-sonarscanner
+  run: dotnet tool install --global dotnet-sonarscanner
+
+- name: Add dotnet tools to PATH
+  run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+```
+
+- **Begin SonarCloud analysis**
+
+```yaml
+- name: Begin SonarCloud analysis
+  working-directory: ParkingSystem/ParkingSystem
+  run: >
+    dotnet-sonarscanner begin
+    /k:"JoanaGMoreira_desofs2025_wed_nap_1"
+    /o:"joanagmoreira"
+    /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+    /d:sonar.host.url="https://sonarcloud.io"
+```
+
+- **Restore dependencies and build solution**
+
+```yaml
+- name: Restore dependencies
+  working-directory: ParkingSystem/ParkingSystem
+  run: dotnet restore ParkingSystem.sln
+
+- name: Build solution
+  working-directory: ParkingSystem/ParkingSystem
+  run: dotnet build ParkingSystem.sln --no-restore --no-incremental
+```
+
+- **End SonarCloud analysis**
+
+```yaml
+- name: End SonarCloud analysis
+  working-directory: ParkingSystem/ParkingSystem
+  run: dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+```
+
+SonarCloud provides continuous feedback on:
+- Code smells
+- Bugs
+- Security vulnerabilities
+- Test coverage
+
+All team members are encouraged to regularly check SonarCloud reports and fix identified issues as part of the development process.
+
+Below is an example of a SonarCloud report generated during this sprint:
+
+![SonarCloud Dashboard Screenshot](./img/SonarCloud.png)
+
 
 ### Software Composition Analysis
 
