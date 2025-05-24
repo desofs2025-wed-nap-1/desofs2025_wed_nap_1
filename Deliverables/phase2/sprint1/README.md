@@ -22,6 +22,21 @@ This `README` file contains all information about developments that were done du
 
 ## Build and Test
 
+This section will describe the build and test procedure for the application, highlighting relevant procedures.
+
+### Build process
+
+To build our application in a repeatable and efficient way, we chose to adopt Docker - thus, our main artifact is a Docker image. This image is built based on our [`Dockerfile`](../../../ParkingSystem/Dockerfile), which itself uses two Microsoft images (with our project being developed in C# and using the .NET framework):
+
+1. Firstly, `dotnet/sdk:8.0` is used to build the application using the necessary `dotnet publish` command, which generates the applicational artifacts in the `out/` directory.
+2. The `aspnet:8.0` image is used to actually execute the application, using the ASP.NET framework. Here, `ParkingSystem.dll` is extracted from the build process and executed via the `ENTRYPOINT` instruction.
+
+This process is not manual, but rather done in a fully automatic way via the usage of GitHub workflows. Notably, the [`build_api.yaml`](../../../.github/workflows/build_api.yaml) is responsible for doing this whenever a pull request to the main branch is created.
+
+The workflow logs in Docker Hub, using a username and password which are stored in the repository as **GitHub secrets** - thus, not being exposed in clear-text anywhere in the repository's code. Then, it uses the `docker/build-push-action@v6` action available in the Marketplace to build the above-mentioned Dockerfile, tag it with the `lew6s/parking-system:0.0.1`, and push it to Docker Hub. The app version is set as `0.0.1` for the time being, and is sourced from an environment variable specified in the workflow.
+
+The mentioned workflow contains other actions for distinct purposes, which will be explained further in this report.
+
 ### Execution of test plans
 
 (falar dos testes aplicacionais que temos e de como são executados - por meio de workflow)
