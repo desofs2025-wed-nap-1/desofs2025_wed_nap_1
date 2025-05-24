@@ -25,7 +25,13 @@ User created to test the authentication system:
 
 ### Coding best practices
 
-(documentar processo de code reviews, branching model - ou seja, ter branches de dev e só vai para main com um Pull Request que passe todos os testes e que seja revisto por pelo menos uma pessoa da equipa)
+In order to achieve a clear organization of the secure development process, we've defined a set of best practices that we must undertake when contributing to this project.
+
+Firstly, we will adopt development branches, meaning that no application code should be commited directly to the main branch without previous review. Whenever a developer considers the code to be appropriate for a merge to the main branch, he/she will open a Pull Request (PR), which will have to be reviewed and approved by another member of the team prior to merging with main. If the reviewer finds any issues or has suggestions to improve the code, these should be specifically commented so that the original PR author can review them and fix them in the code. These fixes will then be reviewed by a reviewer, and merged to the main branch if no further issues are found. 
+
+Additionally, the merge of a PR can only be approved if the defined tests to the application are passing with success, and if no Critical vulnerabilities are found. These tests/vulnerability checks are handled automatically by GitHub workflows - which will be explained further in this report.
+
+Finally, we've taken into consideration the [Coding Conventions and best practices for C#](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions) as defined by Microsoft - the maintainers of the language - in order to achieve a cohesive coding pattern throughout all elements of the application.
 
 ### Static Code Analysis
 
