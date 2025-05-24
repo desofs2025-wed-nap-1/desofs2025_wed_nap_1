@@ -9,7 +9,7 @@ namespace ParkingSystem.Application.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        //private readonly ITokenService _tokenService; 
+        //private readonly ITokenService _tokenService;
 
         public UserService(IUserRepository userRepository)
         {
@@ -24,6 +24,7 @@ namespace ParkingSystem.Application.Services
                 throw new ArgumentException("Username already taken.");
             }
             var user = UserMapper.ToUserDomain(userDto);
+            userDto = new UserDTO();
             var result = await _userRepository.AddUser(user);
             return result != null ? UserMapper.ToUserDto(result) : null;
         }
@@ -32,7 +33,7 @@ namespace ParkingSystem.Application.Services
         {
             var user = await _userRepository.GetUserByEmailAndPassword(email, password);
             if (user != null)
-            {                
+            {
                 return "token";
                 //return _tokenService.GenerateToken(user);
             }
