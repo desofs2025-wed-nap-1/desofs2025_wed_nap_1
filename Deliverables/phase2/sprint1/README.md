@@ -5,7 +5,22 @@ This `README` file contains all information about developments that were done du
 ## Development
 
 ### Authentication
+The authentication system for this project is implemented using Supabase, which provides secure and scalable authentication via JWT-based tokens. The system allows users to authenticate using their email and password, with the credentials being validated through Supabase’s RESTful authentication endpoint.
 
+The application integrates this flow using a custom service `SupabaseAuthService` that sends login requests to Supabase’s `/auth/v1/token` endpoint with the appropriate API key and credentials. Upon successful authentication, Supabase returns a JWT token and user data, which are then used to authorize access to protected resources throughout the system.
+
+The authentication controller `AuthController` exposes an endpoint ` /api/auth/login` which handles login requests. The token returned can then be used by the frontend or client to access other secured endpoints. The JWT is also validated on every request via the built-in JwtBearer middleware in ASP.NET Core, using the Supabase URL as the authority.
+
+This approach removes the burden of handling password encryption, session storage, and token issuance, delegating it to a trusted third-party authentication provider.
+
+The following image shows the tables created in Supabase:
+
+![Supabase.png](img%2FSupabase.png)
+
+User created to test the authentication system:
+
+![User.png](img%2FUser.png)
+---
 ### Developed Use Cases
 
 ### Coding best practices
