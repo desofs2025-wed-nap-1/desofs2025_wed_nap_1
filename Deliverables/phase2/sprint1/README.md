@@ -198,6 +198,20 @@ If this issue is not resolved, it's updated with new findings (if that's the cas
 
 (falar de tools que temos para detetar secrets a serem pushados para o repo - temos evidências disto, é só explicar e colar)
 
+As seen in the **Artifact Scanning** section, Trivy is executed with the `misconfiguration` scan profile enabled, which makes it so that the configuration elements of the application are also automatically scanned. This is handled by the **same workflow job and step**, so that explanation won't be repeated here.
+
+On the security tab, **Trivy** also includes security issues related to configuration. Below is an example of this:
+
+![trivyConfigScan.png](./img/trivyConfigScan.png)
+
+Besides Trivy, we also have **GitHub Secret scanning** enabled, which scans the repository for secrets that are in clear-text, and alerts us of this fact - as this is considered a configuration flaw. Below is the list of findings discovered by this tool:
+
+![secretScanAlert.png](./img/secretScanAlert.png)
+
+Each specific issue (in this case we only have one) documents what type of secret was found, where it's located, and the steps to undertake in order to remediate the vulnerability - usually consists of secret rotation on the secret's provider (Supabase, in this example) and further removal from the code:
+
+![secretScanDetails.png](./img/secretScanDetails.png)
+
 ## Pipeline Automation
 
 (isto meio que já foi falado nos restantes pontos, portanto acho que é brevemente repetir que todos estes processos estão automatizados por meio de GitHub workflows)
