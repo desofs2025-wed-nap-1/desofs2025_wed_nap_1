@@ -114,7 +114,38 @@ The mentioned workflow contains other actions for distinct purposes, which will 
 
 ### Artifact Scanning
 
-(falar do processo de build, e utilização do Trivy para analisar a imagem Docker gerada)
+After the build process mentioned prior, we conduct artifact scanning to identify vulnerabilities in the generated artifact. For this use case, we adopted the usage of **Trivy**, which is able to scan Docker images and report on findings. Like other processes, this is fully automated via a GitHub workflow called [`build_api.yaml`](../../../.github/workflows/build_api.yaml). 
+
+In it, the `aquasecurity/trivy-action@0.28.0` GitHub action is used to scan the Docker image artifact after it has been published to Docker Hub:
+
+```YAML
+- name: Scan built Docker image with Trivy
+  uses: aquasecurity/trivy-action@0.28.0
+  with:
+    image-ref: 'lew6s/parking-system:${{ env.VERSION }}'
+    format: 'sarif'
+    output: 'trivy-results.sarif'
+    exit-code: '0'
+    ignore-unfixed: true
+    vuln-type: 'os,library'
+    scanners: 'vuln,secret,misconfig'
+    severity: 'MEDIUM,HIGH,CRITICAL'
+```
+
+This job conducts the scan and generates an output file called `trivy-results.sarif`, which contains a report of the vulnerabilities that were found. These findings are then published to the GitHub security tab via the following job step:
+
+```YAML
+- name: Upload Trivy scan results to GitHub Security tab
+  uses: github/codeql-action/upload-sarif@v3
+  with:
+    sarif_file: 'trivy-results.sarif'
+```
+
+Below, we can see an example of the findings reported by Trivy:
+
+![trivyScanSecurity.png](./img/trivyScanSecurity.png)
+
+
 
 ### Dynamic Analysis
 
