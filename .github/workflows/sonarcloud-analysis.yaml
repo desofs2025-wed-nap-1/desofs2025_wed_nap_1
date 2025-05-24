@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
@@ -17,7 +20,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '8.0.x'  
 
       - name: Install dotnet-sonarscanner
         run: dotnet tool install --global dotnet-sonarscanner
@@ -26,13 +29,18 @@ jobs:
         run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Begin SonarCloud analysis
-        run: dotnet-sonarscanner begin /k:"JoanaGMoreira_desofs2025_wed_nap_1" /o:"joanagmoreira" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+        run: >
+          dotnet-sonarscanner begin
+          /k:"JoanaGMoreira_desofs2025_wed_nap_1"
+          /o:"joanagmoreira"
+          /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          /d:sonar.host.url="https://sonarcloud.io"
 
       - name: Restore dependencies
-        run: dotnet restore ParkingSystem/ParkingSystem.sln
+        run: dotnet restore ParkingSystem.sln
 
       - name: Build solution
-        run: dotnet build ParkingSystem/ParkingSystem.sln --no-restore --no-incremental
+        run: dotnet build ParkingSystem.sln --no-restore --no-incremental
 
       - name: End SonarCloud analysis
         run: dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
