@@ -237,6 +237,18 @@ jobs:
           path: ParkingSystem/ParkingSystem/sbom
 ```
 
+### Keeping Dependencies Secure with Dependabot
+To further enhance our supply chain security, we integrate Dependabot into our GitHub repository. 
+While the SBOM provides a snapshot of our application's components, Dependabot actively monitors these dependencies and automatically creates pull requests when newer, patched, or more secure versions become available.
+
+![dependabotPullRequest.png](img%2FdependabotPullRequest.png)
+
+This automation helps us detect and mitigate known vulnerabilities (CVEs), avoid outdated or unsupported packages and keep our SBOM accurate and up to date
+
+By combining SBOM generation with Dependabot, we ensure our project maintains a high level of transparency, security, and maintainability, aligning with a modern software supply chain best practices.
+
+
+
 ## Build and Test
 
 This section will describe the build and test procedure for the application, highlighting relevant procedures.
