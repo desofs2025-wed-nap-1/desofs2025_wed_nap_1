@@ -424,5 +424,12 @@ estão automatizados por meio de GitHub workflows)
 
 ## ASVS Checklist
 
-(colar resultados gerados)
+For this Phase and Sprint, we completed the ASVS checklist, highlighting the applicability and validity of each item with a comprehensive explanation of how it relates to our application. This artifact can be found in [`v4-ASVS-checklist-en-phase2-sprint1.xlsx`](v4-ASVS-checklist-en-phase2-sprint1.xlsx).
+
+Below, we present the summary of this checklist in the form of a table and the generated graph:
+
+![asvs-sprint2-phase1-table.png](./img/asvs-sprint2-phase1-table.png)
+
+![asvs-sprint2-phase1-graph.png](./img/asvs-sprint2-phase1-graph.png)
+
 
