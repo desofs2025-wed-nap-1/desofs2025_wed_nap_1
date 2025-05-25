@@ -426,8 +426,7 @@ provider (Supabase, in this example) and further removal from the code:
 
 ## Pipeline Automation
 
-(isto meio que já foi falado nos restantes pontos, portanto acho que é brevemente repetir que todos estes processos
-estão automatizados por meio de GitHub workflows)
+As described in previous sections, we used GitHub workflows to automate processes in our repository, to ensure that tests and builds are done automatically. Our workflows are present on the [`.github/workflows`](../../../.github/workflows) directory, as per the specification of this tool.
 
 ## ASVS Checklist
 
