@@ -6,7 +6,7 @@ namespace ParkingSystem.Core.Interfaces
     public interface IVehicleRepository
     {
         Task<Vehicle?> AddVehicle(Vehicle vehicle, string username);
-        Task<Vehicle?> UpdateVehicle(Vehicle vehicle);
+        Task<Vehicle?> UpdateVehicle(Vehicle vehicle, long vehicleId);
         Task<Vehicle?> DeleteVehicle(long id);
         Task<IEnumerable<Vehicle>> GetAllVehiclesFromUser(long userId);
     }

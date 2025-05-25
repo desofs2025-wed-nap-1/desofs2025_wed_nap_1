@@ -17,9 +17,9 @@ namespace ParkingSystem.API.Controllers
         }
 
         [HttpPost("create")]
-        public IActionResult AddPark(ParkDTO parkDto)
+        public async Task<IActionResult> AddPark(ParkDTO parkDto)
         {
-            var result = _parkService.AddPark(parkDto);
+            var result = await _parkService.AddPark(parkDto);
             if (result != null)
             {
                 return Ok("Park created successfully.");
@@ -28,9 +28,9 @@ namespace ParkingSystem.API.Controllers
         }
 
         [HttpPut("update")]
-        public IActionResult UpdatePark(ParkDTO parkDto)
+        public async Task<IActionResult> UpdatePark(ParkDTO parkDto, long parkId)
         {
-            var result = _parkService.UpdatePark(parkDto);
+            var result = await _parkService.UpdatePark(parkDto, parkId);
             if (result != null)
             {
                 return Ok("Park updated successfully.");
@@ -39,9 +39,9 @@ namespace ParkingSystem.API.Controllers
         }
 
         [HttpDelete("delete/{id}")]
-        public IActionResult DeletePark(long id)
+        public async Task<IActionResult> DeletePark(long id)
         {
-            var result = _parkService.DeletePark(id);
+            var result = await _parkService.DeletePark(id);
             if (result != null)
             {
                 return Ok("Park deleted successfully.");
@@ -50,9 +50,9 @@ namespace ParkingSystem.API.Controllers
         }
 
         [HttpGet("available")]
-        public IActionResult GetAvailableParks()
+        public async Task<IActionResult> GetAvailableParks()
         {
-            var parks = _parkService.GetAvailableParks();
+            var parks = await _parkService.GetAvailableParks();
             return Ok(parks);
         }
     }

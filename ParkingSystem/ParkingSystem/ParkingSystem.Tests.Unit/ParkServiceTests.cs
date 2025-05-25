@@ -58,13 +58,15 @@ namespace ParkingSystem.Tests.Unit
                 gateOpen = false
             };
 
+            var parkId = 1;
+
             var parkDomain = ParkMapper.ToParkDomain(parkDto);
 
             _parkRepositoryMock
-                .Setup(repo => repo.UpdatePark(It.IsAny<Park>()))
+                .Setup(repo => repo.UpdatePark(It.IsAny<Park>(), 1))
                 .ReturnsAsync(parkDomain);
 
-            var result = await _parkService.UpdatePark(parkDto);
+            var result = await _parkService.UpdatePark(parkDto, parkId);
 
             Assert.NotNull(result);
             Assert.Equal(parkDto.name, result?.name);

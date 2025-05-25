@@ -18,10 +18,10 @@ namespace ParkingSystem.Application.Services
 
         public async Task<UserDTO?> RegisterUser(UserDTO userDto)
         {
-            if (!IsValidEmail(userDto.email))
+            /*if (!IsValidEmail(userDto.email))
             {
                 throw new ArgumentException("Invalid email format.");
-            }
+            }*/
             if (await _userRepository.IsEmailTaken(userDto.email))
             {
                 throw new ArgumentException("Email already registered.");
@@ -46,22 +46,10 @@ namespace ParkingSystem.Application.Services
             return null;
         }
 
-        public async Task<UserDTO?> UpdateUser(UserDTO userDto)
+        public async Task<UserDTO?> UpdateUser(UserDTO userDto, long userId)
         {
-            if (!IsValidEmail(userDto.email))
-            {
-                throw new ArgumentException("Invalid email format.");
-            }
-            if (await _userRepository.IsEmailTaken(userDto.email))
-            {
-                throw new ArgumentException("Email already registered.");
-            }
-            if (await _userRepository.IsUsernameTaken(userDto.username))
-            {
-                throw new ArgumentException("Username already taken.");
-            }
             var user = UserMapper.ToUserDomain(userDto);
-            var updatedUser = await _userRepository.UpdateUser(user);
+            var updatedUser = await _userRepository.UpdateUser(user, userId);
             return updatedUser != null ? UserMapper.ToUserDto(updatedUser) : null;
         }
 
@@ -70,7 +58,7 @@ namespace ParkingSystem.Application.Services
             var deletedUser = await _userRepository.DeleteUser(id);
             return deletedUser != null ? UserMapper.ToUserDto(deletedUser) : null;
         }
-        private bool IsValidEmail(string email)
+        /*private bool IsValidEmail(string email)
         {
             try
             {
@@ -79,8 +67,8 @@ namespace ParkingSystem.Application.Services
             }
             catch
             {
-                return false;
+                throw new ArgumentException("Invalid email format.");
             }
-        }
+        }*/
     }
 }
