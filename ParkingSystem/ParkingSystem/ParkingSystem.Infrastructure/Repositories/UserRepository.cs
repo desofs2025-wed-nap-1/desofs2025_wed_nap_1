@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using ParkingSystem.Core.Aggregates;
 using ParkingSystem.Core.Interfaces;
 using ParkingSystem.Infrastructure.Data;
+using BCrypt.Net;
 namespace ParkingSystem.Infrastructure.Repositories
 {
     public class UserRepository : IUserRepository
@@ -15,6 +16,8 @@ namespace ParkingSystem.Infrastructure.Repositories
 
         public async Task<User?> AddUser(User user)
         {
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.password);
+            user.password = hashedPassword;
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return user;
@@ -25,6 +28,8 @@ namespace ParkingSystem.Infrastructure.Repositories
             var existingUser = await _context.Users.FindAsync(user.Id);
             if (existingUser != null)
             {
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.password);
+                user.password = hashedPassword;
                 _context.Entry(existingUser).CurrentValues.SetValues(user);
                 await _context.SaveChangesAsync();
                 return existingUser;
@@ -51,12 +56,22 @@ namespace ParkingSystem.Infrastructure.Repositories
 
         public async Task<User?> GetUserByEmailAndPassword(string email, string password)
         {
-            return await _context.Users.SingleOrDefaultAsync(u => u.email == email && u.password == password);
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.email == email);
+            if (user != null && BCrypt.Net.BCrypt.Verify(password, user.password))
+            {
+                return user;
+            }
+            return null;
         }
 
         public async Task<bool> IsUsernameTaken(string username)
         {
             return await _context.Users.AnyAsync(u => u.username == username);
+        }
+        
+        public async Task<bool> IsEmailTaken(string email)
+        {
+            return await _context.Users.AnyAsync(u => u.email == email);
         }
     }
 }

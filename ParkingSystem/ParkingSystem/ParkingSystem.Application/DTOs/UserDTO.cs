@@ -7,6 +7,6 @@ namespace ParkingSystem.Application.DTOs
         public string email { get; set; } = string.Empty;
         public string password { get; set; } = string.Empty;
         public string phoneNumber { get; set; } = string.Empty;
-        public string role { get; set; } = string.Empty;
+        public int role { get; set; } = 0;
     }
 }

@@ -13,7 +13,7 @@ namespace ParkingSystem.Application.Mappers
                 email = dto.email,
                 password = dto.password,
                 phoneNumber = dto.phoneNumber,
-                role = Enum.TryParse(dto.role, out Role role) ? role : 0
+                role = Enum.IsDefined(typeof(Role), dto.role) ? (Role)dto.role : 0
             };
         }
 
@@ -25,7 +25,7 @@ namespace ParkingSystem.Application.Mappers
                 email = user.email,
                 phoneNumber = user.phoneNumber,
                 password = user.password,
-                role = user.role.ToString()
+                role = (int)user.role
             };
         }
     }
