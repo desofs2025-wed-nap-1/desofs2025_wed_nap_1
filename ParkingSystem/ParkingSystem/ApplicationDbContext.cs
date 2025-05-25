@@ -9,9 +9,9 @@ namespace ParkingSystem.Infrastructure.Data
         {
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Vehicle> Vehicles { get; set; }
-        public DbSet<Park> Parks { get; set; }
+        public DbSet<User> users { get; set; }
+        public DbSet<Vehicle> vehicle { get; set; }
+        public DbSet<Park> park { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
