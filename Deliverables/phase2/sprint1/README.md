@@ -55,6 +55,43 @@ the [Coding Conventions and best practices for C#](https://learn.microsoft.com/e
 as defined by Microsoft - the maintainers of the language - in order to achieve a cohesive coding pattern throughout all
 elements of the application.
 
+### Functionalities
+
+We implemented the CRUD (Create, Read, Update, Delete) operations for the core domain entities: User, Vehicle, and Park.
+
+#### User
+
+The User entity represents individuals registered in the system. The CRUD operations for this entity are exposed via the /api/users endpoint.
+
+- **CreateUser (POST /api/users/register/{userDto})**: Accepts user details (name, email, etc.) and registers a new user.
+- **Login (GET /api/users/login/{email, password})**: Retrieves a token for user login.
+- **UpdateUser (PUT /api/users/update/{userDto})**: Updates a user’s information.
+- **DeleteUser (DELETE /api/users/delete/{id})**: Removes a user from the system.
+
+This controller interacts with a UserService class that encapsulates business logic, and communicates with a repository layer for persistence.
+
+#### Vehicle
+
+The Vehicle entity represents a vehicle associated with a user. Each vehicle contains attributes such as plate number, type, and model.
+
+- **CreateVehicle (POST /api/vehicles/add)**: Registers a new vehicle and associates it with a user.
+- **UpdateVehicle (PUT /api/vehicles/update)**: Modifies vehicle data.
+- **DeleteVehicle (DELETE /api/vehicles/delete/{id})**: Deletes a vehicle record.
+- **GetVehiclesByUser (GET /api/vehicles/user/{userId})**: Lists all vehicles by userID.
+
+Validation is enforced to ensure that each vehicle has a unique license plate and belongs to a valid registered user.
+
+#### Park
+
+The Park entity models parking activity, associating a vehicle with a parking event (entry and optional exit time).
+
+- **CreatePark (POST /api/parks/create/{parkDto})**: Registers a new park event (i.e., vehicle entry).
+- **GetAvailableParks (GET /api/parks/available)**: Lists all park.
+- **UpdatePark (PUT /api/parks/update/{parkDto})**: Updates park data (e.g., vehicle exit time).
+- **DeletePark (DELETE /api/parks/delete/{id})**: Cancels or removes a park event.
+
+This ensures traceability of vehicle entries/exits and can later be used to implement features like billing or availability tracking.
+
 ### Static Code Analysis
 
 To ensure our code quality, maintainability, and security, we integrated **SonarCloud** into our development pipeline.
