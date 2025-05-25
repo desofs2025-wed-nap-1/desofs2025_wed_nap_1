@@ -313,9 +313,16 @@ is sourced from an environment variable specified in the workflow.
 
 The mentioned workflow contains other actions for distinct purposes, which will be explained further in this report.
 
-### Execution of test plans
+### Execution of Test Plans
 
-(falar dos testes aplicacionais que temos e de como são executados - por meio de workflow)
+During this sprint, unit tests were implemented for the core application services, including `ParkService`, `UserService`, and `VehicleService`. These tests verify both the expected behavior for valid input and the correct handling of invalid or exceptional scenarios. The services were tested using the xUnit framework along with the Moq library to mock dependencies such as repositories.
+
+Each service was validated with:
+- Positive test cases to ensure correct outputs when valid data is provided.
+- Negative test cases to verify that invalid data or states (e.g., username already taken, invalid license plate) trigger appropriate exceptions.
+
+So far, the test plan focused on functionality. In Sprint 2, security tests will be added to ensure that methods requiring role-based access control (RBAC) are properly protected. These tests will simulate different user roles and verify that unauthorized users cannot access restricted operations.
+
 
 ### Artifact Scanning
 
