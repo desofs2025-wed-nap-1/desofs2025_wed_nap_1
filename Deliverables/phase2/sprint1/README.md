@@ -55,6 +55,43 @@ the [Coding Conventions and best practices for C#](https://learn.microsoft.com/e
 as defined by Microsoft - the maintainers of the language - in order to achieve a cohesive coding pattern throughout all
 elements of the application.
 
+### Functionalities
+
+We implemented the CRUD (Create, Read, Update, Delete) operations for the core domain entities: User, Vehicle, and Park.
+
+#### User
+
+The User entity represents individuals registered in the system. The CRUD operations for this entity are exposed via the /api/users endpoint.
+
+- **CreateUser (POST /api/users/register/{userDto})**: Accepts user details (name, email, etc.) and registers a new user.
+- **Login (GET /api/users/login/{email, password})**: Retrieves a token for user login.
+- **UpdateUser (PUT /api/users/update/{userDto})**: Updates a user’s information.
+- **DeleteUser (DELETE /api/users/delete/{id})**: Removes a user from the system.
+
+This controller interacts with a UserService class that encapsulates business logic, and communicates with a repository layer for persistence.
+
+#### Vehicle
+
+The Vehicle entity represents a vehicle associated with a user. Each vehicle contains attributes such as plate number, type, and model.
+
+- **CreateVehicle (POST /api/vehicles/add)**: Registers a new vehicle and associates it with a user.
+- **UpdateVehicle (PUT /api/vehicles/update)**: Modifies vehicle data.
+- **DeleteVehicle (DELETE /api/vehicles/delete/{id})**: Deletes a vehicle record.
+- **GetVehiclesByUser (GET /api/vehicles/user/{userId})**: Lists all vehicles by userID.
+
+Validation is enforced to ensure that each vehicle has a unique license plate and belongs to a valid registered user.
+
+#### Park
+
+The Park entity models parking activity, associating a vehicle with a parking event (entry and optional exit time).
+
+- **CreatePark (POST /api/parks/create/{parkDto})**: Registers a new park event (i.e., vehicle entry).
+- **GetAvailableParks (GET /api/parks/available)**: Lists all park.
+- **UpdatePark (PUT /api/parks/update/{parkDto})**: Updates park data (e.g., vehicle exit time).
+- **DeletePark (DELETE /api/parks/delete/{id})**: Cancels or removes a park event.
+
+This ensures traceability of vehicle entries/exits and can later be used to implement features like billing or availability tracking.
+
 ### Static Code Analysis
 
 To ensure our code quality, maintainability, and security, we integrated **SonarCloud** into our development pipeline.
@@ -276,9 +313,16 @@ is sourced from an environment variable specified in the workflow.
 
 The mentioned workflow contains other actions for distinct purposes, which will be explained further in this report.
 
-### Execution of test plans
+### Execution of Test Plans
 
-(falar dos testes aplicacionais que temos e de como são executados - por meio de workflow)
+During this sprint, unit tests were implemented for the core application services, including `ParkService`, `UserService`, and `VehicleService`. These tests verify both the expected behavior for valid input and the correct handling of invalid or exceptional scenarios. The services were tested using the xUnit framework along with the Moq library to mock dependencies such as repositories.
+
+Each service was validated with:
+- Positive test cases to ensure correct outputs when valid data is provided.
+- Negative test cases to verify that invalid data or states (e.g., username already taken, invalid license plate) trigger appropriate exceptions.
+
+So far, the test plan focused on functionality. In Sprint 2, security tests will be added to ensure that methods requiring role-based access control (RBAC) are properly protected. These tests will simulate different user roles and verify that unauthorized users cannot access restricted operations.
+
 
 ### Artifact Scanning
 
@@ -382,10 +426,16 @@ provider (Supabase, in this example) and further removal from the code:
 
 ## Pipeline Automation
 
-(isto meio que já foi falado nos restantes pontos, portanto acho que é brevemente repetir que todos estes processos
-estão automatizados por meio de GitHub workflows)
+As described in previous sections, we used GitHub workflows to automate processes in our repository, to ensure that tests and builds are done automatically. Our workflows are present on the [`.github/workflows`](../../../.github/workflows) directory, as per the specification of this tool.
 
 ## ASVS Checklist
 
-(colar resultados gerados)
+For this Phase and Sprint, we completed the ASVS checklist, highlighting the applicability and validity of each item with a comprehensive explanation of how it relates to our application. This artifact can be found in [`v4-ASVS-checklist-en-phase2-sprint1.xlsx`](v4-ASVS-checklist-en-phase2-sprint1.xlsx).
+
+Below, we present the summary of this checklist in the form of a table and the generated graph:
+
+![asvs-sprint2-phase1-table.png](./img/asvs-sprint2-phase1-table.png)
+
+![asvs-sprint2-phase1-graph.png](./img/asvs-sprint2-phase1-graph.png)
+
 
