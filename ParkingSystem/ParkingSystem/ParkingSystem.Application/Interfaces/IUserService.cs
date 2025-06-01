@@ -6,7 +6,7 @@ namespace ParkingSystem.Application.Interfaces
     {
         Task<UserDTO?> RegisterUser(UserDTO userDto);
         Task<string?> Authenticate(string email, string password);
-        Task<UserDTO?> UpdateUser(UserDTO userDto);
+        Task<UserDTO?> UpdateUser(UserDTO userDto, long userId);
         Task<UserDTO?> DeleteUser(long id);
     }
 }

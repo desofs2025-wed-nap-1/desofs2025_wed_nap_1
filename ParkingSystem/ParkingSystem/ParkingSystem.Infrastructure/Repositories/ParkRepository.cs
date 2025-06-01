@@ -15,17 +15,20 @@ namespace ParkingSystem.Infrastructure.Repositories
 
         public async Task<Park?> AddPark(Park park)
         {
-            _context.Parks.Add(park);
+            _context.park.Add(park);
             await _context.SaveChangesAsync();
             return park;
         }
 
-        public async Task<Park?> UpdatePark(Park park)
+        public async Task<Park?> UpdatePark(Park park, long parkId)
         {
-            var existingPark = await _context.Parks.FindAsync(park.Id);
+            var existingPark = await _context.park.FindAsync(parkId);
             if (existingPark != null)
             {
-                _context.Entry(existingPark).CurrentValues.SetValues(park);
+                existingPark.name = park.name;
+                existingPark.location = park.location;
+                existingPark.capacity = park.capacity;
+                existingPark.gateOpen = park.gateOpen;
                 await _context.SaveChangesAsync();
                 return existingPark;
             }
@@ -34,10 +37,10 @@ namespace ParkingSystem.Infrastructure.Repositories
 
         public async Task<Park?> DeletePark(long id)
         {
-            var park = await _context.Parks.FindAsync(id);
+            var park = await _context.park.FindAsync(id);
             if (park != null)
             {
-                _context.Parks.Remove(park);
+                _context.park.Remove(park);
                 await _context.SaveChangesAsync();
                 return park;
             }
@@ -46,7 +49,7 @@ namespace ParkingSystem.Infrastructure.Repositories
 
         public async Task<IEnumerable<Park>> GetAvailableParks()
         {
-            return await _context.Parks.Where(p => p.gateOpen).ToListAsync();
+            return await _context.park.Where(p => p.gateOpen).ToListAsync();
         }
     }
 }

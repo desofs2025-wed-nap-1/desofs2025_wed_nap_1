@@ -22,10 +22,10 @@ namespace ParkingSystem.Application.Services
             return result != null ? ParkMapper.ToParkDto(result) : null;
         }
 
-        public async Task<ParkDTO?> UpdatePark(ParkDTO parkDto)
+        public async Task<ParkDTO?> UpdatePark(ParkDTO parkDto, long parkId)
         {
             var park = ParkMapper.ToParkDomain(parkDto);
-            var updatedPark = await _parkRepository.UpdatePark(park);
+            var updatedPark = await _parkRepository.UpdatePark(park, parkId);
             return updatedPark != null ? ParkMapper.ToParkDto(updatedPark) : null;
         }
 

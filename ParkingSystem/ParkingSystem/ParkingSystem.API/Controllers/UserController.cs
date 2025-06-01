@@ -16,9 +16,9 @@ namespace ParkingSystem.API.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register(UserDTO userDto)
+        public async Task<IActionResult> Register(UserDTO userDto)
         {
-            var result = _userService.RegisterUser(userDto);
+            var result = await _userService.RegisterUser(userDto);
             if (result != null)
             {
                 return Ok("User registered successfully.");
@@ -27,16 +27,16 @@ namespace ParkingSystem.API.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login(string email, string password)
+        public async Task<IActionResult> Login(string email, string password)
         {
-            var token = _userService.Authenticate(email, password);
+            var token = await _userService.Authenticate(email, password);
             return Ok(new { Token = token });
         }
 
         [HttpPut("update")]
-        public IActionResult Update(UserDTO userDto)
+        public async Task<IActionResult> Update(UserDTO userDto, long userId)
         {
-            var result = _userService.UpdateUser(userDto);
+            var result = await _userService.UpdateUser(userDto, userId);
             if (result != null)
             {
                 return Ok("User updated successfully.");
@@ -45,9 +45,9 @@ namespace ParkingSystem.API.Controllers
         }
 
         [HttpDelete("delete/{id}")]
-        public IActionResult Delete(long id)
+        public async Task<IActionResult> Delete(long id)
         {
-            var result = _userService.DeleteUser(id);
+            var result = await _userService.DeleteUser(id);
             if (result != null)
             {
                 return Ok("User deleted successfully.");

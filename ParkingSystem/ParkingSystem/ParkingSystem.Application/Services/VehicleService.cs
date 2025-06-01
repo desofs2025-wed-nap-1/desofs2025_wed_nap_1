@@ -3,8 +3,6 @@ using ParkingSystem.Application.Interfaces;
 using  ParkingSystem.Application.DTOs;
 using ParkingSystem.Application.Mappers;
 using System.Text.RegularExpressions;
-//using ParkingSystem.Core.Entities;
-using ParkingSystem.Core.Interfaces;
 using ParkingSystem.Core.Aggregates;
 namespace ParkingSystem.Application.Services
 {
@@ -42,7 +40,7 @@ namespace ParkingSystem.Application.Services
             return result != null ? VehicleMapper.ToVehicleDto(result) : null;
         }
 
-        public async Task<VehicleDTO?> UpdateVehicle(VehicleDTO vehicleDto)
+        public async Task<VehicleDTO?> UpdateVehicle(VehicleDTO vehicleDto, long vehicleId)
         {
             if (!IsValidLicensePlate(vehicleDto.licensePlate))
             {
@@ -53,7 +51,7 @@ namespace ParkingSystem.Application.Services
                 throw new ArgumentException("Brand is invalid.");
             }
             var vehicle = VehicleMapper.ToVehicleDomain(vehicleDto);
-            var updatedVehicle = await _vehicleRepository.UpdateVehicle(vehicle);            
+            var updatedVehicle = await _vehicleRepository.UpdateVehicle(vehicle, vehicleId);            
             return updatedVehicle != null ? VehicleMapper.ToVehicleDto(updatedVehicle) : null;
         }
 

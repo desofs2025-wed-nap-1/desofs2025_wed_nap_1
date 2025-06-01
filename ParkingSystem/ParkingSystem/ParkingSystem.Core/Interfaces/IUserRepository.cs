@@ -5,10 +5,11 @@ namespace ParkingSystem.Core.Interfaces
     public interface IUserRepository
     {
         Task<User?> AddUser(User user);
-        Task<User?> UpdateUser(User user);
+        Task<User?> UpdateUser(User user, long userId);
         Task<User?> DeleteUser(long id);
         Task<User?> GetUserById(long id);
-        Task<User?> GetUserByEmailAndPassword(string email, string password);    
+        Task<User?> GetUserByEmailAndPassword(string email, string password);
         Task<bool> IsUsernameTaken(string username);
+        Task<bool> IsEmailTaken(string email);
     }
 }
