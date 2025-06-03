@@ -20,14 +20,22 @@ namespace ParkingSystem.API.Controllers
         }
 
         [HttpPost("create")]
-        public IActionResult AddPark(ParkDTO parkDto)
+        public async Task<IActionResult> AddPark(ParkDTO parkDto)
         {
-            var result = _parkService.AddPark(parkDto);
-            if (result != null)
+            try
             {
-                return Ok("Park created successfully.");
+                var result = await _parkService.AddPark(parkDto);
+                if (result != null)
+                {
+                    return Ok("Park created successfully.");
+                }
+                return BadRequest("Failed to create park.");
             }
-            return BadRequest("Failed to create park.");
+            catch
+            {
+                return BadRequest("Failed to add park");
+            }
+            
         }
 
         [HttpPut("update")]

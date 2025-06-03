@@ -19,9 +19,24 @@ namespace ParkingSystem.Application.Services
 
         public async Task<ParkDTO?> AddPark(ParkDTO parkDto)
         {
-            var park = ParkMapper.ToParkDomain(parkDto);
-            var result = await _parkRepository.AddPark(park);
-            return result != null ? ParkMapper.ToParkDto(result) : null;
+            _logger.LogInformation("Adding park {name}", parkDto.name);
+            try
+            {
+                var park = ParkMapper.ToParkDomain(parkDto);
+                var result = await _parkRepository.AddPark(park);
+                if (result == null)
+                {
+                    _logger.LogWarning("Failed to add Park. Repository returned null");
+                    return null;
+                }
+                _logger.LogInformation("Successfully added park {name}", parkDto.name);
+                return ParkMapper.ToParkDto(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Exception adding park: " + ex.Message);
+                throw;
+            }
         }
 
         public async Task<ParkDTO?> UpdatePark(ParkDTO parkDto)
