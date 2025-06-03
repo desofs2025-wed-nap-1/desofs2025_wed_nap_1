@@ -9,10 +9,12 @@ namespace ParkingSystem.Application.Services
     public class ParkService : IParkService
     {
         private readonly IParkRepository _parkRepository;
+        private readonly ILogger<ParkService> _logger;
 
-        public ParkService(IParkRepository parkRepository)
+        public ParkService(IParkRepository parkRepository, ILogger<ParkService> logger)
         {
             _parkRepository = parkRepository;
+            _logger = logger;
         }
 
         public async Task<ParkDTO?> AddPark(ParkDTO parkDto)
@@ -37,13 +39,25 @@ namespace ParkingSystem.Application.Services
 
         public async Task<IEnumerable<ParkDTO>> GetAvailableParks()
         {
-            var parks = await _parkRepository.GetAvailableParks();
-            var parkDtos = new List<ParkDTO>();
-            foreach (var park in parks)
+            _logger.LogInformation("Fetching available parks");
+            try
             {
-                parkDtos.Add(ParkMapper.ToParkDto(park));
+                var parks = await _parkRepository.GetAvailableParks();
+                var parkDtos = new List<ParkDTO>();
+                foreach (var park in parks)
+                {
+                    parkDtos.Add(ParkMapper.ToParkDto(park));
+                }
+                _logger.LogInformation("Found {Count} available parks", parkDtos.Count);
+                return parkDtos;
             }
-            return parkDtos;
+            catch (Exception ex)
+            {
+                _logger.LogError("Error fetching Parks: " + ex.Message);
+                // preserve the exception after logging - it's caught on the controller for return purposes
+                throw;
+            }
+            
         }
     }
 }
