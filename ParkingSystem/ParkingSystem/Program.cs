@@ -13,8 +13,18 @@ using ParkingSystem.Infrastructure.Data;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// builder.Logging.ClearProviders();
+// Log.Logger = new LoggerConfiguration().Enrich.FromLogContext().WriteTo.Console().WriteTo.File("app.log").CreateLogger();
+builder.Host.UseSerilog((hostingContext, loggingConfig) =>
+{
+    loggingConfig.ReadFrom.Configuration(hostingContext.Configuration);
+});
+
+// Serilog.Debugging.SelfLog.Enable(msg => Console.Error.WriteLine(msg));
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
