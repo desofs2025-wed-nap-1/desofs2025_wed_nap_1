@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using  ParkingSystem.Application.DTOs;
 using  ParkingSystem.Application.Services;
 using  ParkingSystem.Application.Interfaces;
+using System.Threading.Tasks;
 
 namespace ParkingSystem.API.Controllers
 {
@@ -10,20 +11,35 @@ namespace ParkingSystem.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UserController(IUserService userService)
+        private readonly ILogger<UserController> _logger;
+
+        public UserController(IUserService userService, ILogger<UserController> logger)
         {
             _userService = userService;
+            _logger = logger;
         }
 
         [HttpPost("register")]
-        public IActionResult Register(UserDTO userDto)
+        public async Task<IActionResult> Register(UserDTO userDto)
         {
-            var result = _userService.RegisterUser(userDto);
-            if (result != null)
+            try
             {
-                return Ok("User registered successfully.");
+                var result = await _userService.RegisterUser(userDto);
+                if (result != null)
+                {
+                    // result = (UserDTO) result.;
+                    _logger.LogInformation("User " + result.username + " created successfully.");
+                    return Ok("User registered successfully.");
+                }
+                _logger.LogError("Failed to create user.");
+                return BadRequest("Failed to create user.");
             }
-            return BadRequest("Failed to create user.");
+            catch (Exception ex)
+            {
+                _logger.LogError("Error creating user: " + ex.Message);
+                return BadRequest("Failed to create user.");
+            }
+            
         }
 
         [HttpPost("login")]
