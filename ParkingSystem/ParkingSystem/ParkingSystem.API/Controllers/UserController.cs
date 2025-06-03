@@ -27,7 +27,6 @@ namespace ParkingSystem.API.Controllers
                 var result = await _userService.RegisterUser(userDto);
                 if (result != null)
                 {
-                    // result = (UserDTO) result.;
                     _logger.LogInformation("User " + result.username + " created successfully.");
                     return Ok("User registered successfully.");
                 }

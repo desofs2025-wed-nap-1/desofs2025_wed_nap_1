@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using  ParkingSystem.Application.DTOs;
 using  ParkingSystem.Application.Services;
 using  ParkingSystem.Application.Interfaces;
+using System.Threading.Tasks;
 
 namespace ParkingSystem.API.Controllers
 {
@@ -10,10 +11,12 @@ namespace ParkingSystem.API.Controllers
     public class ParkController : ControllerBase
     {
         private readonly IParkService _parkService;
+        private readonly ILogger<ParkController> _logger;
 
-        public ParkController(IParkService parkService)
+        public ParkController(IParkService parkService, ILogger<ParkController> logger)
         {
             _parkService = parkService;
+            _logger = logger;
         }
 
         [HttpPost("create")]
@@ -50,10 +53,20 @@ namespace ParkingSystem.API.Controllers
         }
 
         [HttpGet("available")]
-        public IActionResult GetAvailableParks()
+        public async Task<IActionResult> GetAvailableParks()
         {
-            var parks = _parkService.GetAvailableParks();
-            return Ok(parks);
+            try
+            {
+                var parks = await _parkService.GetAvailableParks();
+                _logger.LogInformation("Successfully gathered available parks");
+                return Ok(parks);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Error listing available parks: " + e.Message);
+                return BadRequest("Error listing available parks");
+            }
+            
         }
     }
 }
