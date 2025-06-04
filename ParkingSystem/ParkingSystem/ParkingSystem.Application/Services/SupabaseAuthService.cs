@@ -10,15 +10,19 @@ namespace ParkingSystem.Application.Services
     {
         private readonly IConfiguration _config;
         private readonly HttpClient _httpClient;
+        private readonly ILogger<SupabaseAuthService> _logger;
 
-        public SupabaseAuthService(IConfiguration config)
+        public SupabaseAuthService(IConfiguration config, ILogger<SupabaseAuthService> logger)
         {
             _config = config;
             _httpClient = new HttpClient();
+            _logger = logger;
         }
 
         public async Task<SupabaseAuthResponse> LoginWithSupabase(string email, string password)
         {
+            _logger.LogInformation("Attempting to login user {email}", email);
+
             var supabaseUrl = _config["Supabase:Url"];
             var apiKey = _config["Supabase:ApiKey"];
 
@@ -40,14 +44,31 @@ namespace ParkingSystem.Application.Services
                 "application/json"
             );
 
-            var response = await _httpClient.PostAsync(url, content);
-            var responseContent = await response.Content.ReadAsStringAsync();
+            try
+            {
+                var response = await _httpClient.PostAsync(url, content);
+                var responseContent = await response.Content.ReadAsStringAsync();
 
-            if (!response.IsSuccessStatusCode)
-                throw new Exception($"Authentication error: {responseContent}");
+                if (!response.IsSuccessStatusCode || responseContent == null)
+                {
+                    _logger.LogError($"Error logging in user: {responseContent}");
+                    throw new Exception($"Authentication error when logging in.");
+                }
 
-            var authResponse = JsonSerializer.Deserialize<SupabaseAuthResponse>(responseContent);
-            return authResponse;
+                var authResponse = JsonSerializer.Deserialize<SupabaseAuthResponse>(responseContent);
+                if (authResponse == null)
+                {
+                    _logger.LogError("Error de-serializing auth response.");
+                    throw new FormatException($"Authentication error when logging in.");
+                }
+                return authResponse;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Exception thrown when logging in user: " + ex.Message);
+                throw;
+            }
+            
         }
     }
 }
