@@ -41,15 +41,47 @@ namespace ParkingSystem.Application.Services
 
         public async Task<ParkDTO?> UpdatePark(ParkDTO parkDto)
         {
-            var park = ParkMapper.ToParkDomain(parkDto);
-            var updatedPark = await _parkRepository.UpdatePark(park);
-            return updatedPark != null ? ParkMapper.ToParkDto(updatedPark) : null;
+            _logger.LogInformation("Updating park {name}", parkDto.name);
+            try
+            {
+                var park = ParkMapper.ToParkDomain(parkDto);
+                var updatedPark = await _parkRepository.UpdatePark(park);
+
+                if (updatedPark == null)
+                {
+                    _logger.LogWarning("Failed to update Park. Repository returned null");
+                    return null;
+                }
+                _logger.LogInformation("Successfully updated park {name}", parkDto.name);
+                return ParkMapper.ToParkDto(updatedPark);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Exception updating park: " + ex.Message);
+                throw;
+            }
+            
         }
 
         public async Task<ParkDTO?> DeletePark(long id)
         {
-            var deletedPark = await _parkRepository.DeletePark(id);
-            return deletedPark != null ? ParkMapper.ToParkDto(deletedPark) : null;
+            _logger.LogInformation("Deleting park with ID: {id}", id);
+            try
+            {
+                var deletedPark = await _parkRepository.DeletePark(id);
+                if (deletedPark == null)
+                {
+                    _logger.LogWarning("Failed to delete park. Repository returned null");
+                    return null;
+                }
+                _logger.LogInformation("Successfully deleted park with ID {id}", id);
+                return ParkMapper.ToParkDto(deletedPark);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error deleting park: " + ex.Message);
+                throw;
+            }
         }
 
         public async Task<IEnumerable<ParkDTO>> GetAvailableParks()
