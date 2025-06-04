@@ -12,10 +12,13 @@ public class UserServiceTests
     private readonly Mock<IUserRepository> _userRepoMock;
     private readonly UserService _userService;
 
+    private readonly Mock<SupabaseAuthService> _authServiceMock;
+
     public UserServiceTests()
     {
         _userRepoMock = new Mock<IUserRepository>();
-        _userService = new UserService(_userRepoMock.Object);
+        _authServiceMock = new Mock<SupabaseAuthService>();
+        _userService = new UserService(_userRepoMock.Object,_authServiceMock.Object);
     }
 
     [Fact]

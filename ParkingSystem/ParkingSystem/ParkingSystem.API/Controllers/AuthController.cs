@@ -24,7 +24,7 @@ namespace ParkingSystem.API.Controllers
                 return Ok(new
                 {
                     token = result.access_token,
-                    user = result.user
+                    user = result.user.email
                 });
             }
             catch (Exception ex)
