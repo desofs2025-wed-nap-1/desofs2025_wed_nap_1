@@ -15,6 +15,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using dotenv.net;
+using Microsoft.AspNetCore.Authentication;
+using ParkingSystem.Infrastructure.Authentication;
+using System.Net.Http.Headers;
 
 DotEnv.Load();
 
@@ -43,6 +46,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<IParkService, ParkService>();
 
+builder.Services.AddTransient<IClaimsTransformation, SupabaseClaimsTransformer>();
+
 builder.Services.AddScoped<SupabaseAuthService>();
 
 builder.Services.AddControllers();
@@ -58,20 +63,39 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuer = true,
             ValidIssuer = builder.Configuration["Supabase:Url"] + "/auth/v1",
             ValidateAudience = false,
-            ValidateLifetime = true
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKeyResolver = (token, securityToken, kid, parameters) =>
+            {
+                using var client = new HttpClient();
+                client.DefaultRequestHeaders.Authorization = 
+                    new AuthenticationHeaderValue("Bearer", builder.Configuration["Supabase:ApiKey"]);
+                // or if Supabase expects the 'apikey' header:
+                client.DefaultRequestHeaders.Add("apikey", builder.Configuration["Supabase:ApiKey"]);
+
+                var response = client.GetAsync(builder.Configuration["Supabase:Url"] + "/auth/v1/keys").Result;
+                response.EnsureSuccessStatusCode();
+
+                var jwksJson = response.Content.ReadAsStringAsync().Result;
+                var jwks = new JsonWebKeySet(jwksJson);
+
+                return jwks.Keys;
+            }
         };
+        options.RequireHttpsMetadata = true;
     });
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseAuthentication();
-app.UseAuthorization();
-
 app.UseRouting();
 
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

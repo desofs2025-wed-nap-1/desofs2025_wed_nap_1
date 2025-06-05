@@ -3,6 +3,8 @@ using  ParkingSystem.Application.DTOs;
 using  ParkingSystem.Application.Services;
 using  ParkingSystem.Application.Interfaces;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using ParkingSystem.Core.Aggregates;
 
 namespace ParkingSystem.API.Controllers
 {
@@ -61,6 +63,7 @@ namespace ParkingSystem.API.Controllers
         }
 
         [HttpGet("available")]
+        [Authorize(Roles = "client")]
         public async Task<IActionResult> GetAvailableParks()
         {
             try
@@ -74,7 +77,7 @@ namespace ParkingSystem.API.Controllers
                 _logger.LogError("Error listing available parks: " + e.Message);
                 return BadRequest("Error listing available parks");
             }
-            
+
         }
     }
 }
