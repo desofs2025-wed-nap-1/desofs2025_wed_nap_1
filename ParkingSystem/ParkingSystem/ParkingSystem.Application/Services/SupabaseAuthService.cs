@@ -73,12 +73,16 @@ namespace ParkingSystem.Application.Services
 
         }
         
-        public async Task<string> CreateUserAsync(string email, string password)
+        public async Task<string> CreateUserAsync(string email, string password, string role)
         {
             var payload = new
             {
                 email,
-                password
+                password,
+                user_metadata = new
+                    {
+                        role = role
+                    }
             };
 
             var supabaseUrl = _config["Supabase:Url"];

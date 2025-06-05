@@ -27,7 +27,7 @@ namespace ParkingSystem.Application.Services
             }
 
             // TODO: actually check how we could integrate this
-            var userID = await _authService.CreateUserAsync(userDto.email, userDto.password);
+            var userID = await _authService.CreateUserAsync(userDto.email, userDto.password, userDto.role);
 
             var user = UserMapper.ToUserDomain(userDto);
 
