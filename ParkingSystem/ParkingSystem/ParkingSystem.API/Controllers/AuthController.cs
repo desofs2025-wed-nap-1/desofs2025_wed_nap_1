@@ -32,5 +32,13 @@ namespace ParkingSystem.API.Controllers
                 return Unauthorized(new { message = ex.Message });
             }
         }
+
+        [HttpGet("claims")]
+        public IActionResult GetClaims()
+        {
+            var claims = User.Claims.Select(c => new { c.Type, c.Value });
+            return Ok(claims);
+        }
+
     }
 }

@@ -26,7 +26,7 @@ namespace ParkingSystem.Application.Services
             _logger.LogInformation("Attempting to login user {email}", email);
 
             var supabaseUrl = _config["Supabase:Url"];
-            var apiKey = _config["Supabase:ApiKey"];
+            var apiKey = Environment.GetEnvironmentVariable("SUPABASE_API_KEY")!;
 
             var url = $"{supabaseUrl}/auth/v1/token?grant_type=password";
 
@@ -86,9 +86,7 @@ namespace ParkingSystem.Application.Services
             };
 
             var supabaseUrl = _config["Supabase:Url"];
-            var apiKey = _config["Supabase:ApiKey"];
-
-            var url = $"{supabaseUrl}/auth/v1/admin/users";
+            var apiKey = Environment.GetEnvironmentVariable("SUPABASE_API_KEY")!;
 
             var request = new HttpRequestMessage(HttpMethod.Post, $"{supabaseUrl}/auth/v1/admin/users")
             {
