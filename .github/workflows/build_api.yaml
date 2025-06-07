@@ -10,8 +10,8 @@ on:
       - .github/workflows/build_api.yaml
   
   push:
-    # branches:
-    #   - main
+    branches:
+      - main
     paths:
       - ParkingSystem/**
       - .github/workflows/build_api.yaml
