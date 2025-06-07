@@ -4,6 +4,7 @@ using ParkingSystem.Application.DTOs;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http.Headers;
 using Microsoft.IdentityModel.Tokens;
+using ParkingSystem.Common.Security;
 
 
 namespace ParkingSystem.Application.Services
@@ -21,7 +22,7 @@ namespace ParkingSystem.Application.Services
             _logger = logger;
         }
 
-        public async Task<SupabaseAuthResponse> LoginWithSupabase(string email, string password)
+        public async Task<SupabaseAuthResponse> LoginWithSupabase(string email, string passwordInput)
         {
             _logger.LogInformation("Attempting to login user {email}", email);
 
@@ -34,10 +35,12 @@ namespace ParkingSystem.Application.Services
             _httpClient.DefaultRequestHeaders.Add("apikey", apiKey);
             _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
+            using var passwordSingle = new ReadOnceSecret(passwordInput);
+
             var payload = new
             {
-                email,
-                password
+                email = email,
+                password = passwordSingle.Read()
             };
 
             var content = new StringContent(
