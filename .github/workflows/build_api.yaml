@@ -10,14 +10,14 @@ on:
       - .github/workflows/build_api.yaml
   
   push:
-    branches:
-      - main
+    # branches:
+    #   - main
     paths:
       - ParkingSystem/**
       - .github/workflows/build_api.yaml
 
 env:
-  VERSION: 0.0.1
+  VERSION: 0.1.0
 
 jobs:
   build-api:
@@ -93,9 +93,15 @@ jobs:
       issues: write
     services:
       api:
-        image: 'lew6s/parking-system:0.0.1'
+        image: 'lew6s/parking-system:0.1.0'
         ports:
           - 8080:8080
+        # FIXME: CONNECTION_STRING_ID shouldn't be static, but sourced from a variable (at least)
+        env:
+          DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+          CONNECTION_STRING_ID: "SupabaseTestConnection"
+          SUPABASE_API_KEY: ${{ secrets.SUPABASE_API_KEY }}
+          SUPABASE_JWT_VALIDATE_TOKEN: ${{ secrets.SUPABASE_JWT_VALIDATE_TOKEN }}
     
     steps:
       - name: Run ZAP test targeting API
