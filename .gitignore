@@ -549,5 +549,3 @@ obj/
 /dataSources.local.xml
 
 *.env
-# TODO: Remove this one, as migrations should be versioned
-ParkingSystem/ParkingSystem/Migrations/*
