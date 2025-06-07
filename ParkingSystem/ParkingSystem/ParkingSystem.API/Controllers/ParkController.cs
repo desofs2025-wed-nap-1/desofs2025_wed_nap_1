@@ -5,6 +5,7 @@ using  ParkingSystem.Application.Interfaces;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using ParkingSystem.Core.Aggregates;
+using ParkingSystem.Core.Constants;
 
 namespace ParkingSystem.API.Controllers
 {
@@ -22,6 +23,7 @@ namespace ParkingSystem.API.Controllers
         }
 
         [HttpPost("create")]
+        [Authorize(Roles = RoleNames.ParkManager)]
         public async Task<IActionResult> AddPark(ParkDTO parkDto)
         {
             try
@@ -37,10 +39,11 @@ namespace ParkingSystem.API.Controllers
             {
                 return BadRequest("Failed to add park");
             }
-            
+
         }
 
         [HttpPut("update")]
+        [Authorize(Roles = RoleNames.ParkManager)]
         public IActionResult UpdatePark(ParkDTO parkDto)
         {
             var result = _parkService.UpdatePark(parkDto);
@@ -52,6 +55,7 @@ namespace ParkingSystem.API.Controllers
         }
 
         [HttpDelete("delete/{id}")]
+        [Authorize(Roles = RoleNames.ParkManager)]
         public IActionResult DeletePark(long id)
         {
             var result = _parkService.DeletePark(id);
@@ -63,7 +67,7 @@ namespace ParkingSystem.API.Controllers
         }
 
         [HttpGet("available")]
-        [Authorize(Roles = "client")]
+        [Authorize(Roles = RoleNames.Client)]
         public async Task<IActionResult> GetAvailableParks()
         {
             try
