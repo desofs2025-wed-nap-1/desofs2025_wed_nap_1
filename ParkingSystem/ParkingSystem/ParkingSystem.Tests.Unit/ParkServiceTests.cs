@@ -14,11 +14,13 @@ namespace ParkingSystem.Tests.Unit
     {
         private readonly Mock<IParkRepository> _parkRepositoryMock;
         private readonly ParkService _parkService;
+        private readonly Mock<ILogger<ParkService>> _loggerMock;
 
         public ParkServiceTests()
         {
             _parkRepositoryMock = new Mock<IParkRepository>();
-            _parkService = new ParkService(_parkRepositoryMock.Object);
+            _loggerMock = new Mock<ILogger<ParkService>>();
+            _parkService = new ParkService(_parkRepositoryMock.Object,_loggerMock.Object);
         }
 
         [Fact]

@@ -16,6 +16,7 @@ namespace ParkingSystem.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<User>().Property(u => u.role).HasConversion<string>();
 
             // modelBuilder.Entity<User>().HasKey(u => u.Id);
             // modelBuilder.Entity<Vehicle>().HasKey(v => v.Id);

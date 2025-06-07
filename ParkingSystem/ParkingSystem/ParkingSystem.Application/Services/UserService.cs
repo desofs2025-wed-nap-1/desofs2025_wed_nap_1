@@ -9,11 +9,13 @@ namespace ParkingSystem.Application.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly SupabaseAuthService _authService;
         //private readonly ITokenService _tokenService;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, SupabaseAuthService authService)
         {
             _userRepository = userRepository;
+            _authService = authService;
             //_tokenService = tokenService;
         }
 
@@ -23,8 +25,12 @@ namespace ParkingSystem.Application.Services
             {
                 throw new ArgumentException("Username already taken.");
             }
+
+            // TODO: actually check how we could integrate this
+            var userID = await _authService.CreateUserAsync(userDto.email, userDto.password, userDto.role);
+
             var user = UserMapper.ToUserDomain(userDto);
-            userDto = new UserDTO();
+
             var result = await _userRepository.AddUser(user);
             return result != null ? UserMapper.ToUserDto(result) : null;
         }
