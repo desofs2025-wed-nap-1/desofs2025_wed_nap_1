@@ -10,12 +10,14 @@ namespace ParkingSystem.Application.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly SupabaseAuthService _authService;
+        private readonly ILogger<UserService> _logger;
         //private readonly ITokenService _tokenService;
 
-        public UserService(IUserRepository userRepository, SupabaseAuthService authService)
+        public UserService(IUserRepository userRepository, SupabaseAuthService authService, ILogger<UserService> logger)
         {
             _userRepository = userRepository;
             _authService = authService;
+            _logger = logger;
             //_tokenService = tokenService;
         }
 
@@ -48,9 +50,24 @@ namespace ParkingSystem.Application.Services
 
         public async Task<UserDTO?> UpdateUser(UserDTO userDto)
         {
-            var user = UserMapper.ToUserDomain(userDto);
-            var updatedUser = await _userRepository.UpdateUser(user);
-            return updatedUser != null ? UserMapper.ToUserDto(updatedUser) : null;
+            try
+            {
+                var findUser = await _userRepository.GetUserByUsername(userDto.username);
+                if (findUser == null)
+                {
+                    throw new Exception("A user with the provided details was not found");
+                }
+                _logger.LogInformation("Provided user exists and is valid, will update: " + findUser.Id);
+                var user = UserMapper.ToUserDomainWithId(userDto, findUser.Id);
+                var updatedUser = await _userRepository.UpdateUser(user);
+                return updatedUser != null ? UserMapper.ToUserDto(updatedUser) : null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error updating user: " + ex.Message);
+                throw;
+            }
+            
         }
 
         public async Task<UserDTO?> DeleteUser(long id)
@@ -58,5 +75,6 @@ namespace ParkingSystem.Application.Services
             var deletedUser = await _userRepository.DeleteUser(id);
             return deletedUser != null ? UserMapper.ToUserDto(deletedUser) : null;
         }
+
     }
 }

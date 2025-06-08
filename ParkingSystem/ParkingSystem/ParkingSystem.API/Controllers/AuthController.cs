@@ -33,5 +33,13 @@ namespace ParkingSystem.API.Controllers
             }
         }
 
+        [HttpGet("claims")]
+        public IActionResult GetClaims()
+        {
+            var claims = User.Claims.Select(c => new { c.Type, c.Value });
+            return Ok(claims);
+        }
+
+
     }
 }

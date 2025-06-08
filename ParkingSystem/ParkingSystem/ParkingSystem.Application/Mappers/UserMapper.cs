@@ -17,6 +17,19 @@ namespace ParkingSystem.Application.Mappers
             };
         }
 
+        public static User ToUserDomainWithId(UserDTO dto, long id)
+        {
+            return new User
+            {
+                Id = id,
+                username = dto.username,
+                email = dto.email,
+                password = dto.password,
+                phoneNumber = dto.phoneNumber,
+                role = Enum.TryParse(dto.role, out Role role) ? role : 0
+            };
+        }
+
         public static UserDTO ToUserDto(User user)
         {
             return new UserDTO

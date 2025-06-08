@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Authentication;
 using ParkingSystem.Infrastructure.Authentication;
 using System.Net.Http.Headers;
 using System.Text;
+using ParkingSystem.Core.Constants;
 
 DotEnv.Load();
 
@@ -88,7 +89,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AllRolesExceptUnauthenticated", policy =>
+    {
+        policy.RequireRole(RoleNames.Client, RoleNames.ParkManager, RoleNames.Admin);
+    });
+});
 
 var app = builder.Build();
 

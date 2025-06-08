@@ -3,6 +3,7 @@ using  ParkingSystem.Application.DTOs;
 using  ParkingSystem.Application.Services;
 using  ParkingSystem.Application.Interfaces;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ParkingSystem.API.Controllers
 {
@@ -49,9 +50,10 @@ namespace ParkingSystem.API.Controllers
         }
 
         [HttpPut("update")]
-        public IActionResult Update(UserDTO userDto)
+        [Authorize(Policy = "AllRolesExceptUnauthenticated")]
+        public async Task<IActionResult> Update(UserDTO userDto)
         {
-            var result = _userService.UpdateUser(userDto);
+            var result = await _userService.UpdateUser(userDto);
             if (result != null)
             {
                 return Ok("User updated successfully.");
@@ -60,6 +62,7 @@ namespace ParkingSystem.API.Controllers
         }
 
         [HttpDelete("delete/{id}")]
+        [Authorize(Policy = "AllRolesExceptUnauthenticated")]
         public IActionResult Delete(long id)
         {
             var result = _userService.DeleteUser(id);

@@ -8,7 +8,8 @@ namespace ParkingSystem.Core.Interfaces
         Task<User?> UpdateUser(User user);
         Task<User?> DeleteUser(long id);
         Task<User?> GetUserById(long id);
-        Task<User?> GetUserByEmailAndPassword(string email, string password);    
+        Task<User?> GetUserByEmailAndPassword(string email, string password);
+        Task<User?> GetUserByUsername(string username);
         Task<bool> IsUsernameTaken(string username);
     }
 }

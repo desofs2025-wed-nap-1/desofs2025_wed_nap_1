@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using  ParkingSystem.Application.DTOs;
 using  ParkingSystem.Application.Services;
 using  ParkingSystem.Application.Interfaces;
+using ParkingSystem.Core.Constants;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ParkingSystem.API.Controllers
 {
@@ -17,9 +19,10 @@ namespace ParkingSystem.API.Controllers
         }
 
         [HttpPost("add")]
+        [Authorize(Roles = RoleNames.Client)]
         public IActionResult AddVehicle(VehicleDTO vehicleDto)
         {
-            var result =_vehicleService.AddVehicleToUser(vehicleDto);
+            var result = _vehicleService.AddVehicleToUser(vehicleDto);
             if (result != null)
             {
                 return Ok("Vehicle created successfully.");
@@ -28,6 +31,7 @@ namespace ParkingSystem.API.Controllers
         }
 
         [HttpPut("update")]
+        [Authorize(Roles = RoleNames.Client)]
         public IActionResult UpdateVehicle(VehicleDTO vehicleDto)
         {
             var result = _vehicleService.UpdateVehicle(vehicleDto);
@@ -39,6 +43,7 @@ namespace ParkingSystem.API.Controllers
         }
 
         [HttpDelete("delete/{id}")]
+        [Authorize(Roles = RoleNames.Client)]
         public IActionResult DeleteVehicle(long id)
         {
             var result = _vehicleService.DeleteVehicle(id);
@@ -50,6 +55,7 @@ namespace ParkingSystem.API.Controllers
         }
 
         [HttpGet("user/{userId}")]
+        [Authorize(Roles = RoleNames.Client)]
         public IActionResult GetVehiclesByUser(long userId)
         {
             var vehicles = _vehicleService.GetVehiclesByUser(userId);
