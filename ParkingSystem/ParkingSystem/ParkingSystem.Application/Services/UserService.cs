@@ -9,10 +9,10 @@ namespace ParkingSystem.Application.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        private readonly SupabaseAuthService _authService;
+        private readonly IAuthenticationService _authService;
         private readonly ILogger<UserService> _logger;
 
-        public UserService(IUserRepository userRepository, SupabaseAuthService authService, ILogger<UserService> logger)
+        public UserService(IUserRepository userRepository, IAuthenticationService authService, ILogger<UserService> logger)
         {
             _userRepository = userRepository;
             _authService = authService;

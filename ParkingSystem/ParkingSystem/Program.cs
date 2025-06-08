@@ -54,7 +54,7 @@ builder.Services.AddScoped<IParkService, ParkService>();
 
 builder.Services.AddScoped<IClaimsTransformation, SupabaseClaimsTransformer>();
 
-builder.Services.AddScoped<SupabaseAuthService>();
+builder.Services.AddScoped<ParkingSystem.Application.Interfaces.IAuthenticationService, SupabaseAuthService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

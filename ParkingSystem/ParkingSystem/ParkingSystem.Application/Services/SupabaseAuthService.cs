@@ -5,11 +5,11 @@ using Microsoft.Extensions.Configuration;
 using System.Net.Http.Headers;
 using Microsoft.IdentityModel.Tokens;
 using ParkingSystem.Common.Security;
-
+using ParkingSystem.Application.Interfaces;
 
 namespace ParkingSystem.Application.Services
 {
-    public class SupabaseAuthService
+    public class SupabaseAuthService : IAuthenticationService
     {
         private readonly IConfiguration _config;
         private readonly HttpClient _httpClient;
