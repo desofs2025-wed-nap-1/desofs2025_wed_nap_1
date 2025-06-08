@@ -44,9 +44,9 @@ namespace ParkingSystem.API.Controllers
 
         [HttpPut("update")]
         [Authorize(Roles = RoleNames.ParkManager)]
-        public IActionResult UpdatePark(ParkDTO parkDto)
+        public async Task<IActionResult> UpdatePark(ParkDTO parkDto)
         {
-            var result = _parkService.UpdatePark(parkDto);
+            var result = await _parkService.UpdatePark(parkDto);
             if (result != null)
             {
                 return Ok("Park updated successfully.");
@@ -56,9 +56,9 @@ namespace ParkingSystem.API.Controllers
 
         [HttpDelete("delete/{id}")]
         [Authorize(Roles = RoleNames.ParkManager)]
-        public IActionResult DeletePark(long id)
+        public async Task<IActionResult> DeletePark(long id)
         {
-            var result = _parkService.DeletePark(id);
+            var result = await _parkService.DeletePark(id);
             if (result != null)
             {
                 return Ok("Park deleted successfully.");

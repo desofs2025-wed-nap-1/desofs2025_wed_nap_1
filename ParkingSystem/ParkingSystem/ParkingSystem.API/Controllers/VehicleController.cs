@@ -20,9 +20,9 @@ namespace ParkingSystem.API.Controllers
 
         [HttpPost("add")]
         [Authorize(Roles = RoleNames.Client)]
-        public IActionResult AddVehicle(VehicleDTO vehicleDto)
+        public async Task<IActionResult> AddVehicleAsync(VehicleDTO vehicleDto)
         {
-            var result = _vehicleService.AddVehicleToUser(vehicleDto);
+            var result = await _vehicleService.AddVehicleToUser(vehicleDto);
             if (result != null)
             {
                 return Ok("Vehicle created successfully.");
@@ -32,9 +32,9 @@ namespace ParkingSystem.API.Controllers
 
         [HttpPut("update")]
         [Authorize(Roles = RoleNames.Client)]
-        public IActionResult UpdateVehicle(VehicleDTO vehicleDto)
+        public async Task<IActionResult> UpdateVehicle(VehicleDTO vehicleDto)
         {
-            var result = _vehicleService.UpdateVehicle(vehicleDto);
+            var result = await _vehicleService.UpdateVehicle(vehicleDto);
             if (result != null)
             {
                 return Ok("Vehicle updated successfully.");
@@ -44,9 +44,9 @@ namespace ParkingSystem.API.Controllers
 
         [HttpDelete("delete/{id}")]
         [Authorize(Roles = RoleNames.Client)]
-        public IActionResult DeleteVehicle(long id)
+        public async Task<IActionResult> DeleteVehicle(long id)
         {
-            var result = _vehicleService.DeleteVehicle(id);
+            var result = await _vehicleService.DeleteVehicle(id);
             if (result != null)
             {
                 return Ok("Vehicle deleted successfully.");
@@ -56,9 +56,9 @@ namespace ParkingSystem.API.Controllers
 
         [HttpGet("user/{userId}")]
         [Authorize(Roles = RoleNames.Client)]
-        public IActionResult GetVehiclesByUser(long userId)
+        public async Task<IActionResult> GetVehiclesByUser(long userId)
         {
-            var vehicles = _vehicleService.GetVehiclesByUser(userId);
+            var vehicles = await _vehicleService.GetVehiclesByUser(userId);
             return Ok(vehicles);
         }
     }
