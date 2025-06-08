@@ -11,14 +11,12 @@ namespace ParkingSystem.Application.Services
         private readonly IUserRepository _userRepository;
         private readonly SupabaseAuthService _authService;
         private readonly ILogger<UserService> _logger;
-        //private readonly ITokenService _tokenService;
 
         public UserService(IUserRepository userRepository, SupabaseAuthService authService, ILogger<UserService> logger)
         {
             _userRepository = userRepository;
             _authService = authService;
             _logger = logger;
-            //_tokenService = tokenService;
         }
 
         public async Task<UserDTO?> RegisterUser(UserDTO userDto)
@@ -60,7 +58,11 @@ namespace ParkingSystem.Application.Services
                 _logger.LogInformation("Provided user exists and is valid, will update: " + findUser.Id);
                 var user = UserMapper.ToUserDomainWithId(userDto, findUser.Id);
                 var updatedUser = await _userRepository.UpdateUser(user);
-                return updatedUser != null ? UserMapper.ToUserDto(updatedUser) : null;
+                if (updatedUser != null)
+                {
+                    return UserMapper.ToUserDto(updatedUser);
+                }
+                throw new Exception("UserRepository returned null after update");
             }
             catch (Exception ex)
             {
