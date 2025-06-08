@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using  ParkingSystem.Application.DTOs;
+using ParkingSystem.Application.Interfaces;
 using  ParkingSystem.Application.Services;
 
 namespace ParkingSystem.API.Controllers
@@ -8,9 +9,9 @@ namespace ParkingSystem.API.Controllers
     [Route("api/auth")]
     public class AuthController : ControllerBase
     {
-        private readonly SupabaseAuthService _authService;
+        private readonly IAuthenticationService _authService;
 
-        public AuthController(SupabaseAuthService authService)
+        public AuthController(IAuthenticationService authService)
         {
             _authService = authService;
         }
@@ -39,7 +40,6 @@ namespace ParkingSystem.API.Controllers
             var claims = User.Claims.Select(c => new { c.Type, c.Value });
             return Ok(claims);
         }
-
 
     }
 }

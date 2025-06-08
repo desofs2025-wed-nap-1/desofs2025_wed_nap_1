@@ -101,6 +101,7 @@ namespace ParkingSystem.Application.Services
             
             try
             {
+                _logger.LogInformation("Creating user in Supabase");
                 var response = await _httpClient.SendAsync(request);
                 response.EnsureSuccessStatusCode();
 

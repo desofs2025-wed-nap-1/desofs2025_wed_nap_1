@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using ParkingSystem.Core.Aggregates;
 using ParkingSystem.Core.Constants;
+using ParkingSystem.Application.Exceptions;
 
 namespace ParkingSystem.API.Controllers
 {
@@ -46,24 +47,47 @@ namespace ParkingSystem.API.Controllers
         [Authorize(Roles = RoleNames.ParkManager)]
         public async Task<IActionResult> UpdatePark(ParkDTO parkDto)
         {
-            var result = await _parkService.UpdatePark(parkDto);
-            if (result != null)
+            try
             {
-                return Ok("Park updated successfully.");
+                var result = await _parkService.UpdatePark(parkDto);
+                if (result != null)
+                {
+                    return Ok("Park updated successfully.");
+                }
+                return BadRequest("Failed to update park, ensure the request contains valid information.");
             }
-            return BadRequest("Failed to update park.");
+            catch (ParkNotFoundException)
+            {
+                return NotFound("The Park provided for update was not found.");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal error when updating Park");
+            }
+            
         }
 
         [HttpDelete("delete/{id}")]
         [Authorize(Roles = RoleNames.ParkManager)]
         public async Task<IActionResult> DeletePark(long id)
         {
-            var result = await _parkService.DeletePark(id);
-            if (result != null)
+            try
             {
-                return Ok("Park deleted successfully.");
+                var result = await _parkService.DeletePark(id);
+                if (result != null)
+                {
+                    return Ok("Park deleted successfully.");
+                }
+                return BadRequest("Failed to delete park, ensure the request contains valid information"); 
             }
-            return NotFound("Park not found.");
+            catch (ParkNotFoundException)
+            {
+                return NotFound("The Park provided for deletion was not found.");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal error when deleting Park");
+            }
         }
 
         [HttpGet("available")]
@@ -73,12 +97,10 @@ namespace ParkingSystem.API.Controllers
             try
             {
                 var parks = await _parkService.GetAvailableParks();
-                _logger.LogInformation("Successfully gathered available parks");
                 return Ok(parks);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                _logger.LogError("Error listing available parks: " + e.Message);
                 return BadRequest("Error listing available parks");
             }
 
