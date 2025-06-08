@@ -4,6 +4,7 @@ using  ParkingSystem.Application.Services;
 using  ParkingSystem.Application.Interfaces;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using ParkingSystem.Application.Exceptions;
 
 namespace ParkingSystem.API.Controllers
 {
@@ -53,12 +54,24 @@ namespace ParkingSystem.API.Controllers
         [Authorize(Policy = "AllRolesExceptUnauthenticated")]
         public async Task<IActionResult> Update(UserDTO userDto)
         {
-            var result = await _userService.UpdateUser(userDto);
-            if (result != null)
+            try
             {
-                return Ok("User updated successfully.");
+                var result = await _userService.UpdateUser(userDto);
+                if (result != null)
+                {
+                    return Ok("User updated successfully.");
+                }
+                return BadRequest("Failed to update user.");
             }
-            return BadRequest("Failed to update user.");
+            catch (UserNotFoundException)
+            {
+                return NotFound("The provided user was not found");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An internal error occurred when updating the user");
+            }
+            
         }
 
         [HttpDelete("delete/{id}")]

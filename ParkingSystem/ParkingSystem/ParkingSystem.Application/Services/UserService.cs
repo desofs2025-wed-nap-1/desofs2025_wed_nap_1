@@ -3,6 +3,7 @@ using ParkingSystem.Application.Interfaces;
 using ParkingSystem.Core.Interfaces;
 using ParkingSystem.Application.Mappers;
 using System.Threading.Tasks;
+using ParkingSystem.Application.Exceptions;
 
 namespace ParkingSystem.Application.Services
 {
@@ -53,7 +54,8 @@ namespace ParkingSystem.Application.Services
                 var findUser = await _userRepository.GetUserByUsername(userDto.username);
                 if (findUser == null)
                 {
-                    throw new Exception("A user with the provided details was not found");
+                    // don't log here, because it's logged below in the "catch" block
+                    throw new UserNotFoundException("A user with the provided details was not found");
                 }
                 _logger.LogInformation("Provided user exists and is valid, will update: " + findUser.Id);
                 var user = UserMapper.ToUserDomainWithId(userDto, findUser.Id);
@@ -74,8 +76,21 @@ namespace ParkingSystem.Application.Services
 
         public async Task<UserDTO?> DeleteUser(long id)
         {
-            var deletedUser = await _userRepository.DeleteUser(id);
-            return deletedUser != null ? UserMapper.ToUserDto(deletedUser) : null;
+            try
+            {
+                var deletedUser = await _userRepository.DeleteUser(id);
+                if (deletedUser != null)
+                {
+                    return UserMapper.ToUserDto(deletedUser);
+                }
+                throw new Exception("UserRepository returned null after delete");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error deleting user: " + ex.Message);
+                throw;
+            }
+            
         }
 
     }
