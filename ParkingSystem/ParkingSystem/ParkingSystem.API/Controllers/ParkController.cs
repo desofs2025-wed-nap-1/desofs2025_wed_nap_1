@@ -34,11 +34,11 @@ namespace ParkingSystem.API.Controllers
                 {
                     return Ok("Park created successfully.");
                 }
-                return BadRequest("Failed to create park.");
+                return BadRequest("Failed to create park, ensure provided Park information is correct.");
             }
             catch
             {
-                return BadRequest("Failed to add park");
+                return StatusCode(500,"Server error when adding park");
             }
 
         }
