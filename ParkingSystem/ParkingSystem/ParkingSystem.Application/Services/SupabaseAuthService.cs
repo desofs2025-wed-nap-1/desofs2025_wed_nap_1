@@ -3,8 +3,8 @@ using System.Text;
 using System.Text.Json;
 using ParkingSystem.Application.DTOs;
 using Microsoft.Extensions.Configuration;
-using System.Net.Http.Headers;
 using Microsoft.IdentityModel.Tokens;
+using ParkingSystem.Application.Helpers;
 
 namespace ParkingSystem.Application.Services
 {
@@ -25,8 +25,10 @@ namespace ParkingSystem.Application.Services
         {
             _logger.LogInformation("Attempting to login user {email}", email);
 
-            var supabaseUrl = _config["Supabase:Url"];
+            var supabaseUrl = Environment.GetEnvironmentVariable("SUPABASE_URL");
             var apiKey = Environment.GetEnvironmentVariable("SUPABASE_API_KEY")!;
+
+
 
             var url = $"{supabaseUrl}/auth/v1/token?grant_type=password";
 
@@ -90,8 +92,9 @@ namespace ParkingSystem.Application.Services
                     }
             };
 
-            var supabaseUrl = _config["Supabase:Url"];
+            var supabaseUrl = Environment.GetEnvironmentVariable("SUPABASE_URL");
             var apiKey = Environment.GetEnvironmentVariable("SUPABASE_API_KEY")!;
+
 
             var request = new HttpRequestMessage(HttpMethod.Post, $"{supabaseUrl}/auth/v1/admin/users")
             {
@@ -126,8 +129,8 @@ namespace ParkingSystem.Application.Services
 
         public async Task<SupabaseAuthResponse> VerifyMfa(string code, string factorId, string accessToken)
         {
-            var supabaseUrl = _config["Supabase:Url"];
-            var apiKey = _config["Supabase:ApiKey"];
+            var supabaseUrl = Environment.GetEnvironmentVariable("SUPABASE_URL");
+            var apiKey = Environment.GetEnvironmentVariable("SUPABASE_API_KEY")!;
 
             var url = $"{supabaseUrl}/auth/v1/verify";
 
@@ -161,14 +164,9 @@ namespace ParkingSystem.Application.Services
 
         public async Task<MfaEnrollResponse> EnrollMfaFactor(string userId)
         {
-            var supabaseUrl = _config["Supabase:Url"];
-            var serviceRoleKey = _config["Supabase:ServiceRoleKey"];
+            var supabaseUrl = Environment.GetEnvironmentVariable("SUPABASE_URL");
+            var serviceRoleKey = Environment.GetEnvironmentVariable("SUPABASE_SERVICE_ROLE_KEY")!;
             var url = $"{supabaseUrl}/auth/v1/admin/users/{userId}/factors";
-
-            _httpClient.DefaultRequestHeaders.Clear();
-            _httpClient.DefaultRequestHeaders.Add("apikey", serviceRoleKey);
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", serviceRoleKey);
-            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
             var payload = new
             {
@@ -176,13 +174,16 @@ namespace ParkingSystem.Application.Services
                 friendly_name = "MFA"
             };
 
-            var content = new StringContent(
-                JsonSerializer.Serialize(payload),
-                Encoding.UTF8,
-                "application/json"
-            );
+            var request = new HttpRequestMessage(HttpMethod.Post, url)
+            {
+                Content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json")
+            };
 
-            var response = await _httpClient.PostAsync(url, content);
+            request.Headers.Add("apikey", serviceRoleKey);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", serviceRoleKey);
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var response = await _httpClient.SendAsync(request);
             var responseContent = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
@@ -191,18 +192,19 @@ namespace ParkingSystem.Application.Services
             return JsonSerializer.Deserialize<MfaEnrollResponse>(responseContent);
         }
 
+
         public async Task<bool> IsMfaEnabled(string userId)
         {
-            var supabaseUrl = _config["Supabase:Url"];
-            var serviceRoleKey = _config["Supabase:ServiceRoleKey"];
+            var supabaseUrl = Environment.GetEnvironmentVariable("SUPABASE_URL");
+            var serviceRoleKey = Environment.GetEnvironmentVariable("SUPABASE_SERVICE_ROLE_KEY")!;
             var url = $"{supabaseUrl}/auth/v1/admin/users/{userId}/factors";
 
-            _httpClient.DefaultRequestHeaders.Clear();
-            _httpClient.DefaultRequestHeaders.Add("apikey", serviceRoleKey);
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", serviceRoleKey);
-            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            request.Headers.Add("apikey", serviceRoleKey);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", serviceRoleKey);
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var response = await _httpClient.GetAsync(url);
+            var response = await _httpClient.SendAsync(request);
             var responseContent = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
@@ -212,6 +214,32 @@ namespace ParkingSystem.Application.Services
 
             return factors != null && factors.Count > 0;
         }
+
+        public async Task ActivateMfaAsync(string factorId, string code, string accessToken)
+        {
+            var supabaseUrl = Environment.GetEnvironmentVariable("SUPABASE_URL");
+            var apiKey = Environment.GetEnvironmentVariable("SUPABASE_API_KEY")!;
+            var url = $"{supabaseUrl}/auth/v1/factors/{factorId}/verify";
+
+            var payload = new
+            {
+                code = code
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+
+            _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Add("apikey", apiKey);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+
+            var response = await _httpClient.PostAsync(url, content);
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+                throw new Exception($"Error activating MFA: {responseContent}");
+        }
+
     }
     
 }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ParkingSystem.Application.DTOs;
 using ParkingSystem.Application.Services;
+using ParkingSystem.Application.Helpers;
 
 namespace ParkingSystem.API.Controllers
 {
@@ -72,12 +73,13 @@ namespace ParkingSystem.API.Controllers
             {
                 var enrollResponse = await _authService.EnrollMfaFactor(userId);
 
-                // Aqui vai o QR code e o secret para o usuário configurar o app autenticador
+                var qrImage = MfaHelper.GenerateQrCodeImage(enrollResponse.Totp.Uri);
+
                 return Ok(new
                 {
                     factorId = enrollResponse.Id,
                     friendlyName = enrollResponse.FriendlyName,
-                    qrCode = enrollResponse.Totp.QrCode,
+                    qrCode = qrImage,
                     secret = enrollResponse.Totp.Secret,
                     uri = enrollResponse.Totp.Uri
                 });
@@ -114,6 +116,21 @@ namespace ParkingSystem.API.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+        [HttpPost("mfa/activate")]
+        public async Task<IActionResult> ActivateMfa([FromBody] ActivateMfaDTO dto)
+        {
+            try
+            {
+                await _authService.ActivateMfaAsync(dto.FactorId, dto.Code, dto.AccessToken);
+                return Ok(new { message = "MFA activated successfully." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
 
     }
 }

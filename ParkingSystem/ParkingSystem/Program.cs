@@ -22,6 +22,7 @@ using System.Text;
 
 DotEnv.Load();
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // builder.Logging.ClearProviders();
@@ -35,6 +36,7 @@ var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
 var connectionStringName = Environment.GetEnvironmentVariable("CONNECTION_STRING_ID") ?? "DefaultConnection";
 var supabaseAPIKey = Environment.GetEnvironmentVariable("SUPABASE_API_KEY")!;
 var supabaseJWTToken = Environment.GetEnvironmentVariable("SUPABASE_JWT_VALIDATE_TOKEN")!;
+var supabaseUrl = Environment.GetEnvironmentVariable("SUPABASE_URL")!;
 
 var jwtKeyBytes = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(supabaseJWTToken));
 
@@ -66,7 +68,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidIssuer = builder.Configuration["Supabase:Url"] + "/auth/v1",
+            ValidIssuer = supabaseUrl + "/auth/v1",
             ValidateAudience = false,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = false,
