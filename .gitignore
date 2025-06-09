@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 *.idea
 # Created by https://www.toptal.com/developers/gitignore/api/csharp,aspnetcore,dotnetcore
 # Edit at https://www.toptal.com/developers/gitignore?templates=csharp,aspnetcore,dotnetcore
@@ -535,8 +534,7 @@ obj/
 /wwwroot/node_modules
 
 # End of https://www.toptal.com/developers/gitignore/api/csharp,aspnetcore,dotnetcore
-=======
-﻿# Default ignored files
+
 /shelf/
 /workspace.xml
 # Rider ignored files
@@ -550,4 +548,4 @@ obj/
 /dataSources/
 /dataSources.local.xml
 
->>>>>>> main
+*.env
