@@ -133,5 +133,55 @@ namespace ParkingSystem.Tests.Unit
                     Assert.False(park.gateOpen);
                 });
         }
+
+
+        [Fact]
+        public async Task SetGateStatus_ShouldReturnUpdatedParkDTO_WhenParkExists()
+        {
+            long parkId = 1;
+            bool newGateStatus = true;
+
+            var parkDomain = new Park
+            {
+                Id = parkId,
+                name = "Test Park",
+                location = "Test Location",
+                capacity = 100,
+                gateOpen = !newGateStatus
+            };
+
+
+            _parkRepositoryMock
+                .Setup(repo => repo.SetGateStatus(parkId, newGateStatus))
+                .ReturnsAsync(() =>
+                {
+                    parkDomain.gateOpen = newGateStatus;
+                    return parkDomain;
+                });
+
+            var result = await _parkService.SetGateStatus(parkId, newGateStatus);
+
+            Assert.NotNull(result);
+            Assert.Equal(parkDomain.name, result?.name);
+            Assert.Equal(parkDomain.location, result?.location);
+            Assert.Equal(parkDomain.capacity, result?.capacity);
+            Assert.Equal(newGateStatus, result?.gateOpen);
+        }
+
+        [Fact]
+        public async Task SetGateStatus_ShouldReturnNull_WhenParkDoesNotExist()
+        {
+            long nonExistingParkId = 999;
+            bool gateStatus = true;
+
+            _parkRepositoryMock
+                .Setup(repo => repo.SetGateStatus(nonExistingParkId, gateStatus))
+                .ReturnsAsync((Park?)null);
+
+            var result = await _parkService.SetGateStatus(nonExistingParkId, gateStatus);
+
+            Assert.Null(result);
+        }
+
     }
 }
