@@ -106,5 +106,18 @@ namespace ParkingSystem.Application.Services
             }
             
         }
+
+        public async Task<ParkDTO?> SetGateStatus(long parkId, bool isOpen)
+        {
+            _logger.LogInformation("Setting gate status for park {parkId} to {isOpen}", parkId, isOpen);
+            var result = await _parkRepository.SetGateStatus(parkId, isOpen);
+            if (result == null)
+            {
+                _logger.LogWarning("Failed to set gate status: park not found");
+                return null;
+            }
+            return ParkMapper.ToParkDto(result);
+        }
+
     }
 }
