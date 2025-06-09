@@ -6,6 +6,10 @@ namespace ParkingSystem.Application.DTOs
         public string token_type { get; set; } = string.Empty;
         public int expires_in { get; set; }
         public SupabaseUser user { get; set; } = new SupabaseUser();
+
+        public string mfa { get; set; } = string.Empty;
+        public string mfa_factor_id { get; set; } = string.Empty;
+
     }
 
     public class SupabaseUser
