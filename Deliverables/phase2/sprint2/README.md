@@ -153,6 +153,45 @@ These messages are then appropriately written to the specified log file:
 2025-06-04 16:52:17.198 +01:00 [INF] Found 3 available parks
 2025-06-04 16:52:17.198 +01:00 [INF] Successfully gathered available parks
 ```
+### Open/Close Gate Use Case
+
+One of the new use cases implemented in this sprint was the **Open/Close Gate** functionality, used to simulate the physical opening and closing of parking barriers. This action is available to authenticated users with the **Park Manager** role, and is intended to be called when a vehicle is allowed or denied entry/exit from a parking location.
+
+The functionality is implemented via two endpoints:
+
+- `POST /gate/open/{parkId}`
+- `POST /gate/close/{parkId}`
+
+These are protected by Role-Based Access Control (RBAC), meaning only users with the required role can execute them:
+
+```csharp
+[HttpPost("open/{parkId}")]
+[Authorize(Roles = RoleNames.ParkManager)]
+public async Task<IActionResult> OpenGateAsync(Guid parkId)
+{
+    await _gateService.OpenGateAsync(parkId);
+    return Ok("Gate opened successfully.");
+}
+
+[HttpPost("close/{parkId}")]
+[Authorize(Roles = RoleNames.ParkManager)]
+public async Task<IActionResult> CloseGateAsync(Guid parkId)
+{
+    await _gateService.CloseGateAsync(parkId);
+    return Ok("Gate closed successfully.");
+}
+```
+
+Internally, these methods call the `GateService`, which logs the operation and updates any necessary state or events associated with gate control.
+
+Example logging output when a gate is opened:
+
+```
+2025-06-05 14:20:45.123 +01:00 [INF] Gate opened for park with ID: 781f823e-bd2d-4c41-a07d-9305a8abf973
+```
+
+This use case provides the backend control logic needed for future integration with physical hardware or simulation systems. It also demonstrates the extensibility of the system's architecture to support real-world operations tied to user roles and permissions.
+
 
 ## Security improvements
 
