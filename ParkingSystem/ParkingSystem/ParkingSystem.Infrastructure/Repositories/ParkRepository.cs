@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ParkingSystem.Application.Exceptions;
 using ParkingSystem.Core.Aggregates;
 using ParkingSystem.Core.Interfaces;
 using ParkingSystem.Infrastructure.Data;
@@ -29,7 +30,7 @@ namespace ParkingSystem.Infrastructure.Repositories
                 await _context.SaveChangesAsync();
                 return existingPark;
             }
-            return null;
+            throw new ParkNotFoundException($"Park with id {park.Id} was not found");
         }
 
         public async Task<Park?> DeletePark(long id)
@@ -41,7 +42,7 @@ namespace ParkingSystem.Infrastructure.Repositories
                 await _context.SaveChangesAsync();
                 return park;
             }
-            return null;
+            throw new ParkNotFoundException($"Park with id {id} was not found");
         }
 
         public async Task<IEnumerable<Park>> GetAvailableParks()
@@ -57,6 +58,11 @@ namespace ParkingSystem.Infrastructure.Repositories
             park.gateOpen = isOpen;
             await _context.SaveChangesAsync();
             return park;
+        }
+
+        public async Task<Park?> GetParkById(long parkId)
+        {
+          return await _context.Parks.FindAsync(parkId);
         }
 
     }

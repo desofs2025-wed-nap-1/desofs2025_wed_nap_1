@@ -18,7 +18,7 @@ namespace ParkingSystem.Infrastructure.Repositories
             var user = await _context.Users.SingleOrDefaultAsync(u => u.username == username);
             if (user != null)
             {
-                vehicle.UserId = user.Id; 
+                vehicle.UserId = user.Id;
                 _context.Vehicles.Add(vehicle);
                 await _context.SaveChangesAsync();
                 return vehicle;
@@ -53,6 +53,11 @@ namespace ParkingSystem.Infrastructure.Repositories
         public async Task<IEnumerable<Vehicle>> GetAllVehiclesFromUser(long userId)
         {
             return await _context.Vehicles.Where(v => v.UserId == userId).ToListAsync();
+        }
+
+        public async Task<Vehicle?> FindById(long id)
+        {
+          return await _context.Vehicles.FindAsync(id);
         }
     }
 }

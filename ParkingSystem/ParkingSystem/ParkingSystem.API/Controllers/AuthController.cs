@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ParkingSystem.Application.Interfaces;
 using ParkingSystem.Application.DTOs;
 using ParkingSystem.Application.Services;
 using System.Security.Claims;

@@ -54,6 +54,11 @@ namespace ParkingSystem.Infrastructure.Repositories
             return await _context.Users.SingleOrDefaultAsync(u => u.email == email && u.password == password);
         }
 
+        public async Task<User?> GetUserByUsername(string username)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.username == username);
+        }
+
         public async Task<bool> IsUsernameTaken(string username)
         {
             return await _context.Users.AnyAsync(u => u.username == username);

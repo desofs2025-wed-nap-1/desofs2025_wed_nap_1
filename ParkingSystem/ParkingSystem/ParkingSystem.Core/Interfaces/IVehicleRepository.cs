@@ -9,5 +9,6 @@ namespace ParkingSystem.Core.Interfaces
         Task<Vehicle?> UpdateVehicle(Vehicle vehicle);
         Task<Vehicle?> DeleteVehicle(long id);
         Task<IEnumerable<Vehicle>> GetAllVehiclesFromUser(long userId);
+        Task<Vehicle?> FindById(long id);
     }
 }

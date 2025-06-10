@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using  ParkingSystem.Application.DTOs;
 using  ParkingSystem.Application.Services;
 using  ParkingSystem.Application.Interfaces;
+using ParkingSystem.Core.Constants;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ParkingSystem.API.Controllers
 {
@@ -17,43 +19,79 @@ namespace ParkingSystem.API.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult AddVehicle(VehicleDTO vehicleDto)
+        [Authorize(Roles = RoleNames.Client)]
+        public async Task<IActionResult> AddVehicleAsync(VehicleDTO vehicleDto)
         {
-            var result =_vehicleService.AddVehicleToUser(vehicleDto);
-            if (result != null)
+            try
             {
-                return Ok("Vehicle created successfully.");
+                var result = await _vehicleService.AddVehicleToUser(vehicleDto);
+                if (result != null)
+                {
+                    return Ok("Vehicle created successfully.");
+                }
+                return BadRequest("Failed to create Vehicle.");
             }
-            return BadRequest("Failed to create Vehicle.");
+            catch
+            {
+                return StatusCode(500, "Internal error when adding vehicle, please try again later");
+            }
+            
         }
 
         [HttpPut("update")]
-        public IActionResult UpdateVehicle(VehicleDTO vehicleDto)
+        [Authorize(Roles = RoleNames.Client)]
+        public async Task<IActionResult> UpdateVehicle(VehicleDTO vehicleDto)
         {
-            var result = _vehicleService.UpdateVehicle(vehicleDto);
-            if (result != null)
+            try
             {
-                return Ok("Vehicle updated successfully.");
+                var result = await _vehicleService.UpdateVehicle(vehicleDto);
+                if (result != null)
+                {
+                    return Ok("Vehicle updated successfully.");
+                }
+                return NotFound("Failed to update vehicle.");
             }
-            return NotFound("Failed to update vehicle.");
+            catch
+            {
+                return StatusCode(500, "Internal error when updating vehicle, please try again later");
+            }
+            
         }
 
         [HttpDelete("delete/{id}")]
-        public IActionResult DeleteVehicle(long id)
+        [Authorize(Roles = RoleNames.Client)]
+        public async Task<IActionResult> DeleteVehicle(long id)
         {
-            var result = _vehicleService.DeleteVehicle(id);
-            if (result != null)
+            try
             {
-                return Ok("Vehicle deleted successfully.");
+                var result = await _vehicleService.DeleteVehicle(id);
+                if (result != null)
+                {
+                    return Ok("Vehicle deleted successfully.");
+                }
+                return NotFound("Vehicle not found.");
             }
-            return NotFound("Vehicle not found.");
+            catch
+            {
+                return StatusCode(500, "Internal error when deleting vehicle, please try again later");
+            }
+            
         }
 
         [HttpGet("user/{userId}")]
-        public IActionResult GetVehiclesByUser(long userId)
+        [Authorize(Roles = RoleNames.Client)]
+        public async Task<IActionResult> GetVehiclesByUser(long userId)
         {
-            var vehicles = _vehicleService.GetVehiclesByUser(userId);
-            return Ok(vehicles);
+            try
+            {
+                var vehicles = await _vehicleService.GetVehiclesByUser(userId);
+                return Ok(vehicles);
+            }
+            catch
+            {
+                return StatusCode(500, "Internal error when deleting vehicle, please try again later");
+            }
+            
         }
     }
 }

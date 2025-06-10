@@ -4,10 +4,12 @@ using System.Text.Json;
 using ParkingSystem.Application.DTOs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using ParkingSystem.Common.Security;
+using ParkingSystem.Application.Interfaces;
 
 namespace ParkingSystem.Application.Services
 {
-    public class SupabaseAuthService
+    public class SupabaseAuthService : IAuthenticationService
     {
         private readonly IConfiguration _config;
         private readonly HttpClient _httpClient;
@@ -20,7 +22,7 @@ namespace ParkingSystem.Application.Services
             _logger = logger;
         }
 
-        public async Task<SupabaseAuthResponse> LoginWithSupabase(string email, string password)
+        public async Task<SupabaseAuthResponse> LoginWithSupabase(string email, string passwordInput)
         {
             _logger.LogInformation("Attempting to login user {email}", email);
 
@@ -33,10 +35,12 @@ namespace ParkingSystem.Application.Services
             _httpClient.DefaultRequestHeaders.Add("apikey", apiKey);
             _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
+            using var passwordSingle = new ReadOnceSecret(passwordInput);
+
             var payload = new
             {
-                email,
-                password
+                email = email,
+                password = passwordSingle.Read()
             };
 
             var content = new StringContent(
@@ -97,6 +101,7 @@ namespace ParkingSystem.Application.Services
 
             try
             {
+                _logger.LogInformation("Creating user in Supabase");
                 var response = await _httpClient.SendAsync(request);
                 response.EnsureSuccessStatusCode();
 

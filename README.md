@@ -11,3 +11,4 @@ DESOFS project team:
 
 - [Phase 1](./Deliverables/phase1/README.md)
 - [Phase 2 - Sprint 1](./Deliverables/phase2/sprint1/README.md)
+- [Phase 2 - Sprint 2](./Deliverables/phase2/sprint2/README.md)

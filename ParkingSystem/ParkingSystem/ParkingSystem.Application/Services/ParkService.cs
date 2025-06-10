@@ -4,6 +4,7 @@ using ParkingSystem.Core.Interfaces;
 using ParkingSystem.Application.Mappers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ParkingSystem.Application.Exceptions;
 namespace ParkingSystem.Application.Services
 {
     public class ParkService : IParkService
@@ -55,6 +56,11 @@ namespace ParkingSystem.Application.Services
                 _logger.LogInformation("Successfully updated park {name}", parkDto.name);
                 return ParkMapper.ToParkDto(updatedPark);
             }
+            catch (ParkNotFoundException pEx)
+            {
+                _logger.LogError(pEx.Message);
+                throw;
+            }
             catch (Exception ex)
             {
                 _logger.LogError("Exception updating park: " + ex.Message);
@@ -76,6 +82,11 @@ namespace ParkingSystem.Application.Services
                 }
                 _logger.LogInformation("Successfully deleted park with ID {id}", id);
                 return ParkMapper.ToParkDto(deletedPark);
+            }
+            catch (ParkNotFoundException pEx)
+            {
+                _logger.LogError(pEx.Message);
+                throw;
             }
             catch (Exception ex)
             {

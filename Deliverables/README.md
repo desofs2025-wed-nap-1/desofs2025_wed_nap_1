@@ -4,4 +4,5 @@ In this directory, we present the deliverables for each phase and sprint of the 
 
 1. [`Phase 1`](./phase1/README.md)
 2. [`Phase 2, Sprint 1`](./phase2/sprint1/README.md)
+3. [`Phase 2, Sprint 2`](./phase2/sprint2/README.md)
 

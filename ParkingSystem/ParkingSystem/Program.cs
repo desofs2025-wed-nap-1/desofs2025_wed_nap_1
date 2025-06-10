@@ -20,6 +20,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using ParkingSystem.Core.Constants;
 
 DotEnv.Load();
 
@@ -50,7 +51,8 @@ builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<IParkService, ParkService>();
 
 builder.Services.AddScoped<IClaimsTransformation, SupabaseClaimsTransformer>();
-builder.Services.AddScoped<SupabaseAuthService>();
+
+builder.Services.AddScoped<ParkingSystem.Application.Interfaces.IAuthenticationService, SupabaseAuthService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -129,7 +131,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AllRolesExceptUnauthenticated", policy =>
+    {
+        policy.RequireRole(RoleNames.Client, RoleNames.ParkManager, RoleNames.Admin);
+    });
+});
 
 var app = builder.Build();
 
