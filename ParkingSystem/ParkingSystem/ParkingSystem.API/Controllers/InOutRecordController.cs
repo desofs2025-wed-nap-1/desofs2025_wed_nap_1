@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ParkingSystem.Application.DTOs;
 using ParkingSystem.Application.Interfaces;
 using ParkingSystem.Application.Services;
+using ParkingSystem.Core.Constants;
 
 namespace ParkingSystem.API.Controllers
 {
@@ -23,7 +24,7 @@ namespace ParkingSystem.API.Controllers
         /// Registers a vehicle entry in a parking lot.
         /// </summary>
         [HttpPost("entry")]
-        [Authorize(Roles = "client")]
+        [Authorize(Roles = RoleNames.Client)]
         public async Task<IActionResult> RegisterEntry([FromBody] InOutRecordDTO.InOutRecordRequestDto dto)
         {
             try
@@ -47,7 +48,7 @@ namespace ParkingSystem.API.Controllers
         /// Registers the vehicle exit.
         /// </summary>
         [HttpPut("exit")]
-        [Authorize(Roles = "client")]
+        [Authorize(Roles = RoleNames.Client)]
         public async Task<IActionResult> RegisterExit([FromBody] InOutRecordDTO.InOutRecordRequestDto dto)
         {
             try
@@ -71,7 +72,7 @@ namespace ParkingSystem.API.Controllers
         /// Gets all records by parking ID.
         /// </summary>
         [HttpGet("by-park/{parkingId:int}")]
-        [Authorize(Roles = "parkmanager")]
+        [Authorize(Roles = RoleNames.ParkManager)]
         public async Task<IActionResult> GetByParking(int parkingId)
         {
             var records = await _service.GetByParkingAsync(parkingId);
@@ -79,7 +80,7 @@ namespace ParkingSystem.API.Controllers
         }
 
         [HttpGet("{parkId}")]
-        [Authorize(Roles = "parkmanager")]
+        [Authorize(Roles = RoleNames.ParkManager)]
         public async Task<IActionResult> GenerateReport(int parkId)
         {
           try
