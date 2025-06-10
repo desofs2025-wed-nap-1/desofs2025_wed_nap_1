@@ -5,13 +5,15 @@ using ParkingSystem.Application.Mappers;
 using System.Text.RegularExpressions;
 //using ParkingSystem.Core.Entities;
 using ParkingSystem.Core.Aggregates;
+using ParkingSystem.Application.Exceptions;
 namespace ParkingSystem.Application.Services
 {
     public class VehicleService : IVehicleService
     {
         private readonly IVehicleRepository _vehicleRepository;
+        private readonly ILogger<VehicleService> _logger;
         private static List<string> listBrands = new List<string>
-        {       
+        {
             "Acura", "Alfa Romeo", "Aston Martin", "Audi", "Bentley", "BMW", "Bugatti",
             "Buick", "Cadillac", "Chevrolet", "Chrysler", "Citroën", "Dodge", "Ferrari",
             "Fiat", "Ford", "Genesis", "GMC", "Honda", "Hyundai", "Infiniti", "Jaguar",
@@ -21,47 +23,104 @@ namespace ParkingSystem.Application.Services
             "Saab", "Subaru", "Suzuki", "Tesla", "Toyota", "Volkswagen", "Volvo", "Opel"
         };
 
-        public VehicleService(IVehicleRepository vehicleRepository)
+        public VehicleService(IVehicleRepository vehicleRepository, ILogger<VehicleService> logger)
         {
             _vehicleRepository = vehicleRepository;
+            _logger = logger;
         }
 
         public async Task<VehicleDTO?> AddVehicleToUser(VehicleDTO vehicleDto)
         {
-            if (!IsValidLicensePlate(vehicleDto.licensePlate))
+            try
             {
-                throw new ArgumentException("License plate format is invalid.");
+                _logger.LogInformation($"Adding vehicle {vehicleDto.licensePlate} to user {vehicleDto.username}");
+                if (!IsValidLicensePlate(vehicleDto.licensePlate))
+                {
+                    throw new ArgumentException("License plate format is invalid.");
+                }
+                if (!IsValidBrand(vehicleDto.brand))
+                {
+                    throw new ArgumentException("Brand is invalid.");
+                }
+                var vehicle = VehicleMapper.ToVehicleDomain(vehicleDto);
+                var result = await _vehicleRepository.AddVehicle(vehicle, vehicleDto.username);
+                if (result == null)
+                {
+                    throw new UserNotFoundException($"Vehicle {vehicleDto.licensePlate} couldn't be added because user {vehicleDto.username} was not found");
+                }
+                else
+                {
+                    return VehicleMapper.ToVehicleDto(result);
+                }
+
             }
-             if (!IsValidBrand(vehicleDto.brand))
+            catch (ArgumentException argEx)
             {
-                throw new ArgumentException("Brand is invalid.");
+                _logger.LogError($"Error adding vehicle {vehicleDto.licensePlate} - Invalid arguments were provided: {argEx.Message}");
+                // Will be caught by the controller and return an error status to the client
+                throw;
             }
-            var vehicle = VehicleMapper.ToVehicleDomain(vehicleDto);
-            var result = await _vehicleRepository.AddVehicle(vehicle, vehicleDto.username);            
-            return result != null ? VehicleMapper.ToVehicleDto(result) : null;
+            catch (UserNotFoundException usrEx)
+            {
+                _logger.LogError($"Error adding vehicle {vehicleDto.licensePlate} - Invalid user was provided: {usrEx.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error adding vehicle {vehicleDto.licensePlate}: {ex.Message}");
+                throw;
+            }
         }
 
         public async Task<VehicleDTO?> UpdateVehicle(VehicleDTO vehicleDto)
         {
-            if (!IsValidLicensePlate(vehicleDto.licensePlate))
+            try
             {
-                throw new ArgumentException("License plate format is invalid.");
+                _logger.LogInformation($"Updating vehicle {vehicleDto.licensePlate} of user {vehicleDto.username}");
+                if (!IsValidLicensePlate(vehicleDto.licensePlate))
+                {
+                    throw new ArgumentException("License plate format is invalid.");
+                }
+                if (!IsValidBrand(vehicleDto.brand))
+                {
+                    throw new ArgumentException("Brand is invalid.");
+                }
+                var vehicle = VehicleMapper.ToVehicleDomain(vehicleDto);
+                var updatedVehicle = await _vehicleRepository.UpdateVehicle(vehicle);
+                if (updatedVehicle == null)
+                {
+                    throw new UserNotFoundException($"Vehicle {vehicleDto.licensePlate} couldn't be updated because user {vehicleDto.username} was not found");
+                }
+                else
+                {
+                    return VehicleMapper.ToVehicleDto(updatedVehicle);
+                }
             }
-             if (!IsValidBrand(vehicleDto.brand))
+            catch (ArgumentException argEx)
             {
-                throw new ArgumentException("Brand is invalid.");
+                _logger.LogError($"Error adding vehicle {vehicleDto.licensePlate} - Invalid arguments were provided: {argEx.Message}");
+                // Will be caught by the controller and return an error status to the client
+                throw;
             }
-            var vehicle = VehicleMapper.ToVehicleDomain(vehicleDto);
-            var updatedVehicle = await _vehicleRepository.UpdateVehicle(vehicle);            
-            return updatedVehicle != null ? VehicleMapper.ToVehicleDto(updatedVehicle) : null;
+            catch (UserNotFoundException usrEx)
+            {
+                _logger.LogError($"Error adding vehicle {vehicleDto.licensePlate} - Invalid user was provided: {usrEx.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error adding vehicle {vehicleDto.licensePlate}: {ex.Message}");
+                throw;
+            }
+            
         }
 
         public async Task<VehicleDTO?> DeleteVehicle(long id)
         {
-            var deletedVehicle = await _vehicleRepository.DeleteVehicle(id);            
+            var deletedVehicle = await _vehicleRepository.DeleteVehicle(id);
             return deletedVehicle != null ? VehicleMapper.ToVehicleDto(deletedVehicle) : null;
         }
-        
+
         public async Task<IEnumerable<VehicleDTO>> GetVehiclesByUser(long userId)
         {
             var result = await _vehicleRepository.GetAllVehiclesFromUser(userId);
