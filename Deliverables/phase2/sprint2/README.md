@@ -208,6 +208,22 @@ services:
 This makes it so that the new version of the application, which redacts secrets from the clear-text config, is executed successfully during testing procedures.
 
 
+## Single-Read Objects
+
+To ensure confidentiality of sensitive data, the class [`ReadOnceSecret.cs`](../../../ParkingSystem/ParkingSystem/ParkingSystem.Common/Security/ReadOnceSecret.cs) was implemented. It encapsulates data and makes it so that it can only be read once, then ensuring its full deletion from memory by filling the respective reference with `'\0'` characters. It is then used, for example when receiving passwords from the client-side and passing them on to the authentication service in [`SupabaseAuthSerice.cs`](../../../ParkingSystem/ParkingSystem/ParkingSystem.Application/Services/SupabaseAuthService.cs):
+
+```C#
+using var passwordSingle = new ReadOnceSecret(passwordInput);
+
+var payload = new
+{
+    email = email,
+    password = passwordSingle.Read()
+};
+```
+
+The `Read()` method, after reading the value, runs `Clear()`, which replaces data in memory with the characters mentioned before, thus ensuring that no residue of this sensitive data is present in memory.
+
 ## ASVS Checklist
 
 For this Phase and Sprint, we completed the ASVS checklist, highlighting the applicability and validity of each item with a comprehensive explanation of how it relates to our application. This artifact can be found in [`v4-ASVS-checklist-en-phase2-sprint2.xlsx`](v4-ASVS-checklist-en-phase2-sprint2.xlsx).
