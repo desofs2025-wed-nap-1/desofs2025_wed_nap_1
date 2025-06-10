@@ -7,6 +7,311 @@ the DESOFS course unit Project.
 
 ### Authentication - MFA
 
+### Overview
+
+To enhance system security, Multi-Factor Authentication was implemented using the ``TOTP (Time-based One-Time Password)`` protocol, supported via ``Supabase Auth``. This feature allows registered users to configure MFA using an authenticator app such as ``Google Authenticator``, significantly increasing protection against unauthorized access.
+
+
+
+## MFA Flow in the System
+
+MFA is integrated into the login process through logic that checks whether the user has an active MFA factor. The full MFA cycle is described below:
+
+---
+
+### 1. Initial Login (without MFA)
+ - In this endpoint the user will log into their account by introducing their email and password.
+```http
+POST /api/auth/login
+```
+
+**Request Body:**
+
+```json
+{
+  "email": "user@example.com",
+  "password": "example123"
+}
+```
+
+**Response if MFA is not enabled:**
+
+```json
+{
+  "mfaRequired": false,
+  "token": "access_token",
+  "user": {
+    "id": "uuid",
+    "email": "user@example.com"
+  },
+  "mfaEnabled": false
+}
+```
+
+**Response if MFA is already enabled:**
+
+```json
+{
+  "mfaRequired": true,
+  "factorId": "factor-uuid",
+  "accessToken": "access_token",
+  "message": "MFA verification required"
+}
+```
+
+---
+
+### 2. Authorize in Swagger
+
+To access protected endpoints/ enable or disable mfa status:
+
+- The user will have to click on the ``Authorize`` button at the top of Swagger.
+
+![authorize.png](img%2Fauthorize.png)
+
+- Enter the token provided when they logged in in the following format:
+
+```
+Bearer your_access_token
+```
+![authorize_bearer.png](img%2Fauthorize_bearer.png)
+---
+
+### 3. MFA Setup
+
+#### Generate QR Code
+
+
+```http
+POST /api/auth/mfa/setup
+```
+- This endpoint will generate a factorId, QRCode, secret and uri, that that can be scanned with an app like ``Google Authenticator``.
+
+
+**Response:**
+
+```json
+{
+  "factorId": "factor-uuid",
+  "friendlyName": "Authenticator App",
+  "qrCode": "base64-qr-code",
+  "secret": "ABC123XYZ",
+  "uri": "otpauth://totp/..."
+}
+```
+
+#### Scan the QR Code
+
+- The user should open an authenticator app and scan the provided QR Code or instead can also enter the ``secret`` that was provided previously in auhtenticator applications such as ``Google Authenticator``, which will generate 6-digit TOTP codes each 30 seconds.
+---
+
+### 4. Complete MFA Setup
+
+```http
+POST /api/auth/mfa/complete-setup
+```
+- In this endpoint the user will fill in the code that was generated and the factorId that was provided previously.
+
+
+**Request Body:**
+
+```json
+{
+  "code": "123456",
+  "factorId": "factor-uuid"
+}
+```
+
+**Response:**
+
+```json
+{
+  "message": "MFA setup completed successfully",
+  "token": "new_token",
+  "user": {
+    "id": "uuid",
+    "email": "user@example.com"
+  }
+}
+```
+
+---
+
+### 5. Future Logins with MFA
+
+After MFA is set up, future logins will return:
+
+```json
+{
+  "mfaRequired": true,
+  "factorId": "factor-uuid",
+  "accessToken": "partial_token"
+}
+```
+
+---
+
+### 6. TOTP Code Verification
+
+```http
+POST /api/auth/verify-mfa
+```
+- In this endpoint the user can verify his MFA.
+
+**Request Body:**
+
+```json
+{
+  "code": "123456",
+  "factorId": "factor-uuid",
+  "accessToken": "partial_token"
+}
+```
+
+**Response:**
+
+```json
+{
+  "token": "final_access_token",
+  "user": {
+    "id": "uuid",
+    "email": "user@example.com"
+  },
+  "message": "MFA verification successful"
+}
+```
+
+
+
+## Relevant Code Snippets
+
+### 1. Login
+
+```csharp
+bool hasMfaEnabled = result.user.factors.Any(f => f.Verified);
+
+if (hasMfaEnabled)
+{
+    var enabledFactor = result.user.factors.First(f => f.Verified);
+    return Ok(new
+    {
+        mfaRequired = true,
+        factorId = enabledFactor.Id,
+        accessToken = result.access_token,
+        message = "MFA verification required"
+    });
+}
+
+return Ok(new
+{
+    mfaRequired = false,
+    token = result.access_token,
+    user = new { id = result.user.id, email = result.user.email },
+    mfaEnabled = false
+});
+````
+
+### 2. Verify MFA
+
+```csharp
+var result = await _authService.VerifyMfa(dto.Code, dto.FactorId, dto.AccessToken);
+
+return Ok(new
+{
+    token = result.access_token,
+    user = new { id = result.user.id, email = result.user.email },
+    message = "MFA verification successful"
+});
+
+```
+### 3. Setup MFA
+```csharp
+var accessToken = GetAccessTokenFromHeader();
+
+var enrollResponse = await _authService.EnrollMfaFactor(accessToken);
+
+return Ok(new
+{
+factorId = enrollResponse.id,
+friendlyName = enrollResponse.friendly_name,
+qrCode = enrollResponse.totp.qr_code,
+secret = enrollResponse.totp.secret,
+uri = enrollResponse.totp.uri,
+message = "Scan the QR code and enter the code to complete setup"
+});
+```
+
+### 4. Complete MFA Setup
+```csharp
+var accessToken = GetAccessTokenFromHeader();
+
+var result = await _authService.VerifyAndCompleteMfaEnroll(dto.Code, dto.FactorId, accessToken);
+
+return Ok(new
+{
+    message = "MFA setup completed successfully",
+    token = result.access_token,
+    user = new { id = result.user.id, email = result.user.email }
+});
+
+```
+
+### 5. Get MFA Status
+```csharp
+var accessToken = GetAccessTokenFromHeader();
+
+var mfaStatus = await _authService.GetMfaStatus(accessToken);
+
+return Ok(new
+{
+    mfaEnabled = mfaStatus.HasEnabledFactors,
+    factors = mfaStatus.totp.Select(f => new
+    {
+        id = f.id,
+        friendlyName = f.friendly_name,
+        verified = f.Verified,
+        status = f.status
+    })
+});
+
+```
+
+### 6. Disable MFA
+```csharp
+var accessToken = GetAccessTokenFromHeader();
+
+var success = await _authService.DisableMfa(factorId, accessToken);
+
+return success
+    ? Ok(new { message = "MFA disabled successfully" })
+    : BadRequest(new { message = "Failed to disable MFA" });
+
+```
+
+### 7. Check if MFA is Enabled
+```csharp
+var enabled = await _authService.IsMfaEnabled(userId);
+
+return Ok(new { mfaEnabled = enabled });
+
+```
+
+![endpoints.png](img%2Fendpoints.png)
+
+
+
+
+
+
+### Conclusion
+
+MFA was fully integrated using Supabase Auth and is accessible via protected Swagger endpoints. This mechanism allows users to:
+
+- Easily activate MFA using an authenticator app
+- Ensure stronger session security
+- Manage or disable MFA factors as needed
+
+
 ### Authorization - RBAC
 
 In this sprint we implemented authorization for our use-cases, meaning that each use case can only be executed by the role(s) permitted to do it. This heavily relies on Supabase, which is the service we chose for authentication and authorization handling.
