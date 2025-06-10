@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using ParkingSystem.Application.Interfaces;
 using ParkingSystem.Application.DTOs;
 using ParkingSystem.Application.Services;
 
@@ -8,9 +9,9 @@ namespace ParkingSystem.API.Controllers
     [Route("api/auth")]
     public class AuthController : ControllerBase
     {
-        private readonly SupabaseAuthService _authService;
+        private readonly IAuthenticationService _authService;
 
-        public AuthController(SupabaseAuthService authService)
+        public AuthController(IAuthenticationService authService)
         {
             _authService = authService;
         }
