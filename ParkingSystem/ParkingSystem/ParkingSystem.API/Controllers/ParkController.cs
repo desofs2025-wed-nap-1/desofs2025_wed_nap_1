@@ -5,6 +5,8 @@ using  ParkingSystem.Application.Interfaces;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using ParkingSystem.Core.Aggregates;
+using ParkingSystem.Core.Constants;
+using ParkingSystem.Application.Exceptions;
 
 namespace ParkingSystem.API.Controllers
 {
@@ -22,6 +24,7 @@ namespace ParkingSystem.API.Controllers
         }
 
         [HttpPost("create")]
+        [Authorize(Roles = RoleNames.ParkManager)]
         public async Task<IActionResult> AddPark(ParkDTO parkDto)
         {
             try
@@ -31,57 +34,80 @@ namespace ParkingSystem.API.Controllers
                 {
                     return Ok("Park created successfully.");
                 }
-                return BadRequest("Failed to create park.");
+                return BadRequest("Failed to create park, ensure provided Park information is correct.");
             }
             catch
             {
-                return BadRequest("Failed to add park");
+                return StatusCode(500,"Server error when adding park");
+            }
+
+        }
+
+        [HttpPut("update")]
+        [Authorize(Roles = RoleNames.ParkManager)]
+        public async Task<IActionResult> UpdatePark(ParkDTO parkDto)
+        {
+            try
+            {
+                var result = await _parkService.UpdatePark(parkDto);
+                if (result != null)
+                {
+                    return Ok("Park updated successfully.");
+                }
+                return BadRequest("Failed to update park, ensure the request contains valid information.");
+            }
+            catch (ParkNotFoundException)
+            {
+                return NotFound("The Park provided for update was not found.");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal error when updating Park");
             }
             
         }
 
-        [HttpPut("update")]
-        public IActionResult UpdatePark(ParkDTO parkDto)
-        {
-            var result = _parkService.UpdatePark(parkDto);
-            if (result != null)
-            {
-                return Ok("Park updated successfully.");
-            }
-            return BadRequest("Failed to update park.");
-        }
-
         [HttpDelete("delete/{id}")]
-        public IActionResult DeletePark(long id)
+        [Authorize(Roles = RoleNames.ParkManager)]
+        public async Task<IActionResult> DeletePark(long id)
         {
-            var result = _parkService.DeletePark(id);
-            if (result != null)
+            try
             {
-                return Ok("Park deleted successfully.");
+                var result = await _parkService.DeletePark(id);
+                if (result != null)
+                {
+                    return Ok("Park deleted successfully.");
+                }
+                return BadRequest("Failed to delete park, ensure the request contains valid information"); 
             }
-            return NotFound("Park not found.");
+            catch (ParkNotFoundException)
+            {
+                return NotFound("The Park provided for deletion was not found.");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal error when deleting Park");
+            }
         }
 
         [HttpGet("available")]
-        [Authorize(Roles = "client")]
+        [Authorize(Roles = RoleNames.Client)]
         public async Task<IActionResult> GetAvailableParks()
         {
             try
             {
                 var parks = await _parkService.GetAvailableParks();
-                _logger.LogInformation("Successfully gathered available parks");
                 return Ok(parks);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                _logger.LogError("Error listing available parks: " + e.Message);
                 return BadRequest("Error listing available parks");
             }
 
         }
 
         [HttpPatch("{parkId}/gate")]
-        [Authorize(Roles = "parkmanager")]
+        [Authorize(Roles = RoleNames.ParkManager)]
         public async Task<IActionResult> SetGateStatus(long parkId, [FromQuery] bool open)
         {
             try
