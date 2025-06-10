@@ -11,10 +11,10 @@ namespace ParkingSystem.API.Controllers
     [Route("api/auth")]
     public class AuthController : ControllerBase
     {
-        private readonly SupabaseAuthService _authService;
+        private readonly IAuthenticationService _authService;
         private readonly ILogger<AuthController> _logger;
 
-        public AuthController(SupabaseAuthService authService, ILogger<AuthController> logger)
+        public AuthController(IAuthenticationService authService, ILogger<AuthController> logger)
         {
             _authService = authService;
             _logger = logger;

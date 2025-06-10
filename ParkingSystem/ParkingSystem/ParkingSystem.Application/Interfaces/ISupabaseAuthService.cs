@@ -9,6 +9,9 @@ namespace ParkingSystem.Application.Interfaces
         Task<SupabaseAuthResponse> VerifyMfa(string code, string factorId, string accessToken);
         Task<MfaEnrollResponse> EnrollMfaFactor(string userId);
         Task<bool> IsMfaEnabled(string userId);
+        Task<MfaStatusResponse> GetMfaStatus(string accessToken);
+        Task<SupabaseAuthResponse> VerifyAndCompleteMfaEnroll(string code, string factorId, string accessToken);
+        Task<bool> DisableMfa(string factorId, string accessToken);
         
     }
 }
