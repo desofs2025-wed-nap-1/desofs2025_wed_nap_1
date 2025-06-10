@@ -154,6 +154,58 @@ These messages are then appropriately written to the specified log file:
 2025-06-04 16:52:17.198 +01:00 [INF] Successfully gathered available parks
 ```
 
+## Security improvements
+
+### Deprecation of clear-text credentials
+
+In this sprint, we deprecated the usage of credentials in clear-text, which was reported by our CI pipeline. It reported that, in [`appsettings.json`](../../../ParkingSystem/ParkingSystem/appsettings.json), we were specifying the Supabase API key and validation token, which shouldn't be done. To solve this issue, the variables are now loaded from one of two sources: a `.env` file; or environment variables. If an environment variable is set before running the application, it is then automatically interpreted; whereas if a `.env` file is used, we use the `DotEnv.Load();` function in the initialization sequence of the app, to ensure that these are read as expected.
+
+Then, instead of sourcing these values from the `appsettings.json` file - which we were doing before - we source them from the environment:
+
+```C#
+var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
+var connectionStringName = Environment.GetEnvironmentVariable("CONNECTION_STRING_ID") ?? "DefaultConnection";
+var supabaseAPIKey = Environment.GetEnvironmentVariable("SUPABASE_API_KEY")!;
+var supabaseJWTToken = Environment.GetEnvironmentVariable("SUPABASE_JWT_VALIDATE_TOKEN")!;
+```
+
+When it comes to the connection string, we opted not to specify it fully as an environment variable - as this is helpful in comparing definitions, as well as storing a common configuration string for the whole repository, and thus the whole team. However, the password contained therein was removed. Instead, a **placeholder value** is set:
+
+```JSON
+"SupabaseTestConnection": "Host=db.sabxpohybsfewoprvayr.supabase.co;Database=postgres;Username=postgres;Password=__PASSWORD_PLACEHOLDER__;SslMode=Require"
+```
+
+This placeholder is then substituted - in [`Program.cs`](../../../ParkingSystem/ParkingSystem/Program.cs) - with the actual value, sourced from environment variables:
+
+```C#
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString(connectionStringName)?.Replace("__PASSWORD_PLACEHOLDER__", dbPassword)));
+```
+
+As such, confidentiality and security of our credentials is ensured, as none of them are stored in clear-text on the repository.
+
+The CI processes also had to be updated to be up-to-speed with this change. Notably, the `run-zap-test` job, which executes the application's container image as a service, needed to load these secrets before starting this container. For that effect, **GitHub Secrets** were used.
+
+The required secrets were created in GitHub:
+
+![githubSecrets.png](./img/githubSecrets.png)
+
+Then, the `run-zap-test` job present in the [`build_api.yaml`](../../../.github/workflows/build_api.yaml) was updated to load these secrets and set them as environment variables:
+
+```YAML
+services:
+    api:
+    image: 'lew6s/parking-system:0.1.0'
+    ports:
+        - 8080:8080
+    env:
+        DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+        CONNECTION_STRING_ID: "SupabaseTestConnection"
+        SUPABASE_API_KEY: ${{ secrets.SUPABASE_API_KEY }}
+        SUPABASE_JWT_VALIDATE_TOKEN: ${{ secrets.SUPABASE_JWT_VALIDATE_TOKEN }}
+```
+
+This makes it so that the new version of the application, which redacts secrets from the clear-text config, is executed successfully during testing procedures.
 
 
 ## ASVS Checklist
