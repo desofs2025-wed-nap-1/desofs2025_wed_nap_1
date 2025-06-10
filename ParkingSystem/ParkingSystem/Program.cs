@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ParkingSystem.Infrastructure.Data;
 
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
@@ -19,14 +18,14 @@ using Microsoft.AspNetCore.Authentication;
 using ParkingSystem.Infrastructure.Authentication;
 using System.Net.Http.Headers;
 using System.Text;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 using ParkingSystem.Core.Constants;
 
 DotEnv.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
-// builder.Logging.ClearProviders();
-// Log.Logger = new LoggerConfiguration().Enrich.FromLogContext().WriteTo.Console().WriteTo.File("app.log").CreateLogger();
 builder.Host.UseSerilog((hostingContext, loggingConfig) =>
 {
     loggingConfig.ReadFrom.Configuration(hostingContext.Configuration);
@@ -39,10 +38,9 @@ var supabaseJWTToken = Environment.GetEnvironmentVariable("SUPABASE_JWT_VALIDATE
 
 var jwtKeyBytes = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(supabaseJWTToken));
 
-// builder.Services.AddDbContext<AppDbContext>(options =>
-//     options.UseSqlServer(builder.Configuration.GetConnectionString(connectionStringName)?.Replace("__PASSWORD_PLACEHOLDER__", dbPassword)));
-
-builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString(connectionStringName)?.Replace("__PASSWORD_PLACEHOLDER__", dbPassword)));
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString(connectionStringName)?.Replace("__PASSWORD_PLACEHOLDER__", dbPassword)));
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
@@ -60,7 +58,51 @@ builder.Services.AddScoped<ParkingSystem.Application.Interfaces.IAuthenticationS
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Parking System API",
+        Version = "v1",
+        Description = "API for a parking system with 2FA authentication"
+    });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = @"JWT Authorization header using the Bearer scheme. Type 'Bearer' [space] and then your token. Example: 'Bearer 12345abcdef'",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                },
+                Scheme = "oauth2",
+                Name = "Bearer",
+                In = ParameterLocation.Header,
+            },
+            new List<string>()
+        }
+    });
+
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    if (File.Exists(xmlPath))
+    {
+        c.IncludeXmlComments(xmlPath);
+    }
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -101,8 +143,15 @@ builder.Services.AddAuthorization(options =>
 
 var app = builder.Build();
 
+
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Parking System API V1");
+    c.RoutePrefix = string.Empty;
+});
+
+
 
 app.UseRouting();
 

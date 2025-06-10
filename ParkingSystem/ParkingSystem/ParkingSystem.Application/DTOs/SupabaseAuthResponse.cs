@@ -9,12 +9,12 @@ namespace ParkingSystem.Application.DTOs
 
         public string mfa { get; set; } = string.Empty;
         public string mfa_factor_id { get; set; } = string.Empty;
-
     }
 
     public class SupabaseUser
     {
         public string id { get; set; } = string.Empty;
         public string email { get; set; } = string.Empty;
+        public List<MfaFactor> factors { get; set; } = new List<MfaFactor>();
     }
 }
