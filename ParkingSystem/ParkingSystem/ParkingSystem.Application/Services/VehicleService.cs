@@ -117,19 +117,55 @@ namespace ParkingSystem.Application.Services
 
         public async Task<VehicleDTO?> DeleteVehicle(long id)
         {
-            var deletedVehicle = await _vehicleRepository.DeleteVehicle(id);
-            return deletedVehicle != null ? VehicleMapper.ToVehicleDto(deletedVehicle) : null;
+            try
+            {
+                var deletedVehicle = await _vehicleRepository.DeleteVehicle(id);
+                if (deletedVehicle == null)
+                {
+                    throw new VehicleNotFoundException($"Vehicle with id {id} does not exist");
+                }
+                else
+                {
+                    return VehicleMapper.ToVehicleDto(deletedVehicle);
+                }
+            }
+            catch (VehicleNotFoundException vEx)
+            {
+                _logger.LogError($"Error when deleting vehicle: {vEx.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Unexpected error when deleting vehicle {ex.Message}");
+                throw;
+            }
+            
         }
 
         public async Task<IEnumerable<VehicleDTO>> GetVehiclesByUser(long userId)
         {
-            var result = await _vehicleRepository.GetAllVehiclesFromUser(userId);
-            List<VehicleDTO> listVehicles = new List<VehicleDTO>();
-            foreach (var item in result)
+            try
             {
-                listVehicles.Add(VehicleMapper.ToVehicleDto(item));
+                var result = await _vehicleRepository.GetAllVehiclesFromUser(userId);
+                List<VehicleDTO> listVehicles = new List<VehicleDTO>();
+                if (result.Count() == 0)
+                {
+                    _logger.LogWarning($"User {userId} has no Vehicles");
+                    return listVehicles;
+                }
+                foreach (var item in result)
+                {
+                    listVehicles.Add(VehicleMapper.ToVehicleDto(item));
+                }
+                _logger.LogInformation($"A set of {listVehicles.Count()} was returned for User {userId}.");
+                return listVehicles;
             }
-            return listVehicles;
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error listing vehicles of user with id {userId}: {ex.Message}");
+                throw;
+            }
+            
         }
 
         private static bool IsValidLicensePlate(string licensePlate)
