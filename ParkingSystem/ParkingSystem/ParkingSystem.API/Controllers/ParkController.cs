@@ -107,7 +107,7 @@ namespace ParkingSystem.API.Controllers
         }
 
         [HttpPatch("{parkId}/gate")]
-        [Authorize(Roles = "parkmanager")]
+        [Authorize(Roles = RoleNames.ParkManager)]
         public async Task<IActionResult> SetGateStatus(long parkId, [FromQuery] bool open)
         {
             try
