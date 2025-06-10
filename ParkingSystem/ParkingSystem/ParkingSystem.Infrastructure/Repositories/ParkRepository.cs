@@ -49,5 +49,16 @@ namespace ParkingSystem.Infrastructure.Repositories
         {
             return await _context.Parks.Where(p => p.gateOpen).ToListAsync();
         }
+
+        public async Task<Park?> SetGateStatus(long parkId, bool isOpen)
+        {
+            var park = await _context.Parks.FindAsync(parkId);
+            if (park == null) return null;
+
+            park.gateOpen = isOpen;
+            await _context.SaveChangesAsync();
+            return park;
+        }
+
     }
 }

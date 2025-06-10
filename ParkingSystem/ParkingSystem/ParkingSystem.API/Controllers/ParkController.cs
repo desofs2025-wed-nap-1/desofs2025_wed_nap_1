@@ -105,5 +105,28 @@ namespace ParkingSystem.API.Controllers
             }
 
         }
+
+        [HttpPatch("{parkId}/gate")]
+        [Authorize(Roles = "parkmanager")]
+        public async Task<IActionResult> SetGateStatus(long parkId, [FromQuery] bool open)
+        {
+            try
+            {
+                var result = await _parkService.SetGateStatus(parkId, open);
+                if (result == null)
+                {
+                    return NotFound("Park not found.");
+                }
+
+                var status = open ? "opened" : "closed";
+                return Ok($"Gate successfully {status}.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error setting gate status: " + ex.Message);
+                return StatusCode(500, "Internal server error while setting gate status.");
+            }
+        }
+
     }
 }
