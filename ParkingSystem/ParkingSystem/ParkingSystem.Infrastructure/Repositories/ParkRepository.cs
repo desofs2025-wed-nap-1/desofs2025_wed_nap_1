@@ -59,5 +59,10 @@ namespace ParkingSystem.Infrastructure.Repositories
             return park;
         }
 
+        public async Task<Park?> GetParkById(long parkId)
+        {
+          return await _context.Parks.FindAsync(parkId);
+        }
+
     }
 }

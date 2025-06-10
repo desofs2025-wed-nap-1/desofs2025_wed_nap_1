@@ -12,7 +12,7 @@ namespace ParkingSystem.Infrastructure.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Park> Parks { get; set; }
-
+        public DbSet<InOutRecord> InOutRecords { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -21,6 +21,7 @@ namespace ParkingSystem.Infrastructure.Data
             // modelBuilder.Entity<User>().HasKey(u => u.Id);
             // modelBuilder.Entity<Vehicle>().HasKey(v => v.Id);
             // modelBuilder.Entity<Park>().HasKey(p => p.Id);
+            // modelBuilder.Entity<InOutRecord>().HasKey(p => p.Id);
 
         }
     }
