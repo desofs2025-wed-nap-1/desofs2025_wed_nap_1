@@ -47,10 +47,12 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 builder.Services.AddScoped<IParkRepository, ParkRepository>();
+builder.Services.AddScoped<IInOutRecordRepository, InOutRecordRepository>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<IParkService, ParkService>();
+builder.Services.AddScoped<IInOutRecordService, InOutRecordService>();
 
 builder.Services.AddScoped<IClaimsTransformation, SupabaseClaimsTransformer>();
 

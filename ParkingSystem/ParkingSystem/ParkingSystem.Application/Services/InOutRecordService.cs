@@ -100,7 +100,11 @@ namespace ParkingSystem.Application.Services
         await writer.WriteLineAsync(header);
         foreach (var record in records)
         {
-          var line = $"{record.Id},{record.Vehicle.licensePlate},{record.Park.name},{record.DataEntrada:yyyy-MM-dd HH:mm:ss},{(record.DataSaida == DateTime.MinValue ? record.DataSaida.ToString("yyyy-MM-dd HH:mm:ss") : "")}";
+          var vehicle = await _vehicleRepository.FindById(record.VehicleId);
+          if (vehicle == null) continue;
+          var park = await _parkRepository.GetParkById(record.ParkId);
+          if (park == null) continue;
+          var line = $"{record.Id},{vehicle.licensePlate},{park.name},{record.DataEntrada:yyyy-MM-dd HH:mm:ss},{(record.DataSaida == DateTime.MinValue ? record.DataSaida.ToString("yyyy-MM-dd HH:mm:ss") : "")}";
           await writer.WriteLineAsync(line);
         }
       }

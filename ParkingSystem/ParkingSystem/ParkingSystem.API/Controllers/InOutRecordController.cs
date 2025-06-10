@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ParkingSystem.Application.DTOs;
 using ParkingSystem.Application.Interfaces;
@@ -8,7 +8,7 @@ using ParkingSystem.Core.Constants;
 namespace ParkingSystem.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/InOutRecord")]
     public class InOutRecordController : ControllerBase
     {
         private readonly IInOutRecordService _service;
@@ -30,7 +30,7 @@ namespace ParkingSystem.API.Controllers
             try
             {
                 var result = await _service.CreateInOutRecordAsync(dto);
-                return CreatedAtAction(nameof(GetByParking), new { parkingId = result.Park }, result);
+                return Ok( result);
             }
             catch (ArgumentException ex)
             {
@@ -79,7 +79,7 @@ namespace ParkingSystem.API.Controllers
             return Ok(records);
         }
 
-        [HttpGet("{parkId}")]
+        [HttpGet("report/{parkId}")]
         [Authorize(Roles = RoleNames.ParkManager)]
         public async Task<IActionResult> GenerateReport(int parkId)
         {
