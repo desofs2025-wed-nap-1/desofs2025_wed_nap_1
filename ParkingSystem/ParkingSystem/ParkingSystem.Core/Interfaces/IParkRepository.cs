@@ -11,6 +11,7 @@ namespace ParkingSystem.Core.Interfaces
         Task<Park?> DeletePark(long id);
         Task<IEnumerable<Park>> GetAvailableParks();
         Task<Park?> SetGateStatus(long parkId, bool isOpen);
+        Task<Park?> GetParkById(long parkId);
 
     }
 }
