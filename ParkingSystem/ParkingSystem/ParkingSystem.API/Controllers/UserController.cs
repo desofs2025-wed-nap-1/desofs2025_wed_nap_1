@@ -5,6 +5,7 @@ using  ParkingSystem.Application.Interfaces;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using ParkingSystem.Application.Exceptions;
+using ParkingSystem.Core.Constants;
 
 namespace ParkingSystem.API.Controllers
 {
@@ -40,7 +41,7 @@ namespace ParkingSystem.API.Controllers
                 _logger.LogError("Error creating user: " + ex.Message);
                 return BadRequest("Failed to create user.");
             }
-            
+
         }
 
         [HttpPost("login")]
@@ -71,7 +72,7 @@ namespace ParkingSystem.API.Controllers
             {
                 return StatusCode(500, "An internal error occurred when updating the user");
             }
-            
+
         }
 
         [HttpDelete("delete/{id}")]
@@ -84,6 +85,30 @@ namespace ParkingSystem.API.Controllers
                 return Ok("User deleted successfully.");
             }
             return NotFound("User not found.");
+        }
+
+        [HttpPost("registerParkManager")]        
+        [Authorize(Roles = RoleNames.Admin)]
+        public async Task<IActionResult> RegisterParkManager(UserDTO userDto)
+        {
+            try
+            {
+                userDto.role = RoleNames.ParkManager;
+                var result = await _userService.RegisterParkManager(userDto);
+                if (result != null)
+                {
+                    _logger.LogInformation("Park Manager " + result.username + " created successfully.");
+                    return Ok("Park Manager registered successfully.");
+                }
+                _logger.LogError("Failed to create Park Manager.");
+                return BadRequest("Failed to create Park Manager.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error creating Park Manager: " + ex.Message);
+                return BadRequest("Failed to create Park Manager.");
+            }
+
         }
     }
 }

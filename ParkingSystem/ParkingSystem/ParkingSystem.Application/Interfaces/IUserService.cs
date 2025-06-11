@@ -8,5 +8,6 @@ namespace ParkingSystem.Application.Interfaces
         Task<string?> Authenticate(string email, string password);
         Task<UserDTO?> UpdateUser(UserDTO userDto);
         Task<UserDTO?> DeleteUser(long id);
+        Task<UserDTO?> RegisterParkManager(UserDTO userDto);
     }
 }
