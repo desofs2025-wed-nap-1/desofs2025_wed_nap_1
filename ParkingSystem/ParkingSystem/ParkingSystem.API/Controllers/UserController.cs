@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using  ParkingSystem.Application.DTOs;
-using  ParkingSystem.Application.Services;
-using  ParkingSystem.Application.Interfaces;
+using ParkingSystem.Application.DTOs;
+using ParkingSystem.Application.Services;
+using ParkingSystem.Application.Interfaces;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using ParkingSystem.Application.Exceptions;
@@ -87,7 +87,7 @@ namespace ParkingSystem.API.Controllers
             return NotFound("User not found.");
         }
 
-        [HttpPost("registerParkManager")]        
+        [HttpPost("registerParkManager")]
         [Authorize(Roles = RoleNames.Admin)]
         public async Task<IActionResult> RegisterParkManager(UserDTO userDto)
         {
@@ -107,6 +107,29 @@ namespace ParkingSystem.API.Controllers
             {
                 _logger.LogError("Error creating Park Manager: " + ex.Message);
                 return BadRequest("Failed to create Park Manager.");
+            }
+
+        }
+
+        [HttpPost("activateSubscription")]
+        [Authorize(Policy = "AllRolesExceptUnauthenticated")]
+        public async Task<IActionResult> ActivateSubscription(long userId, long parkId)
+        {
+            try
+            {
+                var result = await _userService.ActivateSubscription(userId, parkId);
+                if (result)
+                {
+                    _logger.LogInformation($"User {userId} activated monthly subscription for parking {parkId}.");
+                    return Ok("Subscription activated sucessfully.");
+                }
+                _logger.LogError("Failed to activating subscription.");
+                return BadRequest("Failed to activating subscription.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error activating subscription: " + ex.Message);
+                return BadRequest("Failed to activating subscription.");
             }
 
         }

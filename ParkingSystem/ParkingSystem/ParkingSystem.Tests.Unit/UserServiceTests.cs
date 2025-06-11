@@ -12,15 +12,19 @@ public class UserServiceTests
 {
     private readonly Mock<IUserRepository> _userRepoMock;
     private readonly UserService _userService;
+    private readonly Mock<IParkRepository> _parkRepoMock;
+    private readonly Mock<ISubscriptionRepository> _subscriptionRepoMock;
     private readonly ILogger<UserService> _logger;
     private readonly Mock<IAuthenticationService> _authServiceMock;
 
     public UserServiceTests()
     {
         _userRepoMock = new Mock<IUserRepository>();
+        _parkRepoMock = new Mock<IParkRepository>();
+        _subscriptionRepoMock = new Mock<ISubscriptionRepository>();
         _authServiceMock = new Mock<IAuthenticationService>();
         _logger = new Mock<ILogger<UserService>>().Object;
-        _userService = new UserService(_userRepoMock.Object,_authServiceMock.Object, _logger);
+        _userService = new UserService(_userRepoMock.Object, _parkRepoMock.Object, _subscriptionRepoMock.Object,_authServiceMock.Object, _logger);
     }
 
     [Fact]

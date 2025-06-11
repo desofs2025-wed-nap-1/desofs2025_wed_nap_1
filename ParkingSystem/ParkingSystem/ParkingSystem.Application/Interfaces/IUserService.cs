@@ -9,5 +9,6 @@ namespace ParkingSystem.Application.Interfaces
         Task<UserDTO?> UpdateUser(UserDTO userDto);
         Task<UserDTO?> DeleteUser(long id);
         Task<UserDTO?> RegisterParkManager(UserDTO userDto);
+        Task<bool> ActivateSubscription(long userId, long parkId);
     }
 }
