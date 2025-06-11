@@ -71,7 +71,7 @@ namespace ParkingSystem.Application.Services
                 _logger.LogError("Error updating user: " + ex.Message);
                 throw;
             }
-            
+
         }
 
         public async Task<UserDTO?> DeleteUser(long id)
@@ -90,7 +90,21 @@ namespace ParkingSystem.Application.Services
                 _logger.LogError("Error deleting user: " + ex.Message);
                 throw;
             }
-            
+
+        }
+
+        public async Task<UserDTO?> RegisterParkManager(UserDTO userDto)
+        {
+            if (await _userRepository.IsUsernameTaken(userDto.username))
+            {
+                throw new ArgumentException("Username already taken.");
+            }
+
+            var userID = await _authService.CreateUserAsync(userDto.email, userDto.password, userDto.role);
+
+            var user = UserMapper.ToUserDomain(userDto);
+            var result = await _userRepository.AddUser(user);
+            return result != null ? UserMapper.ToUserDto(result) : null;
         }
 
     }
