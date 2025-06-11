@@ -89,7 +89,7 @@ namespace ParkingSystem.Application.Services
             };
 
             var supabaseUrl = _config["Supabase:Url"];
-            var serviceRoleKey = _config["Supabase:ServiceRoleKey"];
+            var serviceRoleKey = Environment.GetEnvironmentVariable("SUPABASE_API_KEY")!;
 
             var request = new HttpRequestMessage(HttpMethod.Post, $"{supabaseUrl}/auth/v1/admin/users")
             {
@@ -321,7 +321,7 @@ namespace ParkingSystem.Application.Services
         public async Task<bool> IsMfaEnabled(string userId)
         {
             var supabaseUrl = _config["Supabase:Url"];
-            var serviceRoleKey = _config["Supabase:ServiceRoleKey"];
+            var serviceRoleKey = Environment.GetEnvironmentVariable("SUPABASE_API_KEY")!;
             var url = $"{supabaseUrl}/auth/v1/admin/users/{userId}/factors";
 
             _httpClient.DefaultRequestHeaders.Clear();
