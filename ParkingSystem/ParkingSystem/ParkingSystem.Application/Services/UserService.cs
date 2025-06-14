@@ -4,18 +4,24 @@ using ParkingSystem.Core.Interfaces;
 using ParkingSystem.Application.Mappers;
 using System.Threading.Tasks;
 using ParkingSystem.Application.Exceptions;
+using Supabase.Storage;
 
 namespace ParkingSystem.Application.Services
 {
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IParkRepository _parkRepository;
+        private readonly ISubscriptionRepository _subscriptionRepository;
         private readonly IAuthenticationService _authService;
         private readonly ILogger<UserService> _logger;
 
-        public UserService(IUserRepository userRepository, IAuthenticationService authService, ILogger<UserService> logger)
+        public UserService(IUserRepository userRepository, IParkRepository parkRepository, ISubscriptionRepository subscriptionRepository,
+        IAuthenticationService authService, ILogger<UserService> logger)
         {
             _userRepository = userRepository;
+            _parkRepository = parkRepository;
+            _subscriptionRepository = subscriptionRepository;
             _authService = authService;
             _logger = logger;
         }
@@ -105,6 +111,33 @@ namespace ParkingSystem.Application.Services
             var user = UserMapper.ToUserDomain(userDto);
             var result = await _userRepository.AddUser(user);
             return result != null ? UserMapper.ToUserDto(result) : null;
+        }
+
+        public async Task<bool> ActivateSubscription(long userId, long parkId)
+        {
+            try
+            {
+                var park = await _parkRepository.GetParkById(parkId);
+                var user = await _userRepository.GetUserById(userId);
+                if (park == null || user == null)
+                {
+                    _logger.LogInformation("Error finding parkid " + parkId + " or userid " + userId);
+                    return false;
+                }
+                var existingSubscription = await _subscriptionRepository.GetActiveSubscription(userId, parkId);
+                if (existingSubscription != null)
+                {
+                    _logger.LogInformation($"Subscription already active for userid {userId} and parkid {parkId}.");
+                    return false;
+                }
+                var success = await _subscriptionRepository.ActivateSubscription(userId, parkId);
+                return success;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error activating subscription: " + ex.Message);
+                return false;
+            }
         }
 
     }
