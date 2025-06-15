@@ -573,7 +573,7 @@ The `Read()` method, after reading the value, runs `Clear()`, which replaces dat
 For this Phase and Sprint, we completed the ASVS checklist, highlighting the applicability and validity of each item with a comprehensive explanation of how it relates to our application. This artifact can be found in [`v4-ASVS-checklist-en-phase2-sprint2.xlsx`](v4-ASVS-checklist-en-phase2-sprint2.xlsx).
 
 Below, we present the summary of this checklist in the form of a table and the generated graph:
-<!-- 
+
 ![asvs-phase2-sprint2-table.png](./img/asvs-phase2-sprint2-table.png)
 
-![asvs-phase2-sprint2-graph.png](./img/asvs-phase2-sprint2-graph.png) -->
+![asvs-phase2-sprint2-chart.png](./img/asvs-phase2-sprint2-chart.png)
