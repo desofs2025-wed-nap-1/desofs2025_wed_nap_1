@@ -498,6 +498,65 @@ These messages are then appropriately written to the specified log file:
 2025-06-04 16:52:17.198 +01:00 [INF] Successfully gathered available parks
 ```
 
+### User Registration Use Case
+
+The system implements different user registration endpoints with varying authorization levels:
+
+- **Regular User Registration** (`/register`): Available to unauthenticated users for self-registration
+- **Park Manager Registration** (`/registerParkManager`): Restricted to Admin users only, to create park managers that have elevated permissions
+
+
+This differentiation ensures proper access control in user management operations, where sensitive roles like Park Manager can only be assigned by system administrators.
+
+### Monthly Subscription Activation Use Case
+
+One of the new use cases implemented in this sprint was the **Monthly Subscription Activation** functionality, which allows authenticated users to activate monthly parking subscriptions for specific parking lots. This action is available to all authenticated users (excluding unauthenticated users) and is intended to provide users with convenient monthly access to parking facilities where subscription services are available.
+
+The functionality is implemented via a single endpoint:
+
+`POST /api/subscription/activateSubscription?userId={userId}&parkId={parkId}`
+
+This endpoint is protected by Role-Based Access Control (RBAC), meaning only authenticated users can execute it:
+
+```csharp
+[HttpPost("activateSubscription")]
+[Authorize(Policy = "AllRolesExceptUnauthenticated")]
+public async Task<IActionResult> ActivateSubscription(long userId, long parkId)
+{
+    try
+    {
+        var result = await _userService.ActivateSubscription(userId, parkId);
+        if (result)
+        {
+            _logger.LogInformation($"User {userId} activated monthly subscription for parking {parkId}.");
+            return Ok("Subscription activated sucessfully.");
+        }
+        _logger.LogError("Failed to activating subscription.");
+        return BadRequest("Failed to activating subscription.");
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError("Error activating subscription: " + ex.Message);
+        return BadRequest("Failed to activating subscription.");
+    }
+}
+```
+
+Internally, this method calls the UserService, which performs several critical checks. Verifies that both the user and parking lot exist in the system, checks if the user already has an active subscription for the specified parking lot and the repository layer handles the actual subscription creation, setting up a monthly subscription.
+
+Example logging output when a subscription is successfully activated:
+
+```plaintext
+2025-06-15 14:30:22.456 +01:00 [INF] User 123 activated monthly subscription for parking 456.
+```
+
+Example logging output for validation failures:
+
+```plaintext
+2025-06-15 14:30:22.456 +01:00 [INF] Error finding parkid 999 or userid 123
+2025-06-15 14:30:22.456 +01:00 [INF] Subscription already active for userid 123 and parkid 456.
+```
+
 ## Security improvements
 
 ### Deprecation of clear-text credentials
